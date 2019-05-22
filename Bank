@@ -1,0 +1,5275 @@
+package usbankingsystem;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.Stack;
+import java.util.Timer;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
+import java.awt.Color;
+import java.awt.Font;
+import com.anylogic.engine.connectivity.ResultSet;
+import com.anylogic.engine.connectivity.Statement;
+import com.anylogic.engine.elements.*;
+import com.anylogic.engine.markup.Network;
+import com.anylogic.engine.Position;
+import com.anylogic.engine.markup.PedFlowStatistics;
+import com.anylogic.engine.markup.DensityMap;
+
+
+import static java.lang.Math.*;
+import static com.anylogic.engine.UtilitiesArray.*;
+import static com.anylogic.engine.UtilitiesCollection.*;
+import static com.anylogic.engine.presentation.UtilitiesColor.*;
+import static com.anylogic.engine.HyperArray.*;
+
+import com.anylogic.engine.*;
+import com.anylogic.engine.analysis.*;
+import com.anylogic.engine.connectivity.*;
+import com.anylogic.engine.database.*;
+import com.anylogic.engine.gis.*;
+import com.anylogic.engine.markup.*;
+import com.anylogic.engine.routing.*;
+import com.anylogic.engine.presentation.*;
+import com.anylogic.engine.gui.*;
+
+import static usbankingsystem.Size.*;
+import static usbankingsystem.DebtType.*;
+import static usbankingsystem.Message.*;
+
+import java.awt.geom.Arc2D;
+
+
+import org.apache.commons.math3.distribution.NormalDistribution; 
+
+public class Bank extends Agent
+        implements 
+Comparable<Bank> 
+{
+  // Parameters
+
+  public 
+int  bankId;
+
+  /**
+   * Returns default value for parameter <code>bankId</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _bankId_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0;
+  }
+
+  public void set_bankId( int bankId ) {
+    if (bankId == this.bankId) {
+      return;
+    }
+    int _oldValue_xjal = this.bankId;
+    this.bankId = bankId;
+    onChange_bankId_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter bankId.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_bankId()</code> method instead.
+   */
+  protected void onChange_bankId() {
+    onChange_bankId_xjal( bankId );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_bankId_xjal( int oldValue ) {  
+  }
+
+
+  public 
+double  rangeTarget;
+
+  /**
+   * Returns default value for parameter <code>rangeTarget</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _rangeTarget_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.0 
+;
+  }
+
+  public void set_rangeTarget( double rangeTarget ) {
+    if (rangeTarget == this.rangeTarget) {
+      return;
+    }
+    double _oldValue_xjal = this.rangeTarget;
+    this.rangeTarget = rangeTarget;
+    onChange_rangeTarget_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter rangeTarget.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_rangeTarget()</code> method instead.
+   */
+  protected void onChange_rangeTarget() {
+    onChange_rangeTarget_xjal( rangeTarget );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_rangeTarget_xjal( double oldValue ) {  
+  }
+
+
+  public 
+Size  type;
+
+  /**
+   * Returns default value for parameter <code>type</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public Size _type_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+SMALL 
+;
+  }
+
+  public void set_type( Size type ) {
+    if (type == this.type) {
+      return;
+    }
+    Size _oldValue_xjal = this.type;
+    this.type = type;
+    onChange_type_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter type.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_type()</code> method instead.
+   */
+  protected void onChange_type() {
+    onChange_type_xjal( type );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_type_xjal( Size oldValue ) {  
+  }
+
+
+  public 
+double  cash2asset;
+
+  /**
+   * Returns default value for parameter <code>cash2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _cash2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_cash2asset( double cash2asset ) {
+    if (cash2asset == this.cash2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.cash2asset;
+    this.cash2asset = cash2asset;
+    onChange_cash2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter cash2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_cash2asset()</code> method instead.
+   */
+  protected void onChange_cash2asset() {
+    onChange_cash2asset_xjal( cash2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_cash2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  balus2asset;
+
+  /**
+   * Returns default value for parameter <code>balus2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _balus2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_balus2asset( double balus2asset ) {
+    if (balus2asset == this.balus2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.balus2asset;
+    this.balus2asset = balus2asset;
+    onChange_balus2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter balus2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_balus2asset()</code> method instead.
+   */
+  protected void onChange_balus2asset() {
+    onChange_balus2asset_xjal( balus2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_balus2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  balnus2asset;
+
+  /**
+   * Returns default value for parameter <code>balnus2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _balnus2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_balnus2asset( double balnus2asset ) {
+    if (balnus2asset == this.balnus2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.balnus2asset;
+    this.balnus2asset = balnus2asset;
+    onChange_balnus2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter balnus2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_balnus2asset()</code> method instead.
+   */
+  protected void onChange_balnus2asset() {
+    onChange_balnus2asset_xjal( balnus2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_balnus2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  fed2asset;
+
+  /**
+   * Returns default value for parameter <code>fed2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _fed2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_fed2asset( double fed2asset ) {
+    if (fed2asset == this.fed2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.fed2asset;
+    this.fed2asset = fed2asset;
+    onChange_fed2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter fed2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_fed2asset()</code> method instead.
+   */
+  protected void onChange_fed2asset() {
+    onChange_fed2asset_xjal( fed2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_fed2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  fedfundsld2asset;
+
+  /**
+   * Returns default value for parameter <code>fedfundsld2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _fedfundsld2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_fedfundsld2asset( double fedfundsld2asset ) {
+    if (fedfundsld2asset == this.fedfundsld2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.fedfundsld2asset;
+    this.fedfundsld2asset = fedfundsld2asset;
+    onChange_fedfundsld2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter fedfundsld2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_fedfundsld2asset()</code> method instead.
+   */
+  protected void onChange_fedfundsld2asset() {
+    onChange_fedfundsld2asset_xjal( fedfundsld2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_fedfundsld2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  fedfundbot2liab;
+
+  /**
+   * Returns default value for parameter <code>fedfundbot2liab</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _fedfundbot2liab_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_fedfundbot2liab( double fedfundbot2liab ) {
+    if (fedfundbot2liab == this.fedfundbot2liab) {
+      return;
+    }
+    double _oldValue_xjal = this.fedfundbot2liab;
+    this.fedfundbot2liab = fedfundbot2liab;
+    onChange_fedfundbot2liab_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter fedfundbot2liab.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_fedfundbot2liab()</code> method instead.
+   */
+  protected void onChange_fedfundbot2liab() {
+    onChange_fedfundbot2liab_xjal( fedfundbot2liab );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_fedfundbot2liab_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  fedsecbot2asset;
+
+  /**
+   * Returns default value for parameter <code>fedsecbot2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _fedsecbot2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_fedsecbot2asset( double fedsecbot2asset ) {
+    if (fedsecbot2asset == this.fedsecbot2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.fedsecbot2asset;
+    this.fedsecbot2asset = fedsecbot2asset;
+    onChange_fedsecbot2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter fedsecbot2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_fedsecbot2asset()</code> method instead.
+   */
+  protected void onChange_fedsecbot2asset() {
+    onChange_fedsecbot2asset_xjal( fedsecbot2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_fedsecbot2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  fedsecsld2liab;
+
+  /**
+   * Returns default value for parameter <code>fedsecsld2liab</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _fedsecsld2liab_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_fedsecsld2liab( double fedsecsld2liab ) {
+    if (fedsecsld2liab == this.fedsecsld2liab) {
+      return;
+    }
+    double _oldValue_xjal = this.fedsecsld2liab;
+    this.fedsecsld2liab = fedsecsld2liab;
+    onChange_fedsecsld2liab_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter fedsecsld2liab.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_fedsecsld2liab()</code> method instead.
+   */
+  protected void onChange_fedsecsld2liab() {
+    onChange_fedsecsld2liab_xjal( fedsecsld2liab );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_fedsecsld2liab_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  loan2asset;
+
+  /**
+   * Returns default value for parameter <code>loan2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _loan2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_loan2asset( double loan2asset ) {
+    if (loan2asset == this.loan2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.loan2asset;
+    this.loan2asset = loan2asset;
+    onChange_loan2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter loan2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_loan2asset()</code> method instead.
+   */
+  protected void onChange_loan2asset() {
+    onChange_loan2asset_xjal( loan2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_loan2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liab2asset;
+
+  /**
+   * Returns default value for parameter <code>liab2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liab2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_liab2asset( double liab2asset ) {
+    if (liab2asset == this.liab2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.liab2asset;
+    this.liab2asset = liab2asset;
+    onChange_liab2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liab2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liab2asset()</code> method instead.
+   */
+  protected void onChange_liab2asset() {
+    onChange_liab2asset_xjal( liab2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liab2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  deposit2liab;
+
+  /**
+   * Returns default value for parameter <code>deposit2liab</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _deposit2liab_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_deposit2liab( double deposit2liab ) {
+    if (deposit2liab == this.deposit2liab) {
+      return;
+    }
+    double _oldValue_xjal = this.deposit2liab;
+    this.deposit2liab = deposit2liab;
+    onChange_deposit2liab_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter deposit2liab.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_deposit2liab()</code> method instead.
+   */
+  protected void onChange_deposit2liab() {
+    onChange_deposit2liab_xjal( deposit2liab );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_deposit2liab_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  brwmy2liab;
+
+  /**
+   * Returns default value for parameter <code>brwmy2liab</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _brwmy2liab_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_brwmy2liab( double brwmy2liab ) {
+    if (brwmy2liab == this.brwmy2liab) {
+      return;
+    }
+    double _oldValue_xjal = this.brwmy2liab;
+    this.brwmy2liab = brwmy2liab;
+    onChange_brwmy2liab_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter brwmy2liab.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_brwmy2liab()</code> method instead.
+   */
+  protected void onChange_brwmy2liab() {
+    onChange_brwmy2liab_xjal( brwmy2liab );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_brwmy2liab_xjal( double oldValue ) {  
+  }
+
+
+  public 
+int  asset;
+
+  /**
+   * Returns default value for parameter <code>asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0;
+  }
+
+  public void set_asset( int asset ) {
+    if (asset == this.asset) {
+      return;
+    }
+    int _oldValue_xjal = this.asset;
+    this.asset = asset;
+    onChange_asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_asset()</code> method instead.
+   */
+  protected void onChange_asset() {
+    onChange_asset_xjal( asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_asset_xjal( int oldValue ) {  
+  }
+
+
+  public 
+double  scoreDecay;
+
+  /**
+   * Returns default value for parameter <code>scoreDecay</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _scoreDecay_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.5 
+;
+  }
+
+  public void set_scoreDecay( double scoreDecay ) {
+    if (scoreDecay == this.scoreDecay) {
+      return;
+    }
+    double _oldValue_xjal = this.scoreDecay;
+    this.scoreDecay = scoreDecay;
+    onChange_scoreDecay_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter scoreDecay.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_scoreDecay()</code> method instead.
+   */
+  protected void onChange_scoreDecay() {
+    onChange_scoreDecay_xjal( scoreDecay );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_scoreDecay_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  borrowingThred;
+
+  /**
+   * Returns default value for parameter <code>borrowingThred</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _borrowingThred_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.01 
+;
+  }
+
+  public void set_borrowingThred( double borrowingThred ) {
+    if (borrowingThred == this.borrowingThred) {
+      return;
+    }
+    double _oldValue_xjal = this.borrowingThred;
+    this.borrowingThred = borrowingThred;
+    onChange_borrowingThred_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter borrowingThred.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_borrowingThred()</code> method instead.
+   */
+  protected void onChange_borrowingThred() {
+    onChange_borrowingThred_xjal( borrowingThred );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_borrowingThred_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  overnightAssetRatio;
+
+  /**
+   * Returns default value for parameter <code>overnightAssetRatio</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _overnightAssetRatio_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+type==LARGE? .5 : .5 
+;
+  }
+
+  public void set_overnightAssetRatio( double overnightAssetRatio ) {
+    if (overnightAssetRatio == this.overnightAssetRatio) {
+      return;
+    }
+    double _oldValue_xjal = this.overnightAssetRatio;
+    this.overnightAssetRatio = overnightAssetRatio;
+    onChange_overnightAssetRatio_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter overnightAssetRatio.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_overnightAssetRatio()</code> method instead.
+   */
+  protected void onChange_overnightAssetRatio() {
+    onChange_overnightAssetRatio_xjal( overnightAssetRatio );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_overnightAssetRatio_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  longtermAssetRatio;
+
+  /**
+   * Returns default value for parameter <code>longtermAssetRatio</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _longtermAssetRatio_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+overnightAssetRatio 
+;
+  }
+
+  public void set_longtermAssetRatio( double longtermAssetRatio ) {
+    if (longtermAssetRatio == this.longtermAssetRatio) {
+      return;
+    }
+    double _oldValue_xjal = this.longtermAssetRatio;
+    this.longtermAssetRatio = longtermAssetRatio;
+    onChange_longtermAssetRatio_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter longtermAssetRatio.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_longtermAssetRatio()</code> method instead.
+   */
+  protected void onChange_longtermAssetRatio() {
+    onChange_longtermAssetRatio_xjal( longtermAssetRatio );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_longtermAssetRatio_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  overnightAlpha;
+
+  /**
+   * Returns default value for parameter <code>overnightAlpha</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _overnightAlpha_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+type==LARGE? -1 : 0 
+;
+  }
+
+  public void set_overnightAlpha( double overnightAlpha ) {
+    if (overnightAlpha == this.overnightAlpha) {
+      return;
+    }
+    double _oldValue_xjal = this.overnightAlpha;
+    this.overnightAlpha = overnightAlpha;
+    onChange_overnightAlpha_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter overnightAlpha.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_overnightAlpha()</code> method instead.
+   */
+  protected void onChange_overnightAlpha() {
+    onChange_overnightAlpha_xjal( overnightAlpha );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_overnightAlpha_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  shorttermAlpha;
+
+  /**
+   * Returns default value for parameter <code>shorttermAlpha</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _shorttermAlpha_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+overnightAlpha 
+;
+  }
+
+  public void set_shorttermAlpha( double shorttermAlpha ) {
+    if (shorttermAlpha == this.shorttermAlpha) {
+      return;
+    }
+    double _oldValue_xjal = this.shorttermAlpha;
+    this.shorttermAlpha = shorttermAlpha;
+    onChange_shorttermAlpha_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter shorttermAlpha.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_shorttermAlpha()</code> method instead.
+   */
+  protected void onChange_shorttermAlpha() {
+    onChange_shorttermAlpha_xjal( shorttermAlpha );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_shorttermAlpha_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  longtermAlpha;
+
+  /**
+   * Returns default value for parameter <code>longtermAlpha</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _longtermAlpha_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+overnightAlpha 
+;
+  }
+
+  public void set_longtermAlpha( double longtermAlpha ) {
+    if (longtermAlpha == this.longtermAlpha) {
+      return;
+    }
+    double _oldValue_xjal = this.longtermAlpha;
+    this.longtermAlpha = longtermAlpha;
+    onChange_longtermAlpha_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter longtermAlpha.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_longtermAlpha()</code> method instead.
+   */
+  protected void onChange_longtermAlpha() {
+    onChange_longtermAlpha_xjal( longtermAlpha );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_longtermAlpha_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  overnightBeta;
+
+  /**
+   * Returns default value for parameter <code>overnightBeta</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _overnightBeta_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+1.0 
+;
+  }
+
+  public void set_overnightBeta( double overnightBeta ) {
+    if (overnightBeta == this.overnightBeta) {
+      return;
+    }
+    double _oldValue_xjal = this.overnightBeta;
+    this.overnightBeta = overnightBeta;
+    onChange_overnightBeta_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter overnightBeta.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_overnightBeta()</code> method instead.
+   */
+  protected void onChange_overnightBeta() {
+    onChange_overnightBeta_xjal( overnightBeta );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_overnightBeta_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  shorttermBeta;
+
+  /**
+   * Returns default value for parameter <code>shorttermBeta</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _shorttermBeta_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+overnightBeta 
+;
+  }
+
+  public void set_shorttermBeta( double shorttermBeta ) {
+    if (shorttermBeta == this.shorttermBeta) {
+      return;
+    }
+    double _oldValue_xjal = this.shorttermBeta;
+    this.shorttermBeta = shorttermBeta;
+    onChange_shorttermBeta_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter shorttermBeta.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_shorttermBeta()</code> method instead.
+   */
+  protected void onChange_shorttermBeta() {
+    onChange_shorttermBeta_xjal( shorttermBeta );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_shorttermBeta_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  longtermBeta;
+
+  /**
+   * Returns default value for parameter <code>longtermBeta</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _longtermBeta_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+overnightBeta 
+;
+  }
+
+  public void set_longtermBeta( double longtermBeta ) {
+    if (longtermBeta == this.longtermBeta) {
+      return;
+    }
+    double _oldValue_xjal = this.longtermBeta;
+    this.longtermBeta = longtermBeta;
+    onChange_longtermBeta_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter longtermBeta.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_longtermBeta()</code> method instead.
+   */
+  protected void onChange_longtermBeta() {
+    onChange_longtermBeta_xjal( longtermBeta );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_longtermBeta_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  matchRate;
+
+  /**
+   * Returns default value for parameter <code>matchRate</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _matchRate_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+1 
+;
+  }
+
+  public void set_matchRate( double matchRate ) {
+    if (matchRate == this.matchRate) {
+      return;
+    }
+    double _oldValue_xjal = this.matchRate;
+    this.matchRate = matchRate;
+    onChange_matchRate_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter matchRate.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_matchRate()</code> method instead.
+   */
+  protected void onChange_matchRate() {
+    onChange_matchRate_xjal( matchRate );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_matchRate_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  shorttermAssetRatio;
+
+  /**
+   * Returns default value for parameter <code>shorttermAssetRatio</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _shorttermAssetRatio_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+overnightAssetRatio 
+;
+  }
+
+  public void set_shorttermAssetRatio( double shorttermAssetRatio ) {
+    if (shorttermAssetRatio == this.shorttermAssetRatio) {
+      return;
+    }
+    double _oldValue_xjal = this.shorttermAssetRatio;
+    this.shorttermAssetRatio = shorttermAssetRatio;
+    onChange_shorttermAssetRatio_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter shorttermAssetRatio.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_shorttermAssetRatio()</code> method instead.
+   */
+  protected void onChange_shorttermAssetRatio() {
+    onChange_shorttermAssetRatio_xjal( shorttermAssetRatio );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_shorttermAssetRatio_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  settlementAdj;
+
+  /**
+   * Returns default value for parameter <code>settlementAdj</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _settlementAdj_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+1.0 
+;
+  }
+
+  public void set_settlementAdj( double settlementAdj ) {
+    if (settlementAdj == this.settlementAdj) {
+      return;
+    }
+    double _oldValue_xjal = this.settlementAdj;
+    this.settlementAdj = settlementAdj;
+    onChange_settlementAdj_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter settlementAdj.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_settlementAdj()</code> method instead.
+   */
+  protected void onChange_settlementAdj() {
+    onChange_settlementAdj_xjal( settlementAdj );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_settlementAdj_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  sec2asset;
+
+  /**
+   * Returns default value for parameter <code>sec2asset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _sec2asset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_sec2asset( double sec2asset ) {
+    if (sec2asset == this.sec2asset) {
+      return;
+    }
+    double _oldValue_xjal = this.sec2asset;
+    this.sec2asset = sec2asset;
+    onChange_sec2asset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter sec2asset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_sec2asset()</code> method instead.
+   */
+  protected void onChange_sec2asset() {
+    onChange_sec2asset_xjal( sec2asset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_sec2asset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  treasury2sc;
+
+  /**
+   * Returns default value for parameter <code>treasury2sc</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _treasury2sc_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_treasury2sc( double treasury2sc ) {
+    if (treasury2sc == this.treasury2sc) {
+      return;
+    }
+    double _oldValue_xjal = this.treasury2sc;
+    this.treasury2sc = treasury2sc;
+    onChange_treasury2sc_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter treasury2sc.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_treasury2sc()</code> method instead.
+   */
+  protected void onChange_treasury2sc() {
+    onChange_treasury2sc_xjal( treasury2sc );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_treasury2sc_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  state2sc;
+
+  /**
+   * Returns default value for parameter <code>state2sc</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _state2sc_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_state2sc( double state2sc ) {
+    if (state2sc == this.state2sc) {
+      return;
+    }
+    double _oldValue_xjal = this.state2sc;
+    this.state2sc = state2sc;
+    onChange_state2sc_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter state2sc.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_state2sc()</code> method instead.
+   */
+  protected void onChange_state2sc() {
+    onChange_state2sc_xjal( state2sc );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_state2sc_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  agency2sc;
+
+  /**
+   * Returns default value for parameter <code>agency2sc</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _agency2sc_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_agency2sc( double agency2sc ) {
+    if (agency2sc == this.agency2sc) {
+      return;
+    }
+    double _oldValue_xjal = this.agency2sc;
+    this.agency2sc = agency2sc;
+    onChange_agency2sc_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter agency2sc.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_agency2sc()</code> method instead.
+   */
+  protected void onChange_agency2sc() {
+    onChange_agency2sc_xjal( agency2sc );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_agency2sc_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  abs2sc;
+
+  /**
+   * Returns default value for parameter <code>abs2sc</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _abs2sc_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_abs2sc( double abs2sc ) {
+    if (abs2sc == this.abs2sc) {
+      return;
+    }
+    double _oldValue_xjal = this.abs2sc;
+    this.abs2sc = abs2sc;
+    onChange_abs2sc_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter abs2sc.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_abs2sc()</code> method instead.
+   */
+  protected void onChange_abs2sc() {
+    onChange_abs2sc_xjal( abs2sc );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_abs2sc_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  mbs2sc;
+
+  /**
+   * Returns default value for parameter <code>mbs2sc</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _mbs2sc_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_mbs2sc( double mbs2sc ) {
+    if (mbs2sc == this.mbs2sc) {
+      return;
+    }
+    double _oldValue_xjal = this.mbs2sc;
+    this.mbs2sc = mbs2sc;
+    onChange_mbs2sc_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter mbs2sc.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_mbs2sc()</code> method instead.
+   */
+  protected void onChange_mbs2sc() {
+    onChange_mbs2sc_xjal( mbs2sc );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_mbs2sc_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  equitysec2sc;
+
+  /**
+   * Returns default value for parameter <code>equitysec2sc</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _equitysec2sc_DefaultValue_xjal() {
+    final Bank self = this;
+    return 0.0;
+  }
+
+  public void set_equitysec2sc( double equitysec2sc ) {
+    if (equitysec2sc == this.equitysec2sc) {
+      return;
+    }
+    double _oldValue_xjal = this.equitysec2sc;
+    this.equitysec2sc = equitysec2sc;
+    onChange_equitysec2sc_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter equitysec2sc.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_equitysec2sc()</code> method instead.
+   */
+  protected void onChange_equitysec2sc() {
+    onChange_equitysec2sc_xjal( equitysec2sc );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_equitysec2sc_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightABS;
+
+  /**
+   * Returns default value for parameter <code>weightABS</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightABS_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.5 
+;
+  }
+
+  public void set_weightABS( double weightABS ) {
+    if (weightABS == this.weightABS) {
+      return;
+    }
+    double _oldValue_xjal = this.weightABS;
+    this.weightABS = weightABS;
+    onChange_weightABS_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightABS.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightABS()</code> method instead.
+   */
+  protected void onChange_weightABS() {
+    onChange_weightABS_xjal( weightABS );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightABS_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightAgency;
+
+  /**
+   * Returns default value for parameter <code>weightAgency</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightAgency_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.1 
+;
+  }
+
+  public void set_weightAgency( double weightAgency ) {
+    if (weightAgency == this.weightAgency) {
+      return;
+    }
+    double _oldValue_xjal = this.weightAgency;
+    this.weightAgency = weightAgency;
+    onChange_weightAgency_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightAgency.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightAgency()</code> method instead.
+   */
+  protected void onChange_weightAgency() {
+    onChange_weightAgency_xjal( weightAgency );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightAgency_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightCash;
+
+  /**
+   * Returns default value for parameter <code>weightCash</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightCash_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0 
+;
+  }
+
+  public void set_weightCash( double weightCash ) {
+    if (weightCash == this.weightCash) {
+      return;
+    }
+    double _oldValue_xjal = this.weightCash;
+    this.weightCash = weightCash;
+    onChange_weightCash_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightCash.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightCash()</code> method instead.
+   */
+  protected void onChange_weightCash() {
+    onChange_weightCash_xjal( weightCash );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightCash_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightEquitysec;
+
+  /**
+   * Returns default value for parameter <code>weightEquitysec</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightEquitysec_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.2 
+;
+  }
+
+  public void set_weightEquitysec( double weightEquitysec ) {
+    if (weightEquitysec == this.weightEquitysec) {
+      return;
+    }
+    double _oldValue_xjal = this.weightEquitysec;
+    this.weightEquitysec = weightEquitysec;
+    onChange_weightEquitysec_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightEquitysec.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightEquitysec()</code> method instead.
+   */
+  protected void onChange_weightEquitysec() {
+    onChange_weightEquitysec_xjal( weightEquitysec );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightEquitysec_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightInterbank;
+
+  /**
+   * Returns default value for parameter <code>weightInterbank</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightInterbank_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.2 
+;
+  }
+
+  public void set_weightInterbank( double weightInterbank ) {
+    if (weightInterbank == this.weightInterbank) {
+      return;
+    }
+    double _oldValue_xjal = this.weightInterbank;
+    this.weightInterbank = weightInterbank;
+    onChange_weightInterbank_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightInterbank.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightInterbank()</code> method instead.
+   */
+  protected void onChange_weightInterbank() {
+    onChange_weightInterbank_xjal( weightInterbank );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightInterbank_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightMBS;
+
+  /**
+   * Returns default value for parameter <code>weightMBS</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightMBS_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.5 
+;
+  }
+
+  public void set_weightMBS( double weightMBS ) {
+    if (weightMBS == this.weightMBS) {
+      return;
+    }
+    double _oldValue_xjal = this.weightMBS;
+    this.weightMBS = weightMBS;
+    onChange_weightMBS_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightMBS.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightMBS()</code> method instead.
+   */
+  protected void onChange_weightMBS() {
+    onChange_weightMBS_xjal( weightMBS );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightMBS_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightOtherasset;
+
+  /**
+   * Returns default value for parameter <code>weightOtherasset</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightOtherasset_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.2 
+;
+  }
+
+  public void set_weightOtherasset( double weightOtherasset ) {
+    if (weightOtherasset == this.weightOtherasset) {
+      return;
+    }
+    double _oldValue_xjal = this.weightOtherasset;
+    this.weightOtherasset = weightOtherasset;
+    onChange_weightOtherasset_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightOtherasset.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightOtherasset()</code> method instead.
+   */
+  protected void onChange_weightOtherasset() {
+    onChange_weightOtherasset_xjal( weightOtherasset );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightOtherasset_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightState;
+
+  /**
+   * Returns default value for parameter <code>weightState</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightState_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.2 
+;
+  }
+
+  public void set_weightState( double weightState ) {
+    if (weightState == this.weightState) {
+      return;
+    }
+    double _oldValue_xjal = this.weightState;
+    this.weightState = weightState;
+    onChange_weightState_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightState.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightState()</code> method instead.
+   */
+  protected void onChange_weightState() {
+    onChange_weightState_xjal( weightState );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightState_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  weightTreasury;
+
+  /**
+   * Returns default value for parameter <code>weightTreasury</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _weightTreasury_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0 
+;
+  }
+
+  public void set_weightTreasury( double weightTreasury ) {
+    if (weightTreasury == this.weightTreasury) {
+      return;
+    }
+    double _oldValue_xjal = this.weightTreasury;
+    this.weightTreasury = weightTreasury;
+    onChange_weightTreasury_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter weightTreasury.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_weightTreasury()</code> method instead.
+   */
+  protected void onChange_weightTreasury() {
+    onChange_weightTreasury_xjal( weightTreasury );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_weightTreasury_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  cashassetHoldingRatio;
+
+  /**
+   * Returns default value for parameter <code>cashassetHoldingRatio</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _cashassetHoldingRatio_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.1 
+;
+  }
+
+  public void set_cashassetHoldingRatio( double cashassetHoldingRatio ) {
+    if (cashassetHoldingRatio == this.cashassetHoldingRatio) {
+      return;
+    }
+    double _oldValue_xjal = this.cashassetHoldingRatio;
+    this.cashassetHoldingRatio = cashassetHoldingRatio;
+    onChange_cashassetHoldingRatio_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter cashassetHoldingRatio.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_cashassetHoldingRatio()</code> method instead.
+   */
+  protected void onChange_cashassetHoldingRatio() {
+    onChange_cashassetHoldingRatio_xjal( cashassetHoldingRatio );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_cashassetHoldingRatio_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  interestRate;
+
+  /**
+   * Returns default value for parameter <code>interestRate</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _interestRate_DefaultValue_xjal() {
+    final Bank self = this;
+    return 
+0.02 
+;
+  }
+
+  public void set_interestRate( double interestRate ) {
+    if (interestRate == this.interestRate) {
+      return;
+    }
+    double _oldValue_xjal = this.interestRate;
+    this.interestRate = interestRate;
+    onChange_interestRate_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter interestRate.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_interestRate()</code> method instead.
+   */
+  protected void onChange_interestRate() {
+    onChange_interestRate_xjal( interestRate );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_interestRate_xjal( double oldValue ) {  
+  }
+
+
+  @Override
+  public void setParametersToDefaultValues() {
+    super.setParametersToDefaultValues();
+    bankId = _bankId_DefaultValue_xjal();
+    rangeTarget = _rangeTarget_DefaultValue_xjal();
+    type = _type_DefaultValue_xjal();
+    cash2asset = _cash2asset_DefaultValue_xjal();
+    balus2asset = _balus2asset_DefaultValue_xjal();
+    balnus2asset = _balnus2asset_DefaultValue_xjal();
+    fed2asset = _fed2asset_DefaultValue_xjal();
+    fedfundsld2asset = _fedfundsld2asset_DefaultValue_xjal();
+    fedfundbot2liab = _fedfundbot2liab_DefaultValue_xjal();
+    fedsecbot2asset = _fedsecbot2asset_DefaultValue_xjal();
+    fedsecsld2liab = _fedsecsld2liab_DefaultValue_xjal();
+    loan2asset = _loan2asset_DefaultValue_xjal();
+    liab2asset = _liab2asset_DefaultValue_xjal();
+    deposit2liab = _deposit2liab_DefaultValue_xjal();
+    brwmy2liab = _brwmy2liab_DefaultValue_xjal();
+    asset = _asset_DefaultValue_xjal();
+    scoreDecay = _scoreDecay_DefaultValue_xjal();
+    borrowingThred = _borrowingThred_DefaultValue_xjal();
+    overnightAssetRatio = _overnightAssetRatio_DefaultValue_xjal();
+    longtermAssetRatio = _longtermAssetRatio_DefaultValue_xjal();
+    overnightAlpha = _overnightAlpha_DefaultValue_xjal();
+    shorttermAlpha = _shorttermAlpha_DefaultValue_xjal();
+    longtermAlpha = _longtermAlpha_DefaultValue_xjal();
+    overnightBeta = _overnightBeta_DefaultValue_xjal();
+    shorttermBeta = _shorttermBeta_DefaultValue_xjal();
+    longtermBeta = _longtermBeta_DefaultValue_xjal();
+    matchRate = _matchRate_DefaultValue_xjal();
+    shorttermAssetRatio = _shorttermAssetRatio_DefaultValue_xjal();
+    settlementAdj = _settlementAdj_DefaultValue_xjal();
+    sec2asset = _sec2asset_DefaultValue_xjal();
+    treasury2sc = _treasury2sc_DefaultValue_xjal();
+    state2sc = _state2sc_DefaultValue_xjal();
+    agency2sc = _agency2sc_DefaultValue_xjal();
+    abs2sc = _abs2sc_DefaultValue_xjal();
+    mbs2sc = _mbs2sc_DefaultValue_xjal();
+    equitysec2sc = _equitysec2sc_DefaultValue_xjal();
+    weightABS = _weightABS_DefaultValue_xjal();
+    weightAgency = _weightAgency_DefaultValue_xjal();
+    weightCash = _weightCash_DefaultValue_xjal();
+    weightEquitysec = _weightEquitysec_DefaultValue_xjal();
+    weightInterbank = _weightInterbank_DefaultValue_xjal();
+    weightMBS = _weightMBS_DefaultValue_xjal();
+    weightOtherasset = _weightOtherasset_DefaultValue_xjal();
+    weightState = _weightState_DefaultValue_xjal();
+    weightTreasury = _weightTreasury_DefaultValue_xjal();
+    cashassetHoldingRatio = _cashassetHoldingRatio_DefaultValue_xjal();
+    interestRate = _interestRate_DefaultValue_xjal();
+  }
+
+  @Override
+  public boolean setParameter(String _name_xjal, Object _value_xjal, boolean _callOnChange_xjal) {
+    switch ( _name_xjal ) {
+    case "bankId":
+      if ( _callOnChange_xjal ) {
+        set_bankId( ((Number) _value_xjal).intValue() );
+      } else {
+        bankId = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "rangeTarget":
+      if ( _callOnChange_xjal ) {
+        set_rangeTarget( ((Number) _value_xjal).doubleValue() );
+      } else {
+        rangeTarget = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "type":
+      if ( _callOnChange_xjal ) {
+        set_type( (Size) _value_xjal );
+      } else {
+        type = (Size) _value_xjal;
+      }
+      return true;
+    case "cash2asset":
+      if ( _callOnChange_xjal ) {
+        set_cash2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        cash2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "balus2asset":
+      if ( _callOnChange_xjal ) {
+        set_balus2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        balus2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "balnus2asset":
+      if ( _callOnChange_xjal ) {
+        set_balnus2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        balnus2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "fed2asset":
+      if ( _callOnChange_xjal ) {
+        set_fed2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        fed2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "fedfundsld2asset":
+      if ( _callOnChange_xjal ) {
+        set_fedfundsld2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        fedfundsld2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "fedfundbot2liab":
+      if ( _callOnChange_xjal ) {
+        set_fedfundbot2liab( ((Number) _value_xjal).doubleValue() );
+      } else {
+        fedfundbot2liab = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "fedsecbot2asset":
+      if ( _callOnChange_xjal ) {
+        set_fedsecbot2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        fedsecbot2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "fedsecsld2liab":
+      if ( _callOnChange_xjal ) {
+        set_fedsecsld2liab( ((Number) _value_xjal).doubleValue() );
+      } else {
+        fedsecsld2liab = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "loan2asset":
+      if ( _callOnChange_xjal ) {
+        set_loan2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        loan2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liab2asset":
+      if ( _callOnChange_xjal ) {
+        set_liab2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liab2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "deposit2liab":
+      if ( _callOnChange_xjal ) {
+        set_deposit2liab( ((Number) _value_xjal).doubleValue() );
+      } else {
+        deposit2liab = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "brwmy2liab":
+      if ( _callOnChange_xjal ) {
+        set_brwmy2liab( ((Number) _value_xjal).doubleValue() );
+      } else {
+        brwmy2liab = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "asset":
+      if ( _callOnChange_xjal ) {
+        set_asset( ((Number) _value_xjal).intValue() );
+      } else {
+        asset = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "scoreDecay":
+      if ( _callOnChange_xjal ) {
+        set_scoreDecay( ((Number) _value_xjal).doubleValue() );
+      } else {
+        scoreDecay = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "borrowingThred":
+      if ( _callOnChange_xjal ) {
+        set_borrowingThred( ((Number) _value_xjal).doubleValue() );
+      } else {
+        borrowingThred = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "overnightAssetRatio":
+      if ( _callOnChange_xjal ) {
+        set_overnightAssetRatio( ((Number) _value_xjal).doubleValue() );
+      } else {
+        overnightAssetRatio = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "longtermAssetRatio":
+      if ( _callOnChange_xjal ) {
+        set_longtermAssetRatio( ((Number) _value_xjal).doubleValue() );
+      } else {
+        longtermAssetRatio = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "overnightAlpha":
+      if ( _callOnChange_xjal ) {
+        set_overnightAlpha( ((Number) _value_xjal).doubleValue() );
+      } else {
+        overnightAlpha = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "shorttermAlpha":
+      if ( _callOnChange_xjal ) {
+        set_shorttermAlpha( ((Number) _value_xjal).doubleValue() );
+      } else {
+        shorttermAlpha = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "longtermAlpha":
+      if ( _callOnChange_xjal ) {
+        set_longtermAlpha( ((Number) _value_xjal).doubleValue() );
+      } else {
+        longtermAlpha = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "overnightBeta":
+      if ( _callOnChange_xjal ) {
+        set_overnightBeta( ((Number) _value_xjal).doubleValue() );
+      } else {
+        overnightBeta = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "shorttermBeta":
+      if ( _callOnChange_xjal ) {
+        set_shorttermBeta( ((Number) _value_xjal).doubleValue() );
+      } else {
+        shorttermBeta = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "longtermBeta":
+      if ( _callOnChange_xjal ) {
+        set_longtermBeta( ((Number) _value_xjal).doubleValue() );
+      } else {
+        longtermBeta = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "matchRate":
+      if ( _callOnChange_xjal ) {
+        set_matchRate( ((Number) _value_xjal).doubleValue() );
+      } else {
+        matchRate = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "shorttermAssetRatio":
+      if ( _callOnChange_xjal ) {
+        set_shorttermAssetRatio( ((Number) _value_xjal).doubleValue() );
+      } else {
+        shorttermAssetRatio = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "settlementAdj":
+      if ( _callOnChange_xjal ) {
+        set_settlementAdj( ((Number) _value_xjal).doubleValue() );
+      } else {
+        settlementAdj = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "sec2asset":
+      if ( _callOnChange_xjal ) {
+        set_sec2asset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        sec2asset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "treasury2sc":
+      if ( _callOnChange_xjal ) {
+        set_treasury2sc( ((Number) _value_xjal).doubleValue() );
+      } else {
+        treasury2sc = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "state2sc":
+      if ( _callOnChange_xjal ) {
+        set_state2sc( ((Number) _value_xjal).doubleValue() );
+      } else {
+        state2sc = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "agency2sc":
+      if ( _callOnChange_xjal ) {
+        set_agency2sc( ((Number) _value_xjal).doubleValue() );
+      } else {
+        agency2sc = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "abs2sc":
+      if ( _callOnChange_xjal ) {
+        set_abs2sc( ((Number) _value_xjal).doubleValue() );
+      } else {
+        abs2sc = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "mbs2sc":
+      if ( _callOnChange_xjal ) {
+        set_mbs2sc( ((Number) _value_xjal).doubleValue() );
+      } else {
+        mbs2sc = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "equitysec2sc":
+      if ( _callOnChange_xjal ) {
+        set_equitysec2sc( ((Number) _value_xjal).doubleValue() );
+      } else {
+        equitysec2sc = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightABS":
+      if ( _callOnChange_xjal ) {
+        set_weightABS( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightABS = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightAgency":
+      if ( _callOnChange_xjal ) {
+        set_weightAgency( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightAgency = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightCash":
+      if ( _callOnChange_xjal ) {
+        set_weightCash( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightCash = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightEquitysec":
+      if ( _callOnChange_xjal ) {
+        set_weightEquitysec( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightEquitysec = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightInterbank":
+      if ( _callOnChange_xjal ) {
+        set_weightInterbank( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightInterbank = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightMBS":
+      if ( _callOnChange_xjal ) {
+        set_weightMBS( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightMBS = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightOtherasset":
+      if ( _callOnChange_xjal ) {
+        set_weightOtherasset( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightOtherasset = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightState":
+      if ( _callOnChange_xjal ) {
+        set_weightState( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightState = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "weightTreasury":
+      if ( _callOnChange_xjal ) {
+        set_weightTreasury( ((Number) _value_xjal).doubleValue() );
+      } else {
+        weightTreasury = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "cashassetHoldingRatio":
+      if ( _callOnChange_xjal ) {
+        set_cashassetHoldingRatio( ((Number) _value_xjal).doubleValue() );
+      } else {
+        cashassetHoldingRatio = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "interestRate":
+      if ( _callOnChange_xjal ) {
+        set_interestRate( ((Number) _value_xjal).doubleValue() );
+      } else {
+        interestRate = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    default:
+      return super.setParameter( _name_xjal, _value_xjal, _callOnChange_xjal );
+    }
+  }
+
+  @Override
+  public <T> T getParameter(String _name_xjal) {
+    Object _result_xjal;
+    switch ( _name_xjal ) {
+    case "bankId": _result_xjal = bankId; break;
+    case "rangeTarget": _result_xjal = rangeTarget; break;
+    case "type": _result_xjal = type; break;
+    case "cash2asset": _result_xjal = cash2asset; break;
+    case "balus2asset": _result_xjal = balus2asset; break;
+    case "balnus2asset": _result_xjal = balnus2asset; break;
+    case "fed2asset": _result_xjal = fed2asset; break;
+    case "fedfundsld2asset": _result_xjal = fedfundsld2asset; break;
+    case "fedfundbot2liab": _result_xjal = fedfundbot2liab; break;
+    case "fedsecbot2asset": _result_xjal = fedsecbot2asset; break;
+    case "fedsecsld2liab": _result_xjal = fedsecsld2liab; break;
+    case "loan2asset": _result_xjal = loan2asset; break;
+    case "liab2asset": _result_xjal = liab2asset; break;
+    case "deposit2liab": _result_xjal = deposit2liab; break;
+    case "brwmy2liab": _result_xjal = brwmy2liab; break;
+    case "asset": _result_xjal = asset; break;
+    case "scoreDecay": _result_xjal = scoreDecay; break;
+    case "borrowingThred": _result_xjal = borrowingThred; break;
+    case "overnightAssetRatio": _result_xjal = overnightAssetRatio; break;
+    case "longtermAssetRatio": _result_xjal = longtermAssetRatio; break;
+    case "overnightAlpha": _result_xjal = overnightAlpha; break;
+    case "shorttermAlpha": _result_xjal = shorttermAlpha; break;
+    case "longtermAlpha": _result_xjal = longtermAlpha; break;
+    case "overnightBeta": _result_xjal = overnightBeta; break;
+    case "shorttermBeta": _result_xjal = shorttermBeta; break;
+    case "longtermBeta": _result_xjal = longtermBeta; break;
+    case "matchRate": _result_xjal = matchRate; break;
+    case "shorttermAssetRatio": _result_xjal = shorttermAssetRatio; break;
+    case "settlementAdj": _result_xjal = settlementAdj; break;
+    case "sec2asset": _result_xjal = sec2asset; break;
+    case "treasury2sc": _result_xjal = treasury2sc; break;
+    case "state2sc": _result_xjal = state2sc; break;
+    case "agency2sc": _result_xjal = agency2sc; break;
+    case "abs2sc": _result_xjal = abs2sc; break;
+    case "mbs2sc": _result_xjal = mbs2sc; break;
+    case "equitysec2sc": _result_xjal = equitysec2sc; break;
+    case "weightABS": _result_xjal = weightABS; break;
+    case "weightAgency": _result_xjal = weightAgency; break;
+    case "weightCash": _result_xjal = weightCash; break;
+    case "weightEquitysec": _result_xjal = weightEquitysec; break;
+    case "weightInterbank": _result_xjal = weightInterbank; break;
+    case "weightMBS": _result_xjal = weightMBS; break;
+    case "weightOtherasset": _result_xjal = weightOtherasset; break;
+    case "weightState": _result_xjal = weightState; break;
+    case "weightTreasury": _result_xjal = weightTreasury; break;
+    case "cashassetHoldingRatio": _result_xjal = cashassetHoldingRatio; break;
+    case "interestRate": _result_xjal = interestRate; break;
+    default: _result_xjal = super.getParameter( _name_xjal ); break;
+    }
+    return (T) _result_xjal;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private static String[] _parameterNames_xjal;
+
+  @Override
+  public String[] getParameterNames() {
+    String[] result = _parameterNames_xjal;
+    if (result == null) {
+      List<String> list = new ArrayList<>( Arrays.asList( super.getParameterNames() ) );
+      list.add( "bankId" );
+      list.add( "rangeTarget" );
+      list.add( "type" );
+      list.add( "cash2asset" );
+      list.add( "balus2asset" );
+      list.add( "balnus2asset" );
+      list.add( "fed2asset" );
+      list.add( "fedfundsld2asset" );
+      list.add( "fedfundbot2liab" );
+      list.add( "fedsecbot2asset" );
+      list.add( "fedsecsld2liab" );
+      list.add( "loan2asset" );
+      list.add( "liab2asset" );
+      list.add( "deposit2liab" );
+      list.add( "brwmy2liab" );
+      list.add( "asset" );
+      list.add( "scoreDecay" );
+      list.add( "borrowingThred" );
+      list.add( "overnightAssetRatio" );
+      list.add( "longtermAssetRatio" );
+      list.add( "overnightAlpha" );
+      list.add( "shorttermAlpha" );
+      list.add( "longtermAlpha" );
+      list.add( "overnightBeta" );
+      list.add( "shorttermBeta" );
+      list.add( "longtermBeta" );
+      list.add( "matchRate" );
+      list.add( "shorttermAssetRatio" );
+      list.add( "settlementAdj" );
+      list.add( "sec2asset" );
+      list.add( "treasury2sc" );
+      list.add( "state2sc" );
+      list.add( "agency2sc" );
+      list.add( "abs2sc" );
+      list.add( "mbs2sc" );
+      list.add( "equitysec2sc" );
+      list.add( "weightABS" );
+      list.add( "weightAgency" );
+      list.add( "weightCash" );
+      list.add( "weightEquitysec" );
+      list.add( "weightInterbank" );
+      list.add( "weightMBS" );
+      list.add( "weightOtherasset" );
+      list.add( "weightState" );
+      list.add( "weightTreasury" );
+      list.add( "cashassetHoldingRatio" );
+      list.add( "interestRate" );
+      result = list.toArray( new String[ list.size() ] );
+      _parameterNames_xjal = result;
+    }
+    return result;
+  }
+  // Plain Variables
+
+  public 
+BalanceSheet 
+ balancesheet;
+  public 
+int 
+ overnightLendingInternal;
+  private 
+int 
+ overnightLendingExternal;
+  public 
+int 
+ longtermLendingInternal;
+  private 
+int 
+ longtermLendingExternal;
+  public 
+int 
+ longtermBorrowingInternal;
+  public 
+int 
+ longtermBorrowingExternal;
+  public 
+boolean 
+ isAlive;
+  public 
+InterbankEntry 
+ debtRequest;
+  public 
+InterbankEntry 
+ debtSettlement;
+  public 
+int 
+ shorttermLendingInternal;
+  private 
+int 
+ shorttermLendingExternal;
+  public 
+double 
+ shorttermWriteDown;
+  public 
+double 
+ longtermWriteDown;
+  public 
+double 
+ avgSizeScore;
+  public 
+int 
+ overnightBorrowingInternal;
+  public 
+int 
+ overnightBorrowingExternal;
+  public 
+int 
+ shorttermBorrowingInternal;
+  public 
+int 
+ shorttermBorrowingExternal;
+  public 
+int 
+ realestateloan;
+  public 
+double 
+ overnightWriteDown;
+  public 
+boolean 
+ liquidityRisk;
+  public 
+boolean 
+ solvencyRisk;
+  public 
+String 
+ failureType;
+  public 
+int 
+ HPILoss;
+  public 
+int 
+ equityLoss;
+  public 
+int 
+ writedownLoss;
+  public 
+int 
+ totScheduledOvernight;
+  public 
+int 
+ totScheduledShortterm;
+  public 
+int 
+ totScheduledLongterm;
+  public 
+int 
+ expBorrowing;
+  public 
+int[] 
+ scheduledShortterm;
+  public 
+int[] 
+ scheduledLongterm;
+  public 
+int[] 
+ scheduledOvernight;
+  public 
+double 
+ avgTDErr;
+  public 
+int[] 
+ scheduledExternalPay;
+  public 
+int[] 
+ scheduledExternalCollect;
+  public 
+int 
+ contagionIndex;
+  public 
+int 
+ liabTest;
+  public 
+int 
+ lendInternalTest;
+  public 
+double 
+ lendPercent;
+  public 
+double 
+ RLReward;
+  public 
+double 
+ totalDelta;
+  public 
+BalanceSheet 
+ oldBalancesheet;
+  public 
+double[] 
+ theta;
+  public 
+double 
+ a;
+  public 
+double 
+ u;
+  public 
+double[] 
+ RLState;
+  public 
+Qstructure 
+ qStructure;
+  public 
+double 
+ accumulativeReward;
+
+  // Collection Variables
+  private 
+TreeMap <
+Bank , 
+Integer > shorttermLending = new TreeMap<Bank, Integer>();
+  private 
+TreeMap <
+Bank , 
+Integer > overnightLending = new TreeMap<Bank, Integer>();
+  private 
+TreeMap <
+Bank , 
+Integer > overnightBorrowing = new TreeMap<Bank, Integer>();
+  private 
+TreeMap <
+Bank , 
+Integer > shorttermBorrowing = new TreeMap<Bank, Integer>();
+  private 
+TreeMap <
+Bank , 
+Integer > longtermLending = new TreeMap<Bank, Integer>();
+  private 
+TreeMap <
+Bank , 
+Integer > longtermBorrowing = new TreeMap<Bank, Integer>();
+  public 
+LinkedHashMap <
+Bank , 
+Double > linkScore = new LinkedHashMap<Bank, Double>();
+  public 
+LinkedHashMap <
+Bank , 
+Double > sizeScore = new LinkedHashMap<Bank, Double>();
+  public 
+LinkedHashMap <
+Bank , 
+Double > copyLinkScore = new LinkedHashMap<Bank, Double>();
+  public 
+LinkedHashMap <
+Qstructure , 
+Double > Q = new LinkedHashMap<Qstructure, Double>();
+  @AnyLogicInternalCodegenAPI
+  private static Map<String, IElementDescriptor> elementDesciptors_xjal = createElementDescriptors( Bank.class );
+  
+  @AnyLogicInternalCodegenAPI
+  @Override
+  public Map<String, IElementDescriptor> getElementDesciptors() {
+    return elementDesciptors_xjal;
+  }
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final Scale scale = new Scale( 10.0 );
+
+  @Override
+  public Scale getScale() {
+    return scale;
+  }
+
+
+  // Events
+
+  public EventTimeout action2 = new EventTimeout(this);
+  public EventTimeout action3 = new EventTimeout(this);
+  public EventTimeout action4 = new EventTimeout(this);
+  public EventTimeout check = new EventTimeout(this);
+  public EventTimeout action1 = new EventTimeout(this);
+  public EventTimeout trained = new EventTimeout(this);	
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout _chart_autoUpdateEvent_xjal = new EventTimeout(this);	
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout _chart1_autoUpdateEvent_xjal = new EventTimeout(this);	
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout _chart2_autoUpdateEvent_xjal = new EventTimeout(this);
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public String getNameOf( EventTimeout _e ) {
+     if( _e == action2 ) return "action2";
+     if( _e == action3 ) return "action3";
+     if( _e == action4 ) return "action4";
+     if( _e == check ) return "check";
+     if( _e == action1 ) return "action1";
+     if( _e == trained ) return "trained";
+     if( _e == _chart_autoUpdateEvent_xjal ) return "chart auto update event";
+     if( _e == _chart1_autoUpdateEvent_xjal ) return "chart1 auto update event";
+     if( _e == _chart2_autoUpdateEvent_xjal ) return "chart2 auto update event";
+    return super.getNameOf( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout.Mode getModeOf( EventTimeout _e ) {
+    if ( _e == action2 ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == action3 ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == action4 ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == check ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == action1 ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == trained ) return EVENT_TIMEOUT_MODE_ONCE;
+    if ( _e == _chart_autoUpdateEvent_xjal ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == _chart1_autoUpdateEvent_xjal ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == _chart2_autoUpdateEvent_xjal ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    return super.getModeOf( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public double getFirstOccurrenceTime( EventTimeout _e ) {
+    double _t;
+    if ( _e == action2 ) {
+      _t = 
+2.6 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == action3 ) {
+      _t = 
+2.7 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == action4 ) {
+      _t = 
+2.8 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == check ) {
+      _t = 
+2 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == action1 ) {
+      _t = 
+2.55 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == trained ) {
+      _t = 
+0.1 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == _chart_autoUpdateEvent_xjal ) {
+      _t = 
+0 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == _chart1_autoUpdateEvent_xjal ) {
+      _t = 
+0 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == _chart2_autoUpdateEvent_xjal ) {
+      _t = 
+0 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    return super.getFirstOccurrenceTime( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public double evaluateTimeoutOf( EventTimeout _e ) {
+    double _t;
+    if( _e == action2) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == action3) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == action4) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == check) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == action1) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == _chart_autoUpdateEvent_xjal) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == _chart1_autoUpdateEvent_xjal) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == _chart2_autoUpdateEvent_xjal) {
+      _t = 
+1 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    return super.evaluateTimeoutOf( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void executeActionOf( EventTimeout _e ) {
+    if ( _e == action2 ) {
+      EventTimeout self = _e;
+
+
+if(bankingSystem.converged && isAlive) {
+	updateBalanceSheet(PAYMENT);
+	// lending limits and borrowing requests
+	resetRequest();
+	RLReward = 0;
+	
+	
+	if(!bankingSystem.isEN)	updateRequest();
+}
+ 
+;
+      return;
+    }
+    if ( _e == action3 ) {
+      EventTimeout self = _e;
+
+
+if(isAlive){
+	// request debts settlement
+	
+	requestSettlement();
+	// update TD
+	calcTDErr();
+	copyLinkScore.clear();
+	copyLinkScore.putAll(linkScore);
+}
+ 
+;
+      return;
+    }
+    if ( _e == action4 ) {
+      EventTimeout self = _e;
+
+
+if(bankingSystem.converged && isAlive){
+	updateBalanceSheet(SETTLEMENT);
+	//updateLiquidityRequest();
+}
+ 
+;
+      return;
+    }
+    if ( _e == check ) {
+      EventTimeout self = _e;
+
+
+if(isAlive){
+	//overnightBorrowingN = overnightBorrowingN>0?(int)Math.ceil(.5*overnightBorrowingN+.5*overnightBorrowing.size()) : max(1,overnightBorrowing.size());
+	//overnightLendingN = overnightLendingN>0? (int)Math.ceil(.5*overnightLendingN+.5*overnightLending.size()) : max(1,overnightLending.size());
+	resetSettlement();
+	//if(time()> 10 )System.out.println((overnightBorrowingInternal)+","+(overnightLendingInternal));
+	
+	if(bankingSystem.converged)checkIncome();
+	else {
+		overnightConn.disconnectFromAll();
+		shorttermConn.disconnectFromAll();
+		longtermConn.disconnectFromAll();
+		overnightLending.clear();
+		shorttermLending.clear();
+		longtermLending.clear();
+		overnightBorrowing.clear();
+		shorttermBorrowing.clear();
+		longtermBorrowing.clear();
+		overnightLendingInternal=overnightLendingExternal=overnightBorrowingInternal=overnightBorrowingExternal=0;
+		shorttermLendingInternal=shorttermLendingExternal=shorttermBorrowingInternal=shorttermBorrowingExternal=0;
+		longtermLendingInternal=longtermLendingExternal=longtermBorrowingInternal=longtermBorrowingExternal=0;
+	}
+	
+	// shock response
+	if(time()>(bankingSystem.shockTime+3*bankingSystem.reactionTime))	settlementAdj = 1.0; 
+	// decay interactive score
+	updateScore();	
+}
+ 
+;
+      return;
+    }
+    if ( _e == action1 ) {
+      EventTimeout self = _e;
+
+
+if(bankingSystem.converged && isAlive && (!bankingSystem.isEN)) {
+	// external payments
+	payExternalDebt();
+	collectExternalLending();
+	
+	if(bankingSystem.LendPcntTrained!=1)updateLendPercent();
+	
+}
+ 
+;
+      return;
+    }
+    if ( _e == trained ) {
+      EventTimeout self = _e;
+
+
+if(bankingSystem.LendPcntTrained==1){
+	int it = 0;	
+	double sigma = 1;
+		for(Bank b: bankingSystem.banks){
+				RLState[it] = 1.0*b.balancesheet.cash/b.balancesheet.asset;
+				RLState[it+1]= 1.0*b.balancesheet.equity/b.balancesheet.asset;
+				RLState[it+2] = 1.0*(b.balancesheet.fedfundbot + b.balancesheet.fedsecsld + b.balancesheet.brwmy)/b.balancesheet.asset;
+				it = it+3;
+			}
+			
+		double uTotal = 0;
+		for(it=0; it<theta.length; it++){		
+			uTotal += RLState[it]*theta[it];		
+		}
+		u = uTotal;	
+		// update action: convert infinity to (0,1) using sigmoid distribution
+		a = normal(sigma,u);
+		double beta = 0.02;
+		lendPercent = 1.0/(1 + beta * Math.pow(2.71828,-a));
+		//lendPercent = 1.0;// for EN model only. 
+	}
+		
+ 
+;
+      return;
+    }
+    if ( _e == _chart_autoUpdateEvent_xjal ) {
+      chart.updateData();
+      return;
+    }
+    if ( _e == _chart1_autoUpdateEvent_xjal ) {
+      chart1.updateData();
+      return;
+    }
+    if ( _e == _chart2_autoUpdateEvent_xjal ) {
+      chart2.updateData();
+      return;
+    }
+    super.executeActionOf( _e );
+  }
+
+	
+
+  /** Internal constant, shouldn't be accessed by user */
+  @AnyLogicInternalCodegenAPI
+  protected static final int _STATECHART_COUNT_xjal = 1;
+
+
+  // Statecharts
+  public Statechart<life_state> life = new Statechart<>( this, (short)2 );
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public String getNameOf( Statechart _s ) {
+    if(_s == this.life) return "life";
+    return super.getNameOf( _s );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public int getIdOf( Statechart _s ) {
+    if(_s == this.life) return 0;
+    return super.getIdOf( _s );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void executeActionOf( Statechart _s ) {
+    if( _s == this.life ) {
+      enterState( alive, true );
+      return;
+    }
+    super.executeActionOf( _s );
+  }
+
+   // States of all statecharts
+   
+  public enum life_state implements IStatechartState<Bank, life_state> {
+    alive,
+    initialization() {
+      @Override
+      @AnyLogicInternalCodegenAPI
+      public life_state getContainerState() {
+        return alive;
+      }
+	},
+    small() {
+      @Override
+      @AnyLogicInternalCodegenAPI
+      public life_state getContainerState() {
+        return alive;
+      }
+	},
+    large() {
+      @Override
+      @AnyLogicInternalCodegenAPI
+      public life_state getContainerState() {
+        return alive;
+      }
+	},
+    sizebranch() {
+      @Override
+      @AnyLogicInternalCodegenAPI
+      public life_state getContainerState() {
+        return alive;
+      }
+	},
+    failed;
+
+    @AnyLogicInternalCodegenAPI
+    private Collection<life_state> _simpleStatesDeep_xjal;
+
+    @AnyLogicInternalCodegenAPI
+    private Set<life_state> _fullState_xjal;
+
+    @AnyLogicInternalCodegenAPI
+    private Set<life_state> _statesInside_xjal;
+
+    @Override
+    @AnyLogicInternalCodegenAPI
+    public Collection<life_state> getSimpleStatesDeep() {
+      Collection<life_state> result = _simpleStatesDeep_xjal;
+      if (result == null) {
+        _simpleStatesDeep_xjal = result = calculateAllSimpleStatesDeep();
+      }
+      return result;
+    }
+    
+    @Override
+    public Set<life_state> getFullState() {
+      Set<life_state> result = _fullState_xjal;
+      if (result == null) {
+        _fullState_xjal = result = calculateFullState();
+      }
+      return result;
+    }
+    
+    @Override
+    @AnyLogicInternalCodegenAPI
+    public Set<life_state> getStatesInside() {
+      Set<life_state> result = _statesInside_xjal;
+      if (result == null) {
+        _statesInside_xjal = result = calculateStatesInside();
+      }
+      return result;
+    }
+
+    @Override
+    @AnyLogicInternalCodegenAPI
+    public Statechart<life_state> getStatechart( Bank _a ) {
+      return _a.life;
+    }
+  }
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final life_state alive = life_state.alive;
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final life_state initialization = life_state.initialization;
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final life_state small = life_state.small;
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final life_state large = life_state.large;
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final life_state sizebranch = life_state.sizebranch;
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final life_state failed = life_state.failed;
+
+
+  @AnyLogicInternalCodegenAPI
+  private void enterState( life_state self, boolean _destination ) {
+    switch( self ) {
+      case alive:
+  	    logToDBEnterState(life, self);
+        // (Composite state)
+        transition3.start();
+        if ( _destination ) {
+           enterState( initialization, true );
+        }
+        return;
+      case initialization:
+  	    logToDBEnterState(life, self);
+        // (Simple state (not composite))
+        life.setActiveState_xjal( initialization );
+        lifecicle.start();
+        return;
+      case small:
+  	    logToDBEnterState(life, self);
+        // (Simple state (not composite))
+        life.setActiveState_xjal( small );
+        return;
+      case large:
+  	    logToDBEnterState(life, self);
+        // (Simple state (not composite))
+        life.setActiveState_xjal( large );
+        return;
+      case sizebranch:
+  	    logToDBEnterState(life, self);
+        // (Branch)
+        if ( 
+this.type==LARGE 
+ ) { // initlarge
+          enterState( large, true );
+          return;
+        }
+        // initsmall (default)
+          enterState( small, true );
+        return;
+      case failed:
+  	    logToDBEnterState(life, self);
+        // (Final State)
+        {
+this.isAlive = false;
+bankingSystem.numFailedBanks++;
+bankingSystem.failed(this);
+//int n = 0;
+// inform lender
+for(Bank b : overnightBorrowing.keySet()) {
+	if(overnightBorrowing.get(b)>0) {
+	    //n++;
+		messageConn.deliver(new DebtMessage(this,overnightBorrowing.get(b),OVERNIGHT,FAILED), b);
+	}
+}	
+for(Bank b : shorttermBorrowing.keySet())
+	if(shorttermBorrowing.get(b)>0) {
+	    //n++;
+		messageConn.deliver(new DebtMessage(this,shorttermBorrowing.get(b),SHORTTERM,FAILED), b);
+	}
+for(Bank b : longtermBorrowing.keySet())
+	if(longtermBorrowing.get(b)>0) {
+	    //n++;
+		messageConn.deliver(new DebtMessage(this,longtermBorrowing.get(b),LONGTERM,FAILED), b);
+	}
+ 
+;}
+        life.setActiveState_xjal( failed );
+        life.onDestroy();
+        return;
+      default:
+        return;
+    }
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private void exitState( life_state self, Transition _t, boolean _source ) {
+    switch( self ) {
+      case alive: 
+  	    logToDBExitState(life, self);
+  	    logToDB(life, _t, self);
+      // (Composite state)
+        if ( _source ) exitInnerStates(self);
+        if ( !_source || _t != transition3 ) transition3.cancel();
+        return;
+      case initialization: 
+  	    logToDBExitState(life, self);
+  	    logToDB(life, _t, self);
+      // (Simple state (not composite))
+        if ( !_source || _t != lifecicle) lifecicle.cancel();
+        return;
+      case small: 
+  	    logToDBExitState(life, self);
+  	    logToDB(life, _t, self);
+      // (Simple state (not composite))
+        return;
+      case large: 
+  	    logToDBExitState(life, self);
+  	    logToDB(life, _t, self);
+      // (Simple state (not composite))
+        return;
+      default:
+        return;
+    }
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private void exitInnerStates( life_state _destination ) {
+    life_state _state = life.getActiveSimpleState();
+    while( _state != _destination ) {
+			exitState( _state, null, false );
+			_state = _state.getContainerState();
+		}
+	}
+  
+
+  public TransitionCondition transition3 = new TransitionCondition( this );
+  public TransitionCondition lifecicle = new TransitionCondition( this );
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public String getNameOf( TransitionCondition _t ) {
+    if ( _t == transition3 ) return "transition3";
+    if ( _t == lifecicle ) return "lifecicle";
+    return super.getNameOf( _t );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public Statechart getStatechartOf( TransitionCondition _t ) { 
+    if ( _t == transition3 ) return life;
+    if ( _t == lifecicle ) return life;
+    return super.getStatechartOf( _t );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void executeActionOf( TransitionCondition self ) {
+    if ( self == transition3 ) {
+      exitState( alive, self, true );
+          enterState( failed, true );
+      return;
+    }
+    if ( self == lifecicle ) {
+      exitState( initialization, self, true );
+          enterState( sizebranch, true );
+      return;
+    }
+    super.executeActionOf( self );
+  }
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public boolean testConditionOf( TransitionCondition _t ) {
+    if ( _t == transition3 ) return 
+!this.isAlive 
+;
+    if ( _t == lifecicle ) return 
+this.isAlive 
+;
+    return super.testConditionOf( _t );
+  }
+
+
+
+  // Functions
+
+  void initBalanceSheet(  ) { 
+
+overnightAlpha = shorttermAlpha = longtermAlpha = (type==LARGE? bankingSystem.alphaLarge : bankingSystem.alphaSmall);
+overnightBeta = shorttermBeta = longtermBeta = (type==LARGE? bankingSystem.betaLarge : bankingSystem.betaSmall);
+
+balancesheet.asset = asset;
+balancesheet.liab = (int) (balancesheet.asset*liab2asset);
+balancesheet.equity = balancesheet.asset - balancesheet.liab;
+balancesheet.cash = (int) (balancesheet.asset*cash2asset);
+balancesheet.balanceus = (int) (balancesheet.asset*balus2asset);
+balancesheet.balancenus = (int) (balancesheet.asset*balnus2asset);
+balancesheet.fed = (int) (balancesheet.asset*fed2asset);
+//overnightLendingExternal = balancesheet.fedfundsld = (int) (balancesheet.asset*fedfundsld2asset);
+//shorttermLendingExternal = balancesheet.fedsecbot = (int) (balancesheet.asset*fedsecbot2asset);
+//longtermLendingExternal = balancesheet.loan = (int) (balancesheet.asset*loan2asset);
+debtRequest.fedfundsld = overnightLendingExternal = (int) (balancesheet.asset*fedfundsld2asset);
+debtRequest.fedsecbot = shorttermLendingExternal = (int) (balancesheet.asset*fedsecbot2asset);
+debtRequest.loan = longtermLendingExternal = (int) (balancesheet.asset*loan2asset);
+balancesheet.sec = (int)(balancesheet.asset*sec2asset);
+balancesheet.treasury = (int)(balancesheet.sec*treasury2sc);
+balancesheet.state = (int)(balancesheet.sec*state2sc);
+balancesheet.agency = (int)(balancesheet.sec*agency2sc);
+balancesheet.abs = (int)(balancesheet.sec*abs2sc);
+balancesheet.mbs = (int)(balancesheet.sec*mbs2sc);
+balancesheet.equitysec = (int)(balancesheet.sec*equitysec2sc);
+balancesheet.othersec = balancesheet.sec - 
+(balancesheet.treasury+balancesheet.state+balancesheet.agency+balancesheet.abs
++balancesheet.mbs+balancesheet.equitysec);
+
+balancesheet.otherasset = balancesheet.asset-balancesheet.sec-balancesheet.cash-balancesheet.balanceus-balancesheet.balancenus-balancesheet.fed-debtRequest.fedfundsld-debtRequest.fedsecbot-debtRequest.loan;
+balancesheet.deposit = (int) (balancesheet.liab*deposit2liab);
+//overnightBorrowingExternal = balancesheet.fedfundbot = (int) (balancesheet.liab*fedfundbot2liab);
+//shorttermBorrowingExternal  = balancesheet.fedsecsld = (int) (balancesheet.liab*fedsecsld2liab);
+//longtermBorrowingExternal = balancesheet.brwmy = (int) (balancesheet.liab*brwmy2liab);
+debtRequest.fedfundbot = overnightBorrowingExternal = (int) (balancesheet.liab*fedfundbot2liab);
+debtRequest.fedsecsld = shorttermBorrowingExternal = (int) (balancesheet.liab*fedsecsld2liab);
+debtRequest.brwmy = longtermBorrowingExternal = (int) (balancesheet.liab*brwmy2liab);
+balancesheet.otherliab = balancesheet.liab-balancesheet.deposit-debtRequest.fedfundbot-debtRequest.fedsecsld-debtRequest.brwmy;
+
+expBorrowing = overnightBorrowingExternal+shorttermBorrowingExternal+longtermBorrowingExternal;
+bankingSystem.banksize.put(this,balancesheet.asset);
+
+balancesheet.rwa = (int)(balancesheet.cash*weightCash+
+weightOtherasset*balancesheet.otherasset +
+weightInterbank * (balancesheet.fedfundsld + balancesheet.fedsecbot+balancesheet.loan)+
+weightTreasury* balancesheet.treasury + weightAgency * balancesheet.agency + weightState * balancesheet.state +
+weightMBS * balancesheet.mbs + weightABS*balancesheet.abs + weightEquitysec* balancesheet.equitysec);
+
+balancesheet.capitalRatio = 1.0 * balancesheet.equity / balancesheet.rwa;
+balancesheet.cashassetRatio = 1.0 * (balancesheet.cash+balancesheet.fed+balancesheet.balancenus+balancesheet.balanceus+balancesheet.treasury+balancesheet.state+balancesheet.agency)/balancesheet.liab;
+//if(balancesheet.otherasset<0)System.out.println(balancesheet.otherasset); 
+  }
+
+  
+double[] 
+ payDebt(  ) { 
+
+// payments
+scheduleExternalDebt();
+// update non-interbank entries
+//updateBalanceSheet(PAYMENT);
+// interbank entries
+payOvernight();
+payShortterm();
+payLongterm();
+int tot = totScheduledOvernight + totScheduledShortterm + totScheduledLongterm;
+double[] pays = new double[bankingSystem.alivebanks.size()];
+for(int i=0;i<bankingSystem.alivebanks.size();i++) {
+	pays[i] = tot==0? 0.0 : 1.0*(scheduledOvernight[i]+scheduledShortterm[i]+scheduledLongterm[i])/tot;
+}
+return pays; 
+  }
+
+  void payOvernight(  ) { 
+
+scheduledOvernight = new int[bankingSystem.alivebanks.size()];
+int i = 0;
+for(Bank b : bankingSystem.alivebanks.values()) {
+	int payment = 0;
+	if(overnightBorrowing.containsKey(b))	payment = overnightBorrowing.get(b);
+	//scheduledOvernight[i++] = 0.0;
+	scheduledOvernight[i++] = payment;
+	totScheduledOvernight += payment;
+	//if(time()<= 15 && time()>11)System.out.println(payment);
+	
+}
+//totScheduledOvernight = 0; 
+  }
+
+  void updateScore(  ) { 
+
+/********** update link score **********/
+Iterator<Map.Entry<Bank,Double>> iter = linkScore.entrySet().iterator();
+while(iter.hasNext()) {
+	Map.Entry<Bank,Double> entry = iter.next();
+	Bank b = entry.getKey();
+	if(b.isAlive){
+		linkScore.put(b,exp(-scoreDecay)*linkScore.get(b));
+	} else {
+		iter.remove();
+	}
+}
+
+/********** update size score **********/
+double avgSizeScore = 0.0;
+int n = 0;
+for(Bank b : overnightLending.keySet()) {
+	if(overnightLending.get(b)>0 && b.isAlive) {
+		if(bankingSystem.banksize.get(b)<=0)System.out.println("error,"+b.bankId+','+bankingSystem.banksize.get(b));
+		avgSizeScore += log(1.0*bankingSystem.banksize.get(b));
+		n++;
+	}
+}
+for(Bank b : shorttermLending.keySet()) {
+	if(shorttermLending.get(b)>0 && b.isAlive && (!overnightLending.containsKey(b))) {
+		if(bankingSystem.banksize.get(b)<=0)System.out.println("error,"+b.bankId+','+bankingSystem.banksize.get(b));
+		avgSizeScore += log(1.0*bankingSystem.banksize.get(b));
+		n++;
+	}
+}
+for(Bank b : longtermLending.keySet()) {
+	if(longtermLending.get(b)>0 && b.isAlive && (!overnightLending.containsKey(b)) && (!shorttermLending.containsKey(b))) {
+		if(bankingSystem.banksize.get(b)<=0)System.out.println("error,"+b.bankId+','+bankingSystem.banksize.get(b));
+		avgSizeScore += log(1.0*bankingSystem.banksize.get(b));
+		n++;
+	}
+}
+if(n>0)	avgSizeScore /= n;
+
+for(Bank b : bankingSystem.banks) {
+	if(b.isAlive && (!b.equals(this)))	sizeScore.put(b,log(bankingSystem.banksize.get(b))-avgSizeScore);
+	else if(sizeScore.containsKey(b))	sizeScore.remove(b);
+} 
+  }
+
+  void payShortterm(  ) { 
+
+scheduledShortterm = new int[bankingSystem.alivebanks.size()];
+int i = 0;
+for(Bank b : bankingSystem.alivebanks.values()) {
+	int payment = 0;
+	if(shorttermBorrowing.containsKey(b))	payment = (int)(getShorttermPayment()*shorttermBorrowing.get(b)+0.5);
+	scheduledShortterm[i++] = payment;
+	totScheduledShortterm += payment;
+} 
+  }
+
+  void payLongterm(  ) { 
+
+scheduledLongterm = new int[bankingSystem.alivebanks.size()];
+int i = 0;
+for(Bank b : bankingSystem.alivebanks.values()) {
+	int payment = 0;
+	if(longtermBorrowing.containsKey(b))	payment=(int)(getLongtermPayment()*longtermBorrowing.get(b)+0.5);
+	scheduledLongterm[i++] = payment;
+	totScheduledLongterm += payment;
+} 
+  }
+
+  void collectExternalLending(  ) { 
+
+int totcollection = scheduledExternalCollect[0];
+//set state features
+balancesheet.fedfundsld -= overnightLendingExternal;
+overnightLendingExternal = 0;
+int collection = scheduledExternalCollect[1];
+totcollection += collection;
+		
+balancesheet.fedsecbot -= collection;
+shorttermLendingExternal -= collection;
+collection = scheduledExternalCollect[2];
+totcollection += collection;
+
+balancesheet.loan -= collection;
+longtermLendingExternal -= collection;
+// collect cash and balance
+balancesheet.cash += totcollection;
+ 
+  }
+
+  void updateRequest(  ) { 
+
+double target = 0.0;
+double current = 0.0;
+if(balancesheet.equity>0) {
+	/********** borrowing **********/
+	int targetAsset = (int)(1.0*balancesheet.equity/(1.0-liab2asset*(1.0+uniform(-rangeTarget,rangeTarget))));
+	int targetLiab = targetAsset-balancesheet.equity;
+	// brwny
+	target = brwmy2liab*(1.0+uniform(-rangeTarget,rangeTarget));
+	current = 1.0*balancesheet.brwmy/targetLiab;
+	debtRequest.brwmy = max(0,(int)((target-current)*targetLiab));
+	
+	// fed-securities
+	target = fedsecsld2liab*(1.0+uniform(-rangeTarget,rangeTarget));
+	current = 1.0*balancesheet.fedsecsld/targetLiab;
+	debtRequest.fedsecsld = max(0,(int)((target-current)*targetLiab));
+	// fed-funds
+	target = fedfundbot2liab*(1.0+uniform(-rangeTarget,rangeTarget));
+	current = 1.0*balancesheet.fedfundbot/targetLiab;
+	debtRequest.fedfundbot = max(0,(int)((target-current)*targetLiab));
+    /********** lending **********/
+    // fed-funds
+	target = lendPercent*fedfundsld2asset*(1.0+uniform(-rangeTarget,rangeTarget));
+	current = 1.0*balancesheet.fedfundsld/balancesheet.asset;
+	debtRequest.fedfundsld = max(0,(int)((target-current)*balancesheet.asset));
+	//if(time()==11.6)System.out.println(debtRequest.fedfundsld);
+	
+	// fed-securities
+	target = fedsecbot2asset*(1.0+uniform(-rangeTarget,rangeTarget));
+	current = 1.0*balancesheet.fedsecbot/balancesheet.asset;
+	debtRequest.fedsecbot = max(0,(int)((target-current)*balancesheet.asset));
+	// loan
+	target = loan2asset*(1.0+uniform(-rangeTarget,rangeTarget));
+	current = 1.0*balancesheet.loan/balancesheet.asset;
+	debtRequest.loan = max(0,(int)((target-current)*balancesheet.asset));
+} 
+  }
+
+  
+List<Bank> 
+ rank( Map<Bank,Double> input ) { 
+
+List<Bank> rs = new LinkedList();
+Set<Double> val = new TreeSet<Double>(input.values());
+for(double v : val){
+	for(Bank b : input.keySet()){
+		if(input.get(b)==v)	rs.add(b);
+	}
+}
+Collections.reverse(rs);
+return rs; 
+  }
+
+  void updateOtherEntry( Message condition ) { 
+
+
+balancesheet.sec = balancesheet.treasury+ balancesheet.state+balancesheet.agency
++balancesheet.abs+balancesheet.mbs+balancesheet.othersec+balancesheet.equitysec;
+
+balancesheet.asset = balancesheet.sec+balancesheet.cash+balancesheet.balanceus+balancesheet.balancenus+balancesheet.fed
++balancesheet.fedfundsld+balancesheet.fedsecbot+balancesheet.loan+balancesheet.otherasset;
+balancesheet.liab = balancesheet.deposit+balancesheet.fedfundbot+balancesheet.fedsecsld+balancesheet.brwmy+balancesheet.otherliab;
+balancesheet.equity = balancesheet.asset-balancesheet.liab;
+
+
+balancesheet.rwa = (int)(balancesheet.cash*weightCash+weightOtherasset*balancesheet.otherasset +weightInterbank * (balancesheet.fedfundsld + balancesheet.fedsecbot+balancesheet.loan)+weightTreasury* balancesheet.treasury + weightAgency * balancesheet.agency + weightState * balancesheet.state +weightMBS * balancesheet.mbs + weightABS*balancesheet.abs + weightEquitysec* balancesheet.equitysec);
+balancesheet.capitalRatio = 1.0 * balancesheet.equity / balancesheet.rwa;
+balancesheet.cashassetRatio = 1.0 * (balancesheet.cash+balancesheet.fed+balancesheet.balancenus+balancesheet.balanceus+balancesheet.treasury+balancesheet.state+balancesheet.agency)/balancesheet.liab;
+
+// update asset condition
+switch(condition) {
+	case SETTLEMENT:
+		bankingSystem.banksize.put(this,balancesheet.asset);
+		// match target
+		int amount = 0;
+		int target = (int)(cash2asset*balancesheet.asset);
+		//int adj1 = min(balancesheet.cash,target);
+		//int adj2 = min(balancesheet.otherasset+balancesheet.cash-amount,target);
+		//target = (int)triangular(adj1,max(adj1,adj2),matchRate*max(adj1,adj2));
+		amount += target-balancesheet.cash;
+		balancesheet.cash = target;	// cash
+		
+		target = (int)(balus2asset*balancesheet.asset);
+		//adj1 = min(balancesheet.balanceus, target);
+		//adj2 = min(balancesheet.otherasset+balancesheet.balanceus-amount,target);
+		//target = (int)triangular(adj1,max(adj1,adj2),matchRate*max(adj1,adj2));
+		amount += target-balancesheet.balanceus;	
+		balancesheet.balanceus = target;	// balanceus
+		
+		target = (int)(balnus2asset*balancesheet.asset);
+		//adj1 = min(balancesheet.balancenus, target);
+		//adj2 = min(balancesheet.otherasset+balancesheet.balancenus-amount,target);
+		//target = (int)triangular(adj1,max(adj1,adj2),matchRate*max(adj1,adj2));
+		amount += target-balancesheet.balancenus;
+		balancesheet.balancenus = target;
+		
+		target = (int)(fed2asset*balancesheet.asset);
+		//adj1 = min(balancesheet.fed, target);
+		//adj2 = min(balancesheet.otherasset+balancesheet.fed-amount,target);
+		//target = (int)triangular(adj1,max(adj1,adj2),matchRate*max(adj1,adj2));
+		amount += target-balancesheet.fed;
+		balancesheet.fed = target;	// fed
+				
+		target = balancesheet.asset-(balancesheet.cash+balancesheet.balanceus+balancesheet.balancenus+balancesheet.fed+balancesheet.fedfundsld+balancesheet.fedsecbot+balancesheet.loan);
+		if(realestateloan>0 && target<(balancesheet.sec+balancesheet.otherasset)) {
+			realestateloan = (int)(1.0*realestateloan/(balancesheet.sec+balancesheet.otherasset)*target);
+			realestateloan = max(0,realestateloan);
+		}
+		
+		balancesheet.otherasset = target-balancesheet.sec;
+		if(balancesheet.asset<0)System.out.println(":"+balancesheet.otherasset);
+		
+		/********** adaptive issue **********/
+		if(time()>(bankingSystem.shockTime+3*bankingSystem.reactionTime) && uniform(0,1)<bankingSystem.adaptiveP) {
+			target = uniform_discr(0, realestateloan);
+		    balancesheet.cash += (realestateloan-target);
+			balancesheet.otherasset -= (realestateloan-target);
+			realestateloan = target;
+		}
+		
+		if(balancesheet.cash+balancesheet.balanceus+balancesheet.balancenus+balancesheet.fed<0)
+			System.out.println("----------");
+		break;
+	default:
+		break;
+}
+ 
+  }
+
+  void requestSettlement(  ) { 
+
+List<Bank> lenderRank1 = rank(linkScore);
+for(Bank b : lenderRank1) {
+
+	if(debtRequest.fedfundbot!=debtSettlement.fedfundbot){	
+		messageConn.deliver(new DebtMessage(this,(int)Math.ceil(uniform(.0,.5)*(debtRequest.fedfundbot-debtSettlement.fedfundbot)),OVERNIGHT,REQUEST), b);}
+	
+	// fed-securities
+	if(debtRequest.fedsecsld!=debtSettlement.fedsecsld){
+		messageConn.deliver(new DebtMessage(this,(int)Math.ceil(uniform(.0,.5)*(debtRequest.fedsecsld-debtSettlement.fedsecsld)),SHORTTERM,REQUEST), b);}
+	
+	//other borrowed money
+	if(debtRequest.brwmy!=debtSettlement.brwmy){
+		messageConn.deliver(new DebtMessage(this,(int)Math.ceil(uniform(.0,.5)*(debtRequest.brwmy-debtSettlement.brwmy)),LONGTERM,REQUEST), b);}
+	
+}
+/*
+for(Bank b : bankingSystem.rankedbanks) {
+	if(debtRequest.fedfundbot!=debtSettlement.fedfundbot)	{
+	if((!b.isAlive) || linkScore.containsKey(b)||b.equals(this))	continue;
+	messageConn.deliver(new DebtMessage(this,(int)Math.ceil(uniform(.0,.5)*(debtRequest.fedfundbot-debtSettlement.fedfundbot)),OVERNIGHT,REQUEST), b);}
+	// fed-securities
+	if(debtRequest.fedsecsld!=debtSettlement.fedsecsld)	{
+	if((!b.isAlive) || linkScore.containsKey(b)||b.equals(this))	continue;
+	messageConn.deliver(new DebtMessage(this,(int)Math.ceil(uniform(.0,.5)*(debtRequest.fedsecsld-debtSettlement.fedsecsld)),SHORTTERM,REQUEST), b);}
+	// other borrowed money
+	if(debtRequest.brwmy!=debtSettlement.brwmy)	{
+	if((!b.isAlive) || linkScore.containsKey(b)||b.equals(this))	continue;
+	messageConn.deliver(new DebtMessage(this,(int)Math.ceil(uniform(.0,.5)*(debtRequest.brwmy-debtSettlement.brwmy)),LONGTERM,REQUEST), b);	}
+}
+*/ 
+  }
+
+  void updateBalanceSheet( Message condition ) { 
+
+switch(condition) {
+	case SETTLEMENT:
+		updateExternalSettlement();
+		processTransaction();
+		break;
+	default:
+		break;
+}
+updateOtherEntry(condition);
+ 
+  }
+
+  
+double 
+ decideSettlementPercentage( double score, DebtType condition ) { 
+
+//double r = min(0.1/time(),0.05);
+//double r = bankingSystem.overnightDegree.mean()>3 ? 1.0/time() : 1.0;
+/*
+switch(condition) {
+	case OVERNIGHT:
+		if(time()>bankingSystem.shockTime && time()<(bankingSystem.shockTime+3*bankingSystem.reactionTime))
+			return settlementAdj/(1.0+exp(overnightAlpha-overnightBeta*score));
+		return 1.0/(1.0+exp(overnightAlpha-overnightBeta*score)); 
+	case SHORTTERM:
+		if(time()>bankingSystem.shockTime && time()<(bankingSystem.shockTime+3*bankingSystem.reactionTime))
+			return settlementAdj/(1.0+exp(shorttermAlpha-shorttermBeta*score));
+		return 1.0/(1.0+exp(shorttermAlpha-shorttermBeta*score));
+	case LONGTERM:
+		if(time()>bankingSystem.shockTime && time()<(bankingSystem.shockTime+3*bankingSystem.reactionTime))
+			return settlementAdj/(1.0+exp(longtermAlpha-longtermBeta*score));
+		return 1.0/(1.0+exp(longtermAlpha-longtermBeta*score));
+	default:
+		return 0.0;
+}*/
+return 1.0/(1.0+exp(1-1*score)); 
+  }
+
+  void updateExternalSettlement(  ) { 
+
+//System.out.println("asset,"+(debtSettlement.fedfundsld-debtRequest.fedfundsld));
+//System.out.println("liability,"+(debtSettlement.fedfundbot-debtRequest.fedfundbot));
+/************** fed-funds **************/
+overnightLendingInternal += debtSettlement.fedfundsld;
+overnightBorrowingInternal += debtSettlement.fedfundbot;
+
+// external lending
+int external = (int)Math.floor(1.0*debtSettlement.fedfundsld/debtRequest.fedfundsld*(debtRequest.fedfundsld-debtSettlement.fedfundsld));
+//int external = (debtRequest.fedfundsld-debtSettlement.fedfundsld);
+overnightLendingExternal += external;
+debtSettlement.fedfundsld += external;
+// external borrowing
+external = (int)Math.floor(1.0*debtSettlement.fedfundbot/debtRequest.fedfundbot*(debtRequest.fedfundbot-debtSettlement.fedfundbot));
+//external = (debtRequest.fedfundbot-debtSettlement.fedfundbot);
+overnightBorrowingExternal += external;
+debtSettlement.fedfundbot += external;
+/**************  fed-securities  **************/
+shorttermLendingInternal += debtSettlement.fedsecbot;
+shorttermBorrowingInternal += debtSettlement.fedsecsld;
+// external lending
+external = (int)Math.floor(1.0*debtSettlement.fedsecbot/debtRequest.fedsecbot*(debtRequest.fedsecbot-debtSettlement.fedsecbot));
+//external = (debtRequest.fedsecbot-debtSettlement.fedsecbot);
+shorttermLendingExternal += external;
+debtSettlement.fedsecbot += external;
+// external borrowing
+external = (int)Math.floor(1.0*debtSettlement.fedsecsld/debtRequest.fedsecsld*(debtRequest.fedsecsld-debtSettlement.fedsecsld));
+//external = (debtRequest.fedsecsld-debtSettlement.fedsecsld);
+shorttermBorrowingExternal += external;
+debtSettlement.fedsecsld += external;
+/**************  loan  **************/
+longtermLendingInternal += debtSettlement.loan;
+longtermBorrowingInternal += debtSettlement.brwmy;
+//external lending
+external = (int)Math.floor(1.0*debtSettlement.loan/debtRequest.loan*(debtRequest.loan-debtSettlement.loan));
+//external = (debtRequest.loan-debtSettlement.loan);
+longtermLendingExternal += external;
+debtSettlement.loan += external;
+// external borrowing
+external = (int)Math.floor(1.0*debtSettlement.brwmy/debtRequest.brwmy*(debtRequest.brwmy-debtSettlement.brwmy));
+//external =(debtRequest.brwmy-debtSettlement.brwmy);
+longtermBorrowingExternal += external;
+debtSettlement.brwmy += external;
+
+expBorrowing = (int)(.5*expBorrowing+.5*(debtSettlement.fedfundbot+debtSettlement.fedsecsld+debtSettlement.brwmy)); 
+  }
+
+  void processTransaction(  ) { 
+
+// fed-funds
+int netcashflow = debtSettlement.fedfundbot - debtSettlement.fedfundsld;
+balancesheet.cash += netcashflow;
+balancesheet.fedfundsld += debtSettlement.fedfundsld;
+balancesheet.fedfundbot += debtSettlement.fedfundbot;
+// fed-securities
+netcashflow = debtSettlement.fedsecsld - debtSettlement.fedsecbot;
+balancesheet.cash += netcashflow;
+balancesheet.fedsecbot += debtSettlement.fedsecbot;
+balancesheet.fedsecsld += debtSettlement.fedsecsld;
+// loan
+netcashflow = debtSettlement.brwmy - debtSettlement.loan;
+balancesheet.cash += netcashflow;
+balancesheet.loan += debtSettlement.loan;
+balancesheet.brwmy += debtSettlement.brwmy;
+
+ 
+  }
+
+  void resetRequest(  ) { 
+
+debtRequest.brwmy = 0;
+debtRequest.fedfundbot = 0;
+debtRequest.fedfundsld = 0;
+debtRequest.fedsecbot = 0;
+debtRequest.fedsecsld = 0;
+debtRequest.loan = 0; 
+  }
+
+  void resetSettlement(  ) { 
+
+debtSettlement.brwmy = 0;
+debtSettlement.fedfundbot = 0;
+debtSettlement.fedfundsld = 0;
+debtSettlement.fedsecbot = 0;
+debtSettlement.fedsecsld = 0;
+debtSettlement.loan = 0; 
+  }
+
+  void payExternalDebt(  ) { 
+
+// pay overnight external borrowing
+int payment = scheduledExternalPay[0];
+overnightBorrowingExternal -= payment;
+balancesheet.cash -= payment;
+balancesheet.fedfundbot -= payment;
+
+// pay shortterm external borrowing
+payment = scheduledExternalPay[1];
+shorttermBorrowingExternal -= payment;
+balancesheet.cash -= payment;
+balancesheet.fedsecsld -= payment;
+
+// pay longterm external borrowing
+payment = scheduledExternalPay[2];
+longtermBorrowingExternal -= payment;
+balancesheet.cash -= payment;
+balancesheet.brwmy -= payment;
+ 
+  }
+
+  void checkIncome(  ) { 
+
+oldBalancesheet = balancesheet;
+
+if(balancesheet.equity>0) {
+double randNum = beta(17,36,-0.1,0.3);
+int amount = (int)(randNum*balancesheet.equity);
+	//int amount = (int)(beta(17, 36, -0.1, 0.3)*balancesheet.equity);
+	//amount = 0;
+	if(amount>0) {
+		/********** gain **********/
+		double ro = 1.0*balancesheet.otherasset/balancesheet.asset;
+		double rs = 1.0*balancesheet.sec/balancesheet.asset;
+		double r = ro+rs;
+		if(r>1)	System.out.println("OTHER ASSET ERROR");
+		r = r>1? 2-r:r;
+		if(realestateloan>0) {
+			realestateloan += (int)(1.0*r*amount/(balancesheet.sec+balancesheet.otherasset))*realestateloan;
+			realestateloan = max(0,realestateloan);
+		}
+		
+		balancesheet.otherasset += (int)(ro*amount);
+		
+		balancesheet.treasury +=(int)(1.0*balancesheet.treasury/balancesheet.asset*amount);
+		balancesheet.agency +=(int)(1.0*balancesheet.agency/balancesheet.asset*amount);
+		balancesheet.state +=(int)(1.0*balancesheet.state/balancesheet.asset*amount);
+		balancesheet.abs +=(int)(1.0*balancesheet.abs/balancesheet.asset*amount);
+		balancesheet.mbs +=(int)(1.0*balancesheet.mbs/balancesheet.asset*amount);
+		balancesheet.equitysec +=(int)(1.0*balancesheet.equitysec/balancesheet.asset*amount);
+		
+		balancesheet.sec += (int)(rs*amount);
+		balancesheet.othersec = balancesheet.sec - balancesheet.treasury- balancesheet.agency
+		-balancesheet.state -balancesheet.abs - balancesheet.mbs - balancesheet.equitysec;
+		
+		
+		balancesheet.cash += amount - (int)(ro*amount) - (int)(rs*amount);
+	} else if(amount<0) {
+		/********** loss **********/
+		amount = -amount;
+		if(time()>bankingSystem.shockTime)	equityLoss += amount;
+		double ro = 1.0*balancesheet.otherasset/balancesheet.asset;
+		double rs = 1.0*balancesheet.sec/balancesheet.asset;
+		double r = ro+rs;
+		
+		if(r>1)	System.out.println("OTHER ASSET ERROR LOSS");
+		r = r>1? 2-r:r;
+		if(realestateloan>0) {
+			realestateloan -= (int)(1.0*r*amount/(balancesheet.sec+balancesheet.otherasset)*realestateloan);
+			realestateloan = max(0,realestateloan);
+		}
+		int realizedloss = (int)(r*amount);
+		balancesheet.otherasset -= (int)(ro*amount);
+		
+		balancesheet.treasury -=(int)(1.0*balancesheet.treasury/balancesheet.asset*amount);
+		balancesheet.agency -=(int)(1.0*balancesheet.agency/balancesheet.asset*amount);
+		balancesheet.state -=(int)(1.0*balancesheet.state/balancesheet.asset*amount);
+		balancesheet.abs -=(int)(1.0*balancesheet.abs/balancesheet.asset*amount);
+		balancesheet.mbs -=(int)(1.0*balancesheet.mbs/balancesheet.asset*amount);
+		balancesheet.equitysec -=(int)(1.0*balancesheet.equitysec/balancesheet.asset*amount);
+		
+		balancesheet.sec -= (int)(rs*amount);
+		balancesheet.othersec = balancesheet.sec - 
+		(balancesheet.treasury+balancesheet.state+balancesheet.agency+balancesheet.abs
+		+balancesheet.mbs+balancesheet.equitysec);
+		
+		/***** lending loss *****/
+		r = 1.0*overnightLendingExternal/balancesheet.asset;
+		int lendingloss = min((int)(r*amount),overnightLendingExternal);
+		overnightLendingExternal -= lendingloss;
+		balancesheet.fedfundsld -= lendingloss;
+		realizedloss += lendingloss;
+		
+		r = 1.0*shorttermLendingExternal/balancesheet.asset;
+		lendingloss = min((int)(r*amount),shorttermLendingExternal);
+		shorttermLendingExternal -= lendingloss;
+		balancesheet.fedsecbot -= lendingloss;
+		realizedloss += lendingloss;
+		
+		r = 1.0*longtermLendingExternal/balancesheet.asset;
+		lendingloss = min((int)(r*amount),longtermLendingExternal);
+		longtermLendingExternal -= lendingloss;
+		balancesheet.loan -= lendingloss;
+		realizedloss += lendingloss;
+		
+		/***** cash loss *****/
+		amount -= realizedloss;
+		int i = 0;
+		while(amount>0 && i<4) {
+			i++;
+			if(balancesheet.cash>=balancesheet.balancenus && balancesheet.cash>=balancesheet.balanceus && balancesheet.cash>=balancesheet.fed) {
+				if(amount>balancesheet.cash) {
+					amount -= balancesheet.cash;
+					balancesheet.cash = 0;
+				} else {
+					balancesheet.cash -= amount;
+					amount = 0;
+				}
+			} else if(balancesheet.fed>=balancesheet.balancenus && balancesheet.fed>=balancesheet.balanceus && balancesheet.fed>=balancesheet.cash) {
+				if(amount>balancesheet.fed) {
+					amount -= balancesheet.fed;
+					balancesheet.fed = 0;
+				} else {
+					balancesheet.fed -= amount;
+					amount = 0;
+				}
+				
+			} else if(balancesheet.balanceus>=balancesheet.fed && balancesheet.balanceus>=balancesheet.balancenus && balancesheet.balanceus>=balancesheet.cash) {
+				if(amount>balancesheet.balanceus) {
+					amount -= balancesheet.balanceus;
+					balancesheet.balanceus = 0;
+				} else {
+					balancesheet.balanceus -= amount;
+					amount = 0;
+				}
+			} else {
+				if(amount>balancesheet.balancenus) {
+					amount -= balancesheet.balancenus;
+					balancesheet.balancenus = 0;
+				} else {
+					balancesheet.balancenus -= amount;
+					amount = 0;
+				}
+			} 
+		}
+		
+	}
+} 
+  }
+
+  void HPIShock( double downp ) { 
+
+int drop = min(realestateloan,(int)(realestateloan*downp));
+HPILoss += drop;
+double ro = balancesheet.otherasset/(balancesheet.otherasset+balancesheet.sec);
+
+//mark: need to separate drop to abs or mbs?
+balancesheet.treasury -=(int)(1.0*balancesheet.treasury/(balancesheet.sec+balancesheet.otherasset))*drop;
+balancesheet.agency -=(int)(1.0*balancesheet.agency/(balancesheet.sec+balancesheet.otherasset))*drop;
+balancesheet.state -=(int)(1.0*balancesheet.state/(balancesheet.sec+balancesheet.otherasset))*drop;
+balancesheet.abs -=(int)(1.0*balancesheet.abs/(balancesheet.sec+balancesheet.otherasset))*drop;
+balancesheet.mbs -=(int)(1.0*balancesheet.mbs/(balancesheet.sec+balancesheet.otherasset))*drop;
+balancesheet.equitysec -=(int)(1.0*balancesheet.equitysec/(balancesheet.sec+balancesheet.otherasset))*drop;
+		
+balancesheet.sec -= drop - (int)(ro*drop);		
+balancesheet.othersec = balancesheet.sec - 
+		(balancesheet.treasury+balancesheet.state+balancesheet.agency+balancesheet.abs
+		+balancesheet.mbs+balancesheet.equitysec);
+	
+balancesheet.otherasset -= (int)(ro*drop);
+	
+realestateloan -= drop;
+
+updateBalanceSheet(NONE); 
+  }
+
+  void setRealEstateLoan( double r ) { 
+
+realestateloan = (int)((balancesheet.sec+balancesheet.otherasset)*r);
+realestateloan = max(0,realestateloan); 
+  }
+
+  
+int 
+ lendingValue( DebtType debttype, Bank bank ) { 
+
+switch(debttype){
+	case OVERNIGHT:
+		return overnightLending.get(bank);
+	case SHORTTERM:
+		return shorttermLending.get(bank);
+	case LONGTERM:
+		return longtermLending.get(bank);
+}
+return 0; 
+  }
+
+  
+double 
+ getShorttermPayment(  ) { 
+
+//return beta(19, 1, 0, 1);
+return uniform(0.99, 1); 
+  }
+
+  
+double 
+ getLongtermPayment(  ) { 
+
+//return beta(2, 1, 0, 1);
+return uniform(0.75, 1); 
+  }
+
+  
+double 
+ getWriteDown( DebtType type ) { 
+
+switch(type) {
+case OVERNIGHT:
+	return overnightWriteDown;
+case SHORTTERM:
+	return shorttermWriteDown;
+case LONGTERM:
+	return longtermWriteDown;
+default:
+	return 0.0;
+} 
+  }
+
+  void fail(  ) { 
+
+failureType="liquidity";
+isAlive = false;
+bankingSystem.numLiquidityFailure++;
+ 
+  }
+
+  
+int 
+ getNLending( DebtType dtype ) { 
+
+switch(dtype){
+case OVERNIGHT:
+	return overnightLending.size();
+case SHORTTERM:
+	return shorttermLending.size();
+case LONGTERM:
+	return longtermLending.size();
+default:
+	break;
+}
+return 0; 
+  }
+
+  
+int 
+ getNBorrowing( DebtType dtype ) { 
+
+switch(dtype){
+case OVERNIGHT:
+	return overnightBorrowing.size();
+case SHORTTERM:
+	return shorttermBorrowing.size();
+case LONGTERM:
+	return longtermBorrowing.size();
+default:
+	break;
+}
+return 0; 
+  }
+
+  void calcTDErr(  ) { 
+
+avgTDErr = Double.NaN;
+if(copyLinkScore.size()==0)	return;
+
+avgTDErr = 0.0;
+int n = 0;
+for(Bank b : copyLinkScore.keySet()) {
+	if(b.isAlive) {
+		avgTDErr += (copyLinkScore.get(b)-linkScore.get(b))*(copyLinkScore.get(b)-linkScore.get(b));
+		n++;
+	}
+}
+avgTDErr = sqrt(avgTDErr)/n; 
+  }
+
+  void initSettlement(  ) { 
+
+/************** fed-funds **************/
+overnightLendingInternal += debtSettlement.fedfundsld;
+overnightBorrowingInternal += debtSettlement.fedfundbot;
+// external lending
+int external = (debtRequest.fedfundsld-debtSettlement.fedfundsld);
+
+overnightLendingExternal += external;
+debtSettlement.fedfundsld += external;
+// external borrowing
+external = (debtRequest.fedfundbot-debtSettlement.fedfundbot);
+overnightBorrowingExternal += external;
+debtSettlement.fedfundbot += external;
+
+balancesheet.fedfundsld += debtSettlement.fedfundsld;
+balancesheet.fedfundbot += debtSettlement.fedfundbot;
+/**************  fed-securities  **************/
+shorttermLendingInternal += debtSettlement.fedsecbot;
+shorttermBorrowingInternal += debtSettlement.fedsecsld;
+// external lending
+external = (debtRequest.fedsecbot-debtSettlement.fedsecbot);
+shorttermLendingExternal += external;
+debtSettlement.fedsecbot += external;
+// external borrowing
+external = (debtRequest.fedsecsld-debtSettlement.fedsecsld);
+shorttermBorrowingExternal += external;
+debtSettlement.fedsecsld += external;
+
+balancesheet.fedsecbot += debtSettlement.fedsecbot;
+balancesheet.fedsecsld += debtSettlement.fedsecsld;
+/**************  loan  **************/
+longtermLendingInternal += debtSettlement.loan;
+longtermBorrowingInternal += debtSettlement.brwmy;
+//external lending
+external = (debtRequest.loan-debtSettlement.loan);
+longtermLendingExternal += external;
+debtSettlement.loan += external;
+// external borrowing
+external = (debtRequest.brwmy-debtSettlement.brwmy);
+longtermBorrowingExternal += external;
+debtSettlement.brwmy += external;
+
+balancesheet.loan += debtSettlement.loan;
+balancesheet.brwmy += debtSettlement.brwmy;
+
+expBorrowing = (int)(.5*expBorrowing+.5*(debtSettlement.fedfundbot+debtSettlement.fedsecsld+debtSettlement.brwmy)); 
+  }
+
+  void scheduleExternalDebt(  ) { 
+
+scheduledExternalPay[0] = overnightBorrowingExternal;
+scheduledExternalCollect[0] = overnightLendingExternal;
+double r = getShorttermPayment();
+scheduledExternalPay[1] = (int) (r*shorttermBorrowingExternal+0.5);
+scheduledExternalCollect[1] = (int)(r*shorttermLendingExternal+0.5);
+r = getLongtermPayment();
+scheduledExternalPay[2] = (int) (r*longtermBorrowingExternal+0.5);
+scheduledExternalCollect[2] = (int)(r*longtermLendingExternal+0.5); 
+  }
+
+  
+int[] 
+ pickSec( double amount ) { 
+
+int[] r = new int[6];
+r[0] = r[1] = r[2] = r[3] = r[4] = r[5] = 0;
+updateBalanceSheet(NONE);
+double liquid = (double)(balancesheet.treasury+balancesheet.agency+balancesheet.state);
+double illiquid = (double)(balancesheet.mbs+balancesheet.abs+balancesheet.equitysec);
+		if(liquid+balancesheet.fed+balancesheet.balanceus+balancesheet.balancenus > balancesheet.cashassetRatio*balancesheet.liab  ){
+			if(liquid>0){
+				int liquidamount = (int)min(amount, liquid);
+				balancesheet.treasury -= (int)(1.0*balancesheet.treasury/liquid * liquidamount);
+				balancesheet.agency -= (int)(1.0*balancesheet.agency/liquid * liquidamount);
+				balancesheet.state -= liquidamount - (int)(1.0*(balancesheet.treasury+balancesheet.agency)/liquid * liquidamount);
+				balancesheet.cash += liquidamount;
+				r[0] = (int)(balancesheet.treasury/liquid * liquidamount);
+				r[1] = (int)(balancesheet.agency/liquid*liquidamount);
+				r[2] = liquidamount - (int)(1.0*(balancesheet.treasury+balancesheet.agency)/liquid * liquidamount);
+				amount -= liquidamount;
+			}
+			
+		}
+		else if(illiquid > 0 && amount > 0){
+			int illiquidamount = (int)min(amount, illiquid);
+			int absAmt = (int)(balancesheet.abs/illiquid * illiquidamount);
+			int mbsAmt = (int)(balancesheet.mbs/illiquid * illiquidamount);
+			int equitysecAmt = illiquidamount-(int)( 1.0*(balancesheet.abs+balancesheet.mbs)/illiquid * illiquidamount);
+			balancesheet.mbs -= mbsAmt;
+			balancesheet.abs -= absAmt;
+			balancesheet.equitysec -= equitysecAmt;
+			balancesheet.cash += illiquidamount;
+			amount -= illiquidamount;
+			r[3] = absAmt;
+			r[4] = mbsAmt;
+			r[5] = equitysecAmt;
+		}
+updateBalanceSheet(NONE);
+return r;
+
+ 
+  }
+
+  void updateLendPercent(  ) { 
+
+if(time()<8.6)return;
+// update policy parameters using policy gradient
+
+// assume policy follows gaussian distribution
+//a = normal(sigma,u);
+// update theta
+double sigma = 1;
+double learningRate = 0.000001;
+double[] deltaTheta = new double[RLState.length];
+
+double paraDelta = (a-u)/sigma/sigma;
+totalDelta = 0;
+
+for(int i=0; i<RLState.length; i++) {
+	deltaTheta[i] =  learningRate * paraDelta* RLState[i] * RLReward;//Q.get(qStructure);
+   	theta[i] += deltaTheta[i];
+   	}
+// update u
+int it = 0;	
+	for(Bank b: bankingSystem.banks){
+		RLState[it] = 1.0*b.balancesheet.cash/b.balancesheet.asset;
+		RLState[it+1]= 1.0*b.balancesheet.equity/b.balancesheet.asset;
+		RLState[it+2] = 1.0*(b.balancesheet.fedfundbot + b.balancesheet.fedsecsld + b.balancesheet.brwmy)/b.balancesheet.asset;
+		it = it+3;
+	}
+	
+double uTotal = 0;
+for(it=0; it<theta.length; it++){		
+	uTotal += RLState[it]*theta[it];		
+}
+u = uTotal;
+qStructure.u = uTotal;	
+	
+// update action: convert infinity to (0,1) using sigmoid distribution
+a = normal(sigma,u);
+//a = Math.round(a*1000)/1000.0;
+double beta=1;
+lendPercent = 1.0/(1+beta*Math.pow(2.71828,-a));
+//lendPercent = min(lendPercent+0.4, 1);
+qStructure.a = a;
+
+
+//System.out.println(lendPercent); 
+  }
+
+  void updateQState(  ) { 
+
+ 
+  }
+
+  void CashShock( double downp ) { 
+
+int drop = (int)(balancesheet.cash*downp);
+
+//mark: need to separate drop to abs or mbs?
+balancesheet.cash -= drop;
+		
+
+updateBalanceSheet(NONE); 
+  }
+
+  void InterbankShock( double downp ) { 
+
+int drop = (int)(balancesheet.fedfundsld*downp);
+
+//mark: need to separate drop to abs or mbs?
+balancesheet.fedfundsld -= drop;
+
+
+updateBalanceSheet(NONE); 
+  }
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart_expression0_dataSet_xjal = new DataSet( 100, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart_expression0_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart_expression0_dataSet_xjal_YValue() {
+    return 
+balancesheet.asset 
+;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart_expression1_dataSet_xjal = new DataSet( 100, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart_expression1_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart_expression1_dataSet_xjal_YValue() {
+    return 
+balancesheet.liab 
+;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart1_expression0_dataSet_xjal = new DataSet( 100, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart1_expression0_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart1_expression0_dataSet_xjal_YValue() {
+    return 
+balancesheet.equity 
+;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart2_expression0_dataSet_xjal = new DataSet( 100, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart2_expression0_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart2_expression0_dataSet_xjal_YValue() {
+    return 
+balancesheet.cash+balancesheet.balanceus+balancesheet.balancenus+balancesheet.fed 
+;
+  }
+
+  // View areas
+  public ViewArea _origin_VA = new ViewArea( this, "[Origin]", 0, 0, 1200.0, 650.0 );
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public int getViewAreas(Map<String, ViewArea> _output) {
+    if ( _output != null ) {
+      _output.put( "_origin_VA", this._origin_VA );
+    }
+    return 1 + super.getViewAreas( _output );
+  }
+  @AnyLogicInternalCodegenAPI
+  protected static final int _chart = 1;
+  @AnyLogicInternalCodegenAPI
+  protected static final int _chart1 = 2;
+  @AnyLogicInternalCodegenAPI
+  protected static final int _chart2 = 3;
+  @AnyLogicInternalCodegenAPI
+  protected static final int _oval = 4;
+  @AnyLogicInternalCodegenAPI
+  protected static final int _image = 5;
+
+  /** Internal constant, shouldn't be accessed by user */
+  @AnyLogicInternalCodegenAPI
+  protected static final int _SHAPE_NEXT_ID_xjal = 6;
+
+  @AnyLogicInternalCodegenAPI
+  public boolean isPublicPresentationDefined() {
+    return true;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public boolean isEmbeddedAgentPresentationVisible( Agent _a ) {
+    return super.isEmbeddedAgentPresentationVisible( _a );
+  }
+
+  protected TimePlot chart;
+  protected TimePlot chart1;
+  protected TimePlot chart2;
+  
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private void _oval_SetDynamicParams_xjal( ShapeOval shape ) {
+    shape.setFillColor(
+type==LARGE? Color.GREEN : Color.ORANGE 
+);
+    shape.setRadius(
+1+min(5,asset/5000000.0) 
+);
+  }
+  
+  protected ShapeOval oval;
+  protected ShapeImage image;
+  @AnyLogicInternalCodegenAPI
+  private void _createPersistentElementsBP0_xjal() {
+    oval = new ShapeOval(
+       SHAPE_DRAW_2D, true,0.0, 0.0, 0.0, 0.0, 
+       null, green,
+	   5.0, 5.0, 0.0, 0.0, LINE_STYLE_SOLID ) {
+      @Override
+      public void updateDynamicProperties() {
+        _oval_SetDynamicParams_xjal( this );
+        super.updateDynamicProperties();
+      }
+    };
+
+    image = new ShapeImage(
+		Bank.this, SHAPE_DRAW_2D3D, true, 0.0, 0.0, 0.0, 0.0, 
+			150.0, 100.0, "/usbankingsystem/", 
+			new String[]{"image.png",}	 );
+
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private void _createPersistentElementsAP0_xjal() {
+    {
+    DataSet _item;
+    List<DataSet> _items = new ArrayList<DataSet>( 2 );
+    _items.add( _chart_expression0_dataSet_xjal ); 
+    _items.add( _chart_expression1_dataSet_xjal ); 
+    List<String> _titles = new ArrayList<String>( 2 );
+    _titles.add( "Asset" );
+    _titles.add( "Liability" );
+    List<Chart2DPlot.Appearance> _appearances = new ArrayList<Chart2DPlot.Appearance>( 2 );
+    _appearances.add( new Chart2DPlot.Appearance( darkOrange, true, false, Chart.INTERPOLATION_LINEAR, 2.0, Chart.POINT_CIRCLE ) );
+    _appearances.add( new Chart2DPlot.Appearance( mediumSeaGreen, true, false, Chart.INTERPOLATION_LINEAR, 2.0, Chart.POINT_CIRCLE ) );
+    chart = new TimePlot(
+		    Bank.this, false, 30.0, 430.0, 
+			480.0, 210.0,
+            null, null,
+            70.0, 10.0,
+			390.0, 160.0, white, black, black,
+            20.0, Chart.SOUTH,
+            
+100 
+            , Chart.WINDOW_MOVES_WITH_TIME, null, Chart.SCALE_AUTO,
+            0, 0, Chart.GRID_DEFAULT, Chart.GRID_DEFAULT,
+            darkGray, darkGray, _items, _titles, _appearances );
+
+    }
+    {
+    DataSet _item;
+    List<DataSet> _items = new ArrayList<DataSet>( 1 );
+    _items.add( _chart1_expression0_dataSet_xjal ); 
+    List<String> _titles = new ArrayList<String>( 1 );
+    _titles.add( "Equity" );
+    List<Chart2DPlot.Appearance> _appearances = new ArrayList<Chart2DPlot.Appearance>( 1 );
+    _appearances.add( new Chart2DPlot.Appearance( darkOrange, true, false, Chart.INTERPOLATION_LINEAR, 2.0, Chart.POINT_CIRCLE ) );
+    chart1 = new TimePlot(
+		    Bank.this, false, 568.0, 428.0, 
+			480.0, 210.0,
+            null, null,
+            82.0, 10.0,
+			378.0, 160.0, white, black, black,
+            20.0, Chart.SOUTH,
+            
+100 
+            , Chart.WINDOW_MOVES_WITH_TIME, null, Chart.SCALE_AUTO,
+            0, 0, Chart.GRID_DEFAULT, Chart.GRID_DEFAULT,
+            darkGray, darkGray, _items, _titles, _appearances );
+
+    }
+    {
+    DataSet _item;
+    List<DataSet> _items = new ArrayList<DataSet>( 1 );
+    _items.add( _chart2_expression0_dataSet_xjal ); 
+    List<String> _titles = new ArrayList<String>( 1 );
+    _titles.add( "Liquidity asset" );
+    List<Chart2DPlot.Appearance> _appearances = new ArrayList<Chart2DPlot.Appearance>( 1 );
+    _appearances.add( new Chart2DPlot.Appearance( goldenRod, true, false, Chart.INTERPOLATION_LINEAR, 2.0, Chart.POINT_CIRCLE ) );
+    chart2 = new TimePlot(
+		    Bank.this, false, 670.0, 70.0, 
+			510.0, 300.0,
+            null, null,
+            80.0, 10.0,
+			410.0, 240.0, white, black, black,
+            20.0, Chart.SOUTH,
+            
+100 
+            , Chart.WINDOW_MOVES_WITH_TIME, null, Chart.SCALE_AUTO,
+            0, 0, Chart.GRID_DEFAULT, Chart.GRID_DEFAULT,
+            darkGray, darkGray, _items, _titles, _appearances );
+
+    }
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private void _createPersistentElementsBS0_xjal() {
+  }
+
+
+  // Static initialization of persistent elements
+  {
+    _createPersistentElementsBP0_xjal();
+  }
+  protected ShapeTopLevelPresentationGroup presentation;
+  protected ShapeModelElementsGroup icon; 
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public ShapeTopLevelPresentationGroup getPresentationShape() {
+    return presentation;
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public ShapeModelElementsGroup getModelElementsShape() {
+    return icon;
+  }
+
+  /**
+   * Constructor
+   */
+  public Bank( Engine engine, Agent owner, AgentList<? extends Bank> ownerPopulation ) {
+    super( engine, owner, ownerPopulation );
+    instantiateBaseStructureThis_xjal();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void onOwnerChanged_xjal() {
+    super.onOwnerChanged_xjal();
+    setupReferences_xjal();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void instantiateBaseStructure_xjal() {
+    super.instantiateBaseStructure_xjal();
+    instantiateBaseStructureThis_xjal();
+  }
+  
+  @AnyLogicInternalCodegenAPI
+  private void instantiateBaseStructureThis_xjal() {
+    setupReferences_xjal();
+  }
+  
+  @AnyLogicInternalCodegenAPI
+  private void setupReferences_xjal() {
+    bankingSystem = get_BankingSystem();
+  }
+  
+  /**
+   * Simple constructor. Please add created agent to some population by calling goToPopulation() function
+   */
+  public Bank() {
+  }
+  
+  /**
+   * Simple constructor. Please add created agent to some population by calling goToPopulation() function
+   */
+  public Bank( int bankId, double rangeTarget, Size type, double cash2asset, double balus2asset, double balnus2asset, double fed2asset, double fedfundsld2asset, double fedfundbot2liab, double fedsecbot2asset, double fedsecsld2liab, double loan2asset, double liab2asset, double deposit2liab, double brwmy2liab, int asset, double scoreDecay, double borrowingThred, double overnightAssetRatio, double longtermAssetRatio, double overnightAlpha, double shorttermAlpha, double longtermAlpha, double overnightBeta, double shorttermBeta, double longtermBeta, double matchRate, double shorttermAssetRatio, double settlementAdj, double sec2asset, double treasury2sc, double state2sc, double agency2sc, double abs2sc, double mbs2sc, double equitysec2sc, double weightABS, double weightAgency, double weightCash, double weightEquitysec, double weightInterbank, double weightMBS, double weightOtherasset, double weightState, double weightTreasury, double cashassetHoldingRatio, double interestRate ) {
+    markParametersAreSet();
+    this.bankId = bankId;
+    this.rangeTarget = rangeTarget;
+    this.type = type;
+    this.cash2asset = cash2asset;
+    this.balus2asset = balus2asset;
+    this.balnus2asset = balnus2asset;
+    this.fed2asset = fed2asset;
+    this.fedfundsld2asset = fedfundsld2asset;
+    this.fedfundbot2liab = fedfundbot2liab;
+    this.fedsecbot2asset = fedsecbot2asset;
+    this.fedsecsld2liab = fedsecsld2liab;
+    this.loan2asset = loan2asset;
+    this.liab2asset = liab2asset;
+    this.deposit2liab = deposit2liab;
+    this.brwmy2liab = brwmy2liab;
+    this.asset = asset;
+    this.scoreDecay = scoreDecay;
+    this.borrowingThred = borrowingThred;
+    this.overnightAssetRatio = overnightAssetRatio;
+    this.longtermAssetRatio = longtermAssetRatio;
+    this.overnightAlpha = overnightAlpha;
+    this.shorttermAlpha = shorttermAlpha;
+    this.longtermAlpha = longtermAlpha;
+    this.overnightBeta = overnightBeta;
+    this.shorttermBeta = shorttermBeta;
+    this.longtermBeta = longtermBeta;
+    this.matchRate = matchRate;
+    this.shorttermAssetRatio = shorttermAssetRatio;
+    this.settlementAdj = settlementAdj;
+    this.sec2asset = sec2asset;
+    this.treasury2sc = treasury2sc;
+    this.state2sc = state2sc;
+    this.agency2sc = agency2sc;
+    this.abs2sc = abs2sc;
+    this.mbs2sc = mbs2sc;
+    this.equitysec2sc = equitysec2sc;
+    this.weightABS = weightABS;
+    this.weightAgency = weightAgency;
+    this.weightCash = weightCash;
+    this.weightEquitysec = weightEquitysec;
+    this.weightInterbank = weightInterbank;
+    this.weightMBS = weightMBS;
+    this.weightOtherasset = weightOtherasset;
+    this.weightState = weightState;
+    this.weightTreasury = weightTreasury;
+    this.cashassetHoldingRatio = cashassetHoldingRatio;
+    this.interestRate = interestRate;
+  }
+  
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void doCreate() {
+    super.doCreate();
+    // Assigning initial values for plain variables
+    setupPlainVariables_Bank_xjal();
+    // Dynamic initialization of persistent elements
+    _createPersistentElementsAP0_xjal();
+    presentation = new ShapeTopLevelPresentationGroup( Bank.this, true, 0, 0, 0, 0 , oval, image, chart, chart1, chart2 );
+    icon = new ShapeModelElementsGroup( Bank.this, getElementProperty( "usbankingsystem.Bank.icon", IElementDescriptor.MODEL_ELEMENT_DESCRIPTORS )  );
+    icon.setIconOffsets( 0.0, 0.0 );
+	 // Port connectors with non-replicated objects
+    // Creating replicated embedded objects
+    setupInitialConditions_xjal( Bank.class );
+    // Dynamic initialization of persistent elements
+    _createPersistentElementsBS0_xjal();
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void doStart() {
+    super.doStart();
+    action2.start();
+    action3.start();
+    action4.start();
+    check.start();
+    action1.start();
+    trained.start();
+    _chart_autoUpdateEvent_xjal.start();
+    _chart1_autoUpdateEvent_xjal.start();
+    _chart2_autoUpdateEvent_xjal.start();
+    life.start();
+  }
+ 
+  @AnyLogicInternalCodegenAPI
+  public void onStartup() {
+    super.onStartup();
+    
+//initialize balance sheet
+initBalanceSheet();
+// insert into system
+bankingSystem.alivebanks.put(bankId, this); 
+  }
+
+  /**
+   * Assigning initial values for plain variables<br>
+   * <em>This method isn't designed to be called by user and may be removed in future releases.</em>
+   */
+  @AnyLogicInternalCodegenAPI
+  public void setupPlainVariables_xjal() {
+    setupPlainVariables_Bank_xjal();
+  }
+
+  /**
+   * Assigning initial values for plain variables<br>
+   * <em>This method isn't designed to be called by user and may be removed in future releases.</em>
+   */
+  @AnyLogicInternalCodegenAPI
+  private void setupPlainVariables_Bank_xjal() {
+    balancesheet = 
+new BalanceSheet(); 
+;
+    overnightLendingInternal = 
+0 
+;
+    overnightLendingExternal = 
+0 
+;
+    longtermLendingInternal = 
+0 
+;
+    longtermLendingExternal = 
+0 
+;
+    longtermBorrowingInternal = 
+0 
+;
+    longtermBorrowingExternal = 
+0 
+;
+    isAlive = 
+true 
+;
+    debtRequest = 
+new InterbankEntry(); 
+;
+    debtSettlement = 
+new InterbankEntry(); 
+;
+    shorttermLendingInternal = 
+0 
+;
+    shorttermLendingExternal = 
+0 
+;
+    shorttermWriteDown = 
+0.0 
+;
+    longtermWriteDown = 
+0.0 
+;
+    avgSizeScore = 
+0.0 
+;
+    overnightBorrowingInternal = 
+0 
+;
+    overnightBorrowingExternal = 
+0 
+;
+    shorttermBorrowingInternal = 
+0 
+;
+    shorttermBorrowingExternal = 
+0 
+;
+    realestateloan = 
+0 
+;
+    overnightWriteDown = 
+1.0 
+;
+    liquidityRisk = 
+false 
+;
+    solvencyRisk = 
+false 
+;
+    failureType = 
+"na" 
+;
+    HPILoss = 
+0 
+;
+    equityLoss = 
+0 
+;
+    writedownLoss = 
+0 
+;
+    totScheduledOvernight = 
+0 
+;
+    totScheduledShortterm = 
+0 
+;
+    totScheduledLongterm = 
+0 
+;
+    expBorrowing = 
+0 
+;
+    scheduledShortterm = 
+null 
+;
+    scheduledLongterm = 
+null 
+;
+    scheduledOvernight = 
+null 
+;
+    avgTDErr = 
+Double.NaN 
+;
+    scheduledExternalPay = 
+new int[3] 
+;
+    scheduledExternalCollect = 
+new int[3] 
+;
+    contagionIndex = 
+0 
+;
+    liabTest = 
+0 
+;
+    lendInternalTest = 
+0 
+;
+    lendPercent = 
+1//0.999999 
+;
+    RLReward = 
+0 
+;
+    totalDelta = 
+0 
+;
+    oldBalancesheet = 
+new BalanceSheet(); 
+;
+    theta = 
+new double[bankingSystem.initBanks*3]; 
+;
+    a = 
+1 
+;
+    u = 
+0.0 
+;
+    RLState = 
+new double[bankingSystem.initBanks*3]; 
+;
+    qStructure = 
+new Qstructure(); 
+;
+    accumulativeReward = 
+0 
+;
+  }
+
+  // User API -----------------------------------------------------
+  public BankingSystem get_BankingSystem() {
+    {
+      Agent owner = getOwner();
+      if ( owner instanceof BankingSystem ) return (BankingSystem) owner;
+    }
+    return null;
+  }
+
+  /**
+   * Read-only variable. <em>Shouldn't be modified by user.</em>
+   */
+  @AnyLogicCustomSerialization(AnyLogicCustomSerializationMode.REFERENCE)
+  public transient usbankingsystem.BankingSystem bankingSystem;
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _overnightConn_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, mediumOrchid, 1.0, LINE_STYLE_DASHED, ARROW_FILLED, 0.0 );
+
+  public LinkToAgentCollection<Bank, Bank> overnightConn = new LinkToAgentCollectionImpl<Bank, Bank>(this, _overnightConn_commonAnimationSettings_xjal);
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _longtermConn_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, gold, 1.0, LINE_STYLE_DASHED, ARROW_FILLED, 0.0 );
+
+  public LinkToAgentCollection<Bank, Bank> longtermConn = new LinkToAgentCollectionImpl<Bank, Bank>(this, _longtermConn_commonAnimationSettings_xjal);
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _system_commonAnimationSettings_xjal;
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _system_commonAnimationSettings_xjal() {
+    if (_system_commonAnimationSettings_xjal == null) {
+      if (BankingSystem._bank_commonAnimationSettings_xjal == null) {
+        BankingSystem._bank_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, black, 1.0, LINE_STYLE_SOLID, ARROW_NONE, 0.0 );
+      }
+      _system_commonAnimationSettings_xjal = BankingSystem._bank_commonAnimationSettings_xjal;
+    } // endif (bidirectional)
+    return _system_commonAnimationSettings_xjal;
+  }
+
+  public LinkToAgent<BankingSystem, Bank> system = new LinkToAgentImpl<BankingSystem, Bank>(this, _system_commonAnimationSettings_xjal()){
+
+    @AnyLogicInternalCodegenAPI
+    public AbstractLinkToAgent<Bank, BankingSystem> getBidirectionalPeer_xjal(BankingSystem _agent_xjal) {
+      return _agent_xjal.bank;
+    }
+    
+    @AnyLogicInternalCodegenAPI
+    public void onReceive( Object msg, Agent sender ) {
+      _onReceive_system_xjal( msg, sender );
+    }
+  };
+  @AnyLogicInternalCodegenAPI
+  public void _onReceive_system_xjal( Object _msg_xjal, Agent _sender_xjal ) {
+    
+Debt  msg = (Debt) _msg_xjal;
+    BankingSystem sender = (BankingSystem) _sender_xjal;
+    
+
+if(this.equals(msg.lender)){
+	Bank b = msg.borrower;
+	// update score
+	if(linkScore.containsKey(b))	linkScore.put(b,linkScore.get(b)+log(1.0*msg.amount)/scoreDecay);
+	else	linkScore.put(b,log(1.0*msg.amount)/scoreDecay);
+	// update connection
+	switch(msg.type){
+		case OVERNIGHT:
+			overnightConn.connectTo(b);
+			overnightLendingInternal += msg.amount;
+			overnightLendingExternal -= msg.amount;
+			if(overnightLending.containsKey(b))	overnightLending.put(b, overnightLending.get(b)+msg.amount);			
+			else	overnightLending.put(b, msg.amount);
+			break;
+		case SHORTTERM:
+			shorttermConn.connectTo(b);
+			shorttermLendingInternal += msg.amount;
+			shorttermLendingExternal -= msg.amount;
+			if(shorttermLending.containsKey(b))	shorttermLending.put(b, shorttermLending.get(b)+msg.amount);
+			else	shorttermLending.put(b, msg.amount);
+			break;
+		case LONGTERM:
+			longtermConn.connectTo(b);
+			longtermLendingInternal += msg.amount;
+			longtermLendingExternal -= msg.amount;
+			if(longtermLending.containsKey(b))	longtermLending.put(b, longtermLending.get(b)+msg.amount);
+			else	longtermLending.put(b, msg.amount);
+			break;
+		default:
+			break;
+	}
+}
+else {
+	Bank b = msg.lender;
+	// update score
+	if(linkScore.containsKey(b))	linkScore.put(b,linkScore.get(b)+log(1.0*msg.amount));
+	else	linkScore.put(b,log(1.0*msg.amount));
+	// update connection
+	messageConn.connectTo(b);
+	switch(msg.type){
+		case OVERNIGHT:
+			overnightBorrowingInternal += msg.amount;
+			overnightBorrowingExternal -= msg.amount;
+			if(overnightBorrowing.containsKey(b))	overnightBorrowing.put(b, overnightBorrowing.get(b)+msg.amount);
+			else	overnightBorrowing.put(b, msg.amount);
+			break;
+		case SHORTTERM:
+			shorttermBorrowingInternal += msg.amount;
+			shorttermBorrowingExternal -= msg.amount;
+			if(shorttermBorrowing.containsKey(b))	shorttermBorrowing.put(b, shorttermBorrowing.get(b)+msg.amount);
+			else	shorttermBorrowing.put(b, msg.amount);
+			break;
+		case LONGTERM:
+			longtermBorrowingInternal += msg.amount;
+			longtermBorrowingExternal -= msg.amount;
+			if(longtermBorrowing.containsKey(b))	longtermBorrowing.put(b, longtermBorrowing.get(b)+msg.amount);
+			else	longtermBorrowing.put(b, msg.amount);
+			break;
+		default:
+			break;
+	}
+}
+ 
+  }
+
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _shorttermConn_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, gold, 1.0, LINE_STYLE_DASHED, ARROW_FILLED, 0.0 );
+
+  public LinkToAgentCollection<Bank, Bank> shorttermConn = new LinkToAgentCollectionImpl<Bank, Bank>(this, _shorttermConn_commonAnimationSettings_xjal);
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _messageConn_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, black, 1.0, LINE_STYLE_SOLID, ARROW_NONE, 0.0 );
+
+  public LinkToAgentCollection<Bank, Bank> messageConn = new LinkToAgentCollectionImpl<Bank, Bank>(this, _messageConn_commonAnimationSettings_xjal){
+
+    @AnyLogicInternalCodegenAPI
+    public AbstractLinkToAgent<Bank, Bank> getBidirectionalPeer_xjal(Bank _agent_xjal) {
+      return _agent_xjal.messageConn;
+    }
+    
+    @AnyLogicInternalCodegenAPI
+    public void onReceive( Object msg, Agent sender ) {
+      _onReceive_messageConn_xjal( msg, sender );
+    }
+  };
+  @AnyLogicInternalCodegenAPI
+  public void _onReceive_messageConn_xjal( Object _msg_xjal, Agent _sender_xjal ) {
+    
+DebtMessage  msg = (DebtMessage) _msg_xjal;
+    Bank sender = (Bank) _sender_xjal;
+    
+Bank b = msg.bank;
+int amount = 0;
+double r = 0.0;
+switch(msg.message) {
+	case FAILED:
+		switch(msg.type){
+			case OVERNIGHT:
+				amount = (int)((1-b.getWriteDown(OVERNIGHT))*msg.amount+0.5);
+				overnightLendingInternal -= msg.amount;
+				overnightLendingExternal += amount;
+				balancesheet.fedfundsld -= (msg.amount-amount);
+				overnightLending.remove(b);
+				overnightConn.disconnectFrom(b);
+				writedownLoss += (msg.amount-amount);
+				//contagionIndex += (int)((msg.amount-amount)*
+				//(1-1.0*b.overnightLendingInternal/b.balancesheet.liab)); 
+				
+				break;
+			case SHORTTERM:
+				amount = (int)((1-b.getWriteDown(SHORTTERM))*msg.amount+0.5);
+				shorttermLendingInternal -= msg.amount;
+				shorttermLendingExternal += amount;
+				balancesheet.fedsecbot -= (msg.amount-amount);
+				shorttermLending.remove(b);
+				shorttermConn.disconnectFrom(b);
+				
+				writedownLoss += (msg.amount-amount);
+				//contagionIndex += (int)((msg.amount-amount)*
+				//(1-1.0*b.shorttermLendingInternal/b.balancesheet.liab)) ;
+				
+				break;
+			case LONGTERM:
+				amount = (int)((1-b.getWriteDown(LONGTERM))*msg.amount+0.5);
+				longtermLendingInternal -= msg.amount;
+				longtermLendingExternal += amount;
+				balancesheet.loan -= (msg.amount-amount);
+				longtermLending.remove(b);
+				longtermConn.disconnectFrom(b);
+				
+				writedownLoss += (msg.amount-amount);
+				//contagionIndex += (int)((msg.amount-amount)*
+				//(1-1.0*b.longtermLendingInternal/b.balancesheet.liab)) ;
+				
+				break;
+			default:
+				break;
+		}
+		break;
+	case CONFIRMATION:
+		switch(msg.type){
+			case OVERNIGHT:
+				overnightBorrowing.put(b,overnightBorrowing.get(b)-msg.amount);
+				
+				balancesheet.fedfundbot -= msg.amount; 
+				overnightBorrowingInternal -=msg.amount; 
+				break;
+			case SHORTTERM:
+				shorttermBorrowing.put(b,shorttermBorrowing.get(b)-msg.amount);
+				balancesheet.fedsecsld -= msg.amount;
+				shorttermBorrowingInternal -=msg.amount;
+				break;
+			case LONGTERM:
+				longtermBorrowing.put(b,longtermBorrowing.get(b)-msg.amount);
+				balancesheet.brwmy -= msg.amount;
+				longtermBorrowingInternal -= msg.amount;
+				break;
+			default:
+				break;
+		}
+		balancesheet.cash -= msg.amount;
+		break;
+	case PAYMENT:
+		if(msg.amount<=0)	System.out.println(msg.type.toString()+','+msg.amount+",error");
+		switch(msg.type){
+			case OVERNIGHT:
+				if(overnightLending.get(b)== msg.amount) {
+					overnightConn.disconnectFrom(b);
+					overnightLending.remove(b);
+				}
+				else {
+					overnightLending.put(b,overnightLending.get(b)-msg.amount);
+				}
+				balancesheet.fedfundsld -= msg.amount;
+				overnightLendingInternal -= msg.amount;
+				messageConn.deliver(new DebtMessage(this,msg.amount,OVERNIGHT,CONFIRMATION), b);
+				
+				RLReward += 1.0*msg.amount*(1+interestRate);// /oldBalancesheet.asset;//;
+				accumulativeReward += 1.0*msg.amount*(1+interestRate);// /oldBalancesheet.asset;//;
+				
+				/*
+				for(Qstructure val : Q.keySet()){Q.put(val,bankingSystem.liborRate*Q.get(val)+msg.amount*100*(interestRate)/balancesheet.asset);}//*Math.pow(bankingSystem.liborRate,Math.floor(time()/3-3)));}
+				if(Q.get(qStructure)==null){
+					System.out.println("@PAYMENT");
+					Q.put(qStructure,msg.amount*interestRate*100/balancesheet.asset);//*Math.pow(bankingSystem.liborRate,Math.floor(time()/3-3));
+				}*/
+			
+				break;
+			case SHORTTERM:
+				if(shorttermLending.get(b)==msg.amount) {
+					shorttermConn.disconnectFrom(b);
+					shorttermLending.remove(b);
+				}
+				else {shorttermLending.put(b,shorttermLending.get(b)-msg.amount);}
+				balancesheet.fedsecbot -= msg.amount;
+				shorttermLendingInternal -= msg.amount;
+				messageConn.deliver(new DebtMessage(this,msg.amount,SHORTTERM,CONFIRMATION), b);
+			
+				break;
+			case LONGTERM:
+				if(longtermLending.get(b)== msg.amount) {
+					longtermConn.disconnectFrom(b);
+					longtermLending.remove(b);
+				}
+				else {
+					longtermLending.put(b,longtermLending.get(b)-msg.amount);
+				}
+				balancesheet.loan -= msg.amount;
+				longtermLendingInternal -= msg.amount;
+				messageConn.deliver(new DebtMessage(this,msg.amount,LONGTERM,CONFIRMATION), b);
+				break;
+			default:
+				break;
+		}
+		balancesheet.cash += msg.amount;
+		
+		break;
+	case REQUEST:
+		double score = sizeScore.get(b);
+		amount = 0;
+		r = uniform(.0,.05);
+		switch(msg.type){
+			case OVERNIGHT:
+				if(linkScore.containsKey(b))	score = overnightAssetRatio*score + (1.0-overnightAssetRatio)*linkScore.get(b);
+				if(debtSettlement.fedfundsld<debtRequest.fedfundsld && uniform(0,1)<decideSettlementPercentage(score,OVERNIGHT)) {
+
+					amount = min((debtRequest.fedfundsld-debtSettlement.fedfundsld),msg.amount);
+					amount = amount>r*(debtRequest.fedfundsld-debtSettlement.fedfundsld)?amount:0;
+					if(amount>0) {
+						messageConn.deliver(new DebtMessage(this,amount,OVERNIGHT,SETTLEMENT), b);
+						debtSettlement.fedfundsld += amount;
+						
+						if(overnightLending.containsKey(b))	overnightLending.put(b, overnightLending.get(b)+amount);
+						else	overnightLending.put(b, amount);
+						RLReward -= 1.0*amount;
+						accumulativeReward -= 1.0*amount;
+						
+						if(linkScore.containsKey(b))	linkScore.put(b,linkScore.get(b)+log(1.0*amount));
+						else	linkScore.put(b,log(1.0*amount)/scoreDecay);
+						if(!overnightConn.isConnectedTo(b))	overnightConn.connectTo(b);
+					}
+				}
+				
+				break;
+			case SHORTTERM:
+				if(linkScore.containsKey(b))	score = shorttermAssetRatio*score + (1.0-shorttermAssetRatio)*linkScore.get(b);
+				if(debtSettlement.fedsecbot<debtRequest.fedsecbot && uniform(0,1)<decideSettlementPercentage(score,SHORTTERM)) {
+					
+					amount = min((debtRequest.fedsecbot-debtSettlement.fedsecbot),msg.amount);
+					amount = amount>r*(debtRequest.fedsecbot-debtSettlement.fedsecbot)?amount:0; 
+					if(amount>0) {
+						messageConn.deliver(new DebtMessage(this,amount,SHORTTERM,SETTLEMENT), b);
+						debtSettlement.fedsecbot += amount;
+									
+						if(shorttermLending.containsKey(b))	shorttermLending.put(b, shorttermLending.get(b)+amount);
+						else	shorttermLending.put(b, amount);
+						
+						if(linkScore.containsKey(b))	linkScore.put(b,linkScore.get(b)+log(1.0*amount));
+						else	linkScore.put(b,log(1.0*amount)/scoreDecay);
+						if(!shorttermConn.isConnectedTo(b))	shorttermConn.connectTo(b);
+					}
+				}
+				break;
+			case LONGTERM:
+				if(linkScore.containsKey(b))	score = longtermAssetRatio*score + (1.0-longtermAssetRatio)*linkScore.get(b);
+				if(debtSettlement.loan<debtRequest.loan && uniform(0,1)<decideSettlementPercentage(score,LONGTERM)) {
+					amount = min((debtRequest.loan-debtSettlement.loan),msg.amount);
+					amount = amount>r*(debtRequest.loan-debtSettlement.loan)?amount:0;
+					if(amount>0) {
+						messageConn.deliver(new DebtMessage(this,amount,LONGTERM,SETTLEMENT), b);
+						debtSettlement.loan += amount;
+						
+						if(longtermLending.containsKey(b))	longtermLending.put(b, longtermLending.get(b)+amount);
+						else	longtermLending.put(b, amount);
+						
+						if(linkScore.containsKey(b))	linkScore.put(b,linkScore.get(b)+log(1.0*amount));
+						else	linkScore.put(b,log(1.0*amount)/scoreDecay);
+						if(!longtermConn.isConnectedTo(b))	longtermConn.connectTo(b);
+					}
+				}
+				break;
+			default:
+				break;
+		}
+
+		break;
+	case SETTLEMENT:
+		amount = msg.amount;
+		if(linkScore.containsKey(b))	linkScore.put(b,linkScore.get(b)+log(amount));
+		else	linkScore.put(b,log(amount)/scoreDecay);
+		switch(msg.type){
+			case OVERNIGHT:
+				//if(debtSettlement.fedfundsld<debtRequest.fedfundsld) {
+					debtSettlement.fedfundbot += amount;
+					if(overnightBorrowing.containsKey(b))	overnightBorrowing.put(b, overnightBorrowing.get(b)+amount);
+					else	overnightBorrowing.put(b, amount);
+					
+				//}
+				break;
+			case SHORTTERM:
+				//if(debtSettlement.fedsecbot<debtRequest.fedsecbot) {
+					debtSettlement.fedsecsld += amount;
+					if(shorttermBorrowing.containsKey(b))	shorttermBorrowing.put(b, shorttermBorrowing.get(b)+amount);
+					else	shorttermBorrowing.put(b, amount);
+				//}
+				break;
+			case LONGTERM:
+				//if(debtSettlement.loan<debtRequest.loan) {
+					debtSettlement.brwmy += amount;
+					if(longtermBorrowing.containsKey(b))	longtermBorrowing.put(b, longtermBorrowing.get(b)+amount);
+					else	longtermBorrowing.put(b, amount);
+				//}
+				break;
+			default:
+				break;
+		}
+		break;
+	default:
+		break;
+}
+ 
+  }
+
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _clearingVec_commonAnimationSettings_xjal;
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _clearingVec_commonAnimationSettings_xjal() {
+    if (_clearingVec_commonAnimationSettings_xjal == null) {
+      if (BankingSystem._clearingVec_commonAnimationSettings_xjal == null) {
+        BankingSystem._clearingVec_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, black, 1.0, LINE_STYLE_SOLID, ARROW_NONE, 0.0 );
+      }
+      _clearingVec_commonAnimationSettings_xjal = BankingSystem._clearingVec_commonAnimationSettings_xjal;
+    } // endif (bidirectional)
+    return _clearingVec_commonAnimationSettings_xjal;
+  }
+
+  public LinkToAgent<BankingSystem, Bank> clearingVec = new LinkToAgentImpl<BankingSystem, Bank>(this, _clearingVec_commonAnimationSettings_xjal()){
+
+    @AnyLogicInternalCodegenAPI
+    public AbstractLinkToAgent<Bank, BankingSystem> getBidirectionalPeer_xjal(BankingSystem _agent_xjal) {
+      return _agent_xjal.clearingVec;
+    }
+    
+    @AnyLogicInternalCodegenAPI
+    public void onReceive( Object msg, Agent sender ) {
+      _onReceive_clearingVec_xjal( msg, sender );
+    }
+  };
+  @AnyLogicInternalCodegenAPI
+  public void _onReceive_clearingVec_xjal( Object _msg_xjal, Agent _sender_xjal ) {
+    
+Integer  msg = (Integer) _msg_xjal;
+    BankingSystem sender = (BankingSystem) _sender_xjal;
+    
+int tot = totScheduledOvernight+totScheduledShortterm+totScheduledLongterm;
+if(msg<tot)	{
+	double r = 1.0*msg/tot;
+	overnightWriteDown = shorttermWriteDown=longtermWriteDown = 1-r;
+	return;
+}
+
+if(bankingSystem.isEN)	return;
+
+int i = 0;
+for(Bank b : bankingSystem.alivebanks.values()) {
+	int payment = scheduledOvernight[i++];
+	if(payment>0) {
+		messageConn.deliver(new DebtMessage(this,payment,OVERNIGHT,PAYMENT), b);
+		if(overnightBorrowing.get(b)==0)	overnightBorrowing.remove(b);
+	}
+}
+i = 0;
+for(Bank b : bankingSystem.alivebanks.values()) {
+	int payment = scheduledShortterm[i++];
+	if(payment>0) {
+		messageConn.deliver(new DebtMessage(this,payment,SHORTTERM,PAYMENT), b);
+		if(shorttermBorrowing.get(b)==0)	shorttermBorrowing.remove(b);
+	}
+}
+i = 0;
+for(Bank b : bankingSystem.alivebanks.values()) {
+	int payment = scheduledLongterm[i++];
+	if(payment>0) {
+		messageConn.deliver(new DebtMessage(this,payment,LONGTERM,PAYMENT), b);
+		if(longtermBorrowing.get(b)==0)	longtermBorrowing.remove(b);
+	}
+}
+ 
+
+//if(overnightBorrowing.get(b)==0)	iter.remove();
+//if(shorttermBorrowing.get(b)==0)	iter.remove();
+//if(longtermBorrowing.get(b)==0)	iter.remove(); 
+  }
+
+
+
+  @AnyLogicInternalCodegenAPI
+  public void drawLinksToAgents(boolean _underAgents_xjal, LinkToAgentAnimator _animator_xjal) {
+    super.drawLinksToAgents(_underAgents_xjal, _animator_xjal);
+    if ( _underAgents_xjal ) {
+      _animator_xjal.drawLink( this, overnightConn, false, false );
+    }
+    if ( _underAgents_xjal ) {
+      _animator_xjal.drawLink( this, longtermConn, false, false );
+    }
+    if ( _underAgents_xjal ) {
+      _animator_xjal.drawLink( this, shorttermConn, false, false );
+    }
+    if ( _underAgents_xjal ) {
+      _animator_xjal.drawLink( this, messageConn, true, true );
+    }
+  }
+
+  public AgentList<? extends Bank> getPopulation() {
+    return (AgentList<? extends Bank>) super.getPopulation();
+  }
+
+  public List<? extends Bank> agentsInRange( double distance ) {
+    return (List<? extends Bank>) super.agentsInRange( distance );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public boolean isLoggingToDB(EventOriginator _e) {
+    if ( _e == _chart_autoUpdateEvent_xjal ) return false;
+    if ( _e == _chart1_autoUpdateEvent_xjal ) return false;
+    if ( _e == _chart2_autoUpdateEvent_xjal ) return false;
+    return super.isLoggingToDB( _e );
+  }
+
+  // Reaction on changes -------------------------------------
+  public void onChange() {
+    super.onChange();
+    life.onChange();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void onDestroy() {
+    action2.onDestroy();
+    action3.onDestroy();
+    action4.onDestroy();
+    check.onDestroy();
+    action1.onDestroy();
+    trained.onDestroy();
+    _chart_autoUpdateEvent_xjal.onDestroy();
+    _chart1_autoUpdateEvent_xjal.onDestroy();
+    _chart2_autoUpdateEvent_xjal.onDestroy();
+    overnightConn.onDestroy();
+    longtermConn.onDestroy();
+    system.onDestroy();
+    shorttermConn.onDestroy();
+    messageConn.onDestroy();
+    clearingVec.onDestroy();
+    life.onDestroy();
+    _chart_expression0_dataSet_xjal.destroyUpdater_xjal();
+    _chart_expression1_dataSet_xjal.destroyUpdater_xjal();
+    _chart1_expression0_dataSet_xjal.destroyUpdater_xjal();
+    _chart2_expression0_dataSet_xjal.destroyUpdater_xjal();
+    logToDB( _chart_expression0_dataSet_xjal, "chart : Asset" );
+    logToDB( _chart_expression1_dataSet_xjal, "chart : Liability" );
+    logToDB( _chart1_expression0_dataSet_xjal, "chart1 : Equity" );
+    logToDB( _chart2_expression0_dataSet_xjal, "chart2 : Liquidity asset" );
+    super.onDestroy();
+  }
+
+  // Additional class code
+
+@Override public int hashCode() {
+     return this.bankId;
+}
+
+@Override public int compareTo(Bank a) {
+    if (this.bankId == a.bankId) return 0;
+    else if (this.bankId < a.bankId) return -1;
+    else return 1;
+  } 
+  // End of additional class code
+
+
+}
