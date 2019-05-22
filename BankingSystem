@@ -1,0 +1,3687 @@
+package usbankingsystem;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.Stack;
+import java.util.Timer;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
+import java.awt.Color;
+import java.awt.Font;
+import com.anylogic.engine.connectivity.ResultSet;
+import com.anylogic.engine.connectivity.Statement;
+import com.anylogic.engine.elements.*;
+import com.anylogic.engine.markup.Network;
+import com.anylogic.engine.Position;
+import com.anylogic.engine.markup.PedFlowStatistics;
+import com.anylogic.engine.markup.DensityMap;
+
+
+import static java.lang.Math.*;
+import static com.anylogic.engine.UtilitiesArray.*;
+import static com.anylogic.engine.UtilitiesCollection.*;
+import static com.anylogic.engine.presentation.UtilitiesColor.*;
+import static com.anylogic.engine.HyperArray.*;
+
+import com.anylogic.engine.*;
+import com.anylogic.engine.analysis.*;
+import com.anylogic.engine.connectivity.*;
+import com.anylogic.engine.database.*;
+import com.anylogic.engine.gis.*;
+import com.anylogic.engine.markup.*;
+import com.anylogic.engine.routing.*;
+import com.anylogic.engine.presentation.*;
+import com.anylogic.engine.gui.*;
+
+import static usbankingsystem.Size.*;
+import static usbankingsystem.DebtType.*;
+import static usbankingsystem.Message.*;
+
+import java.awt.geom.Arc2D;
+
+import Jama.Matrix;
+import java.io.FileWriter;
+import java.io.IOException;
+import com.opencsv.CSVWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.LinkedList;
+//import com.mysema.query.BooleanBuilder;
+import java.io.BufferedWriter;
+import org.apache.commons.math3.special.Erf; 
+
+public class BankingSystem extends Agent
+{
+  // Text Files
+  public TextFile initOvernightNetwork = new TextFile( this, "/usbankingsystem/", TextFile.READ, "initOvernightNetwork-beforecrisis.csv", null, new char[] { '\n', ',' } );
+  public TextFile initShorttermNetwork = new TextFile( this, "/usbankingsystem/", TextFile.READ, "initShorttermNetwork-beforecrisis.csv", null, new char[] { '\n', ',' } );
+  public TextFile initLongtermNetwork = new TextFile( this, "/usbankingsystem/", TextFile.READ, "initLongtermNetwork-beforecrisis.csv", null, new char[] { '\n', ',' } );
+  public TextFile pricedrop = new TextFile( this, "/usbankingsystem/", TextFile.READ, "price-drop.txt", null, new char[] { '\n' } );
+  public TextFile overnightNetworkRecord = new TextFile( this, "/usbankingsystem/", TextFile.WRITE, "overnight-network.txt", null, null );
+  public TextFile shorttermNetworkRecord = new TextFile( this, "/usbankingsystem/", TextFile.WRITE, "shortterm-network.txt", null, null );
+  public TextFile longtermNetworkRecord = new TextFile( this, "/usbankingsystem/", TextFile.WRITE, "longterm-network.txt", null, null );
+  public TextFile bankRecord = new TextFile( this, "/usbankingsystem/", TextFile.WRITE, "bank.txt", null, null );
+  public TextFile initThetaFile = new TextFile( this, "/usbankingsystem/", TextFile.READ, "thetafile.txt", null, new char[] { '\n', ',' } );
+
+  // Excel Files
+  public ExcelFile initTargetInput = new ExcelFile( BankingSystem.this, "/usbankingsystem/", "initTarget-beforecrisis-6600.xlsx", false );
+
+  // Parameters
+
+  public 
+int  initBanks;
+
+  /**
+   * Returns default value for parameter <code>initBanks</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _initBanks_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+2600 
+;
+  }
+
+  public void set_initBanks( int initBanks ) {
+    if (initBanks == this.initBanks) {
+      return;
+    }
+    int _oldValue_xjal = this.initBanks;
+    this.initBanks = initBanks;
+    onChange_initBanks_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter initBanks.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_initBanks()</code> method instead.
+   */
+  protected void onChange_initBanks() {
+    onChange_initBanks_xjal( initBanks );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_initBanks_xjal( int oldValue ) {  
+  }
+
+
+  public 
+double  shockTime;
+
+  /**
+   * Returns default value for parameter <code>shockTime</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _shockTime_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+6 
+;
+  }
+
+  public void set_shockTime( double shockTime ) {
+    if (shockTime == this.shockTime) {
+      return;
+    }
+    double _oldValue_xjal = this.shockTime;
+    this.shockTime = shockTime;
+    onChange_shockTime_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter shockTime.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_shockTime()</code> method instead.
+   */
+  protected void onChange_shockTime() {
+    onChange_shockTime_xjal( shockTime );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_shockTime_xjal( double oldValue ) {  
+  }
+
+
+  public 
+String  regime;
+
+  /**
+   * Returns default value for parameter <code>regime</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public String _regime_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+"beforecrisis" 
+;
+  }
+
+  public void set_regime( String regime ) {
+    if (regime == this.regime) {
+      return;
+    }
+    String _oldValue_xjal = this.regime;
+    this.regime = regime;
+    onChange_regime_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter regime.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_regime()</code> method instead.
+   */
+  protected void onChange_regime() {
+    onChange_regime_xjal( regime );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_regime_xjal( String oldValue ) {  
+  }
+
+
+  public 
+int  reactionTime;
+
+  /**
+   * Returns default value for parameter <code>reactionTime</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _reactionTime_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+8 
+;
+  }
+
+  public void set_reactionTime( int reactionTime ) {
+    if (reactionTime == this.reactionTime) {
+      return;
+    }
+    int _oldValue_xjal = this.reactionTime;
+    this.reactionTime = reactionTime;
+    onChange_reactionTime_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter reactionTime.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_reactionTime()</code> method instead.
+   */
+  protected void onChange_reactionTime() {
+    onChange_reactionTime_xjal( reactionTime );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_reactionTime_xjal( int oldValue ) {  
+  }
+
+
+  public 
+double  recoveryRate;
+
+  /**
+   * Returns default value for parameter <code>recoveryRate</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _recoveryRate_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.0 
+;
+  }
+
+  public void set_recoveryRate( double recoveryRate ) {
+    if (recoveryRate == this.recoveryRate) {
+      return;
+    }
+    double _oldValue_xjal = this.recoveryRate;
+    this.recoveryRate = recoveryRate;
+    onChange_recoveryRate_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter recoveryRate.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_recoveryRate()</code> method instead.
+   */
+  protected void onChange_recoveryRate() {
+    onChange_recoveryRate_xjal( recoveryRate );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_recoveryRate_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  adaptiveP;
+
+  /**
+   * Returns default value for parameter <code>adaptiveP</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _adaptiveP_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.0 
+;
+  }
+
+  public void set_adaptiveP( double adaptiveP ) {
+    if (adaptiveP == this.adaptiveP) {
+      return;
+    }
+    double _oldValue_xjal = this.adaptiveP;
+    this.adaptiveP = adaptiveP;
+    onChange_adaptiveP_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter adaptiveP.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_adaptiveP()</code> method instead.
+   */
+  protected void onChange_adaptiveP() {
+    onChange_adaptiveP_xjal( adaptiveP );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_adaptiveP_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  alphaLarge;
+
+  /**
+   * Returns default value for parameter <code>alphaLarge</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _alphaLarge_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+-1 
+;
+  }
+
+  public void set_alphaLarge( double alphaLarge ) {
+    if (alphaLarge == this.alphaLarge) {
+      return;
+    }
+    double _oldValue_xjal = this.alphaLarge;
+    this.alphaLarge = alphaLarge;
+    onChange_alphaLarge_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter alphaLarge.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_alphaLarge()</code> method instead.
+   */
+  protected void onChange_alphaLarge() {
+    onChange_alphaLarge_xjal( alphaLarge );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_alphaLarge_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  alphaSmall;
+
+  /**
+   * Returns default value for parameter <code>alphaSmall</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _alphaSmall_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0 
+;
+  }
+
+  public void set_alphaSmall( double alphaSmall ) {
+    if (alphaSmall == this.alphaSmall) {
+      return;
+    }
+    double _oldValue_xjal = this.alphaSmall;
+    this.alphaSmall = alphaSmall;
+    onChange_alphaSmall_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter alphaSmall.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_alphaSmall()</code> method instead.
+   */
+  protected void onChange_alphaSmall() {
+    onChange_alphaSmall_xjal( alphaSmall );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_alphaSmall_xjal( double oldValue ) {  
+  }
+
+
+  public 
+boolean  isEN;
+
+  /**
+   * Returns default value for parameter <code>isEN</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public boolean _isEN_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+false 
+;
+  }
+
+  public void set_isEN( boolean isEN ) {
+    if (isEN == this.isEN) {
+      return;
+    }
+    boolean _oldValue_xjal = this.isEN;
+    this.isEN = isEN;
+    onChange_isEN_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter isEN.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_isEN()</code> method instead.
+   */
+  protected void onChange_isEN() {
+    onChange_isEN_xjal( isEN );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_isEN_xjal( boolean oldValue ) {  
+  }
+
+
+  public 
+double  r_correction;
+
+  /**
+   * Returns default value for parameter <code>r_correction</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _r_correction_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1.0 
+;
+  }
+
+  public void set_r_correction( double r_correction ) {
+    if (r_correction == this.r_correction) {
+      return;
+    }
+    double _oldValue_xjal = this.r_correction;
+    this.r_correction = r_correction;
+    onChange_r_correction_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter r_correction.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_r_correction()</code> method instead.
+   */
+  protected void onChange_r_correction() {
+    onChange_r_correction_xjal( r_correction );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_r_correction_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  betaLarge;
+
+  /**
+   * Returns default value for parameter <code>betaLarge</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _betaLarge_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1 
+;
+  }
+
+  public void set_betaLarge( double betaLarge ) {
+    if (betaLarge == this.betaLarge) {
+      return;
+    }
+    double _oldValue_xjal = this.betaLarge;
+    this.betaLarge = betaLarge;
+    onChange_betaLarge_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter betaLarge.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_betaLarge()</code> method instead.
+   */
+  protected void onChange_betaLarge() {
+    onChange_betaLarge_xjal( betaLarge );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_betaLarge_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  betaSmall;
+
+  /**
+   * Returns default value for parameter <code>betaSmall</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _betaSmall_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1 
+;
+  }
+
+  public void set_betaSmall( double betaSmall ) {
+    if (betaSmall == this.betaSmall) {
+      return;
+    }
+    double _oldValue_xjal = this.betaSmall;
+    this.betaSmall = betaSmall;
+    onChange_betaSmall_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter betaSmall.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_betaSmall()</code> method instead.
+   */
+  protected void onChange_betaSmall() {
+    onChange_betaSmall_xjal( betaSmall );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_betaSmall_xjal( double oldValue ) {  
+  }
+
+
+  public 
+int  FIRESALE;
+
+  /**
+   * Returns default value for parameter <code>FIRESALE</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _FIRESALE_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0 
+;
+  }
+
+  public void set_FIRESALE( int FIRESALE ) {
+    if (FIRESALE == this.FIRESALE) {
+      return;
+    }
+    int _oldValue_xjal = this.FIRESALE;
+    this.FIRESALE = FIRESALE;
+    onChange_FIRESALE_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter FIRESALE.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_FIRESALE()</code> method instead.
+   */
+  protected void onChange_FIRESALE() {
+    onChange_FIRESALE_xjal( FIRESALE );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_FIRESALE_xjal( int oldValue ) {  
+  }
+
+
+  public 
+int  BASEL3;
+
+  /**
+   * Returns default value for parameter <code>BASEL3</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _BASEL3_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0 
+;
+  }
+
+  public void set_BASEL3( int BASEL3 ) {
+    if (BASEL3 == this.BASEL3) {
+      return;
+    }
+    int _oldValue_xjal = this.BASEL3;
+    this.BASEL3 = BASEL3;
+    onChange_BASEL3_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter BASEL3.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_BASEL3()</code> method instead.
+   */
+  protected void onChange_BASEL3() {
+    onChange_BASEL3_xjal( BASEL3 );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_BASEL3_xjal( int oldValue ) {  
+  }
+
+
+  public 
+double  liquidityABS;
+
+  /**
+   * Returns default value for parameter <code>liquidityABS</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liquidityABS_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.1194 
+;
+  }
+
+  public void set_liquidityABS( double liquidityABS ) {
+    if (liquidityABS == this.liquidityABS) {
+      return;
+    }
+    double _oldValue_xjal = this.liquidityABS;
+    this.liquidityABS = liquidityABS;
+    onChange_liquidityABS_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liquidityABS.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liquidityABS()</code> method instead.
+   */
+  protected void onChange_liquidityABS() {
+    onChange_liquidityABS_xjal( liquidityABS );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liquidityABS_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liquidityAgency;
+
+  /**
+   * Returns default value for parameter <code>liquidityAgency</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liquidityAgency_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0 
+;
+  }
+
+  public void set_liquidityAgency( double liquidityAgency ) {
+    if (liquidityAgency == this.liquidityAgency) {
+      return;
+    }
+    double _oldValue_xjal = this.liquidityAgency;
+    this.liquidityAgency = liquidityAgency;
+    onChange_liquidityAgency_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liquidityAgency.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liquidityAgency()</code> method instead.
+   */
+  protected void onChange_liquidityAgency() {
+    onChange_liquidityAgency_xjal( liquidityAgency );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liquidityAgency_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liquidityEquitysec;
+
+  /**
+   * Returns default value for parameter <code>liquidityEquitysec</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liquidityEquitysec_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1.4278 
+;
+  }
+
+  public void set_liquidityEquitysec( double liquidityEquitysec ) {
+    if (liquidityEquitysec == this.liquidityEquitysec) {
+      return;
+    }
+    double _oldValue_xjal = this.liquidityEquitysec;
+    this.liquidityEquitysec = liquidityEquitysec;
+    onChange_liquidityEquitysec_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liquidityEquitysec.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liquidityEquitysec()</code> method instead.
+   */
+  protected void onChange_liquidityEquitysec() {
+    onChange_liquidityEquitysec_xjal( liquidityEquitysec );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liquidityEquitysec_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liquidityMBS;
+
+  /**
+   * Returns default value for parameter <code>liquidityMBS</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liquidityMBS_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.6056 
+;
+  }
+
+  public void set_liquidityMBS( double liquidityMBS ) {
+    if (liquidityMBS == this.liquidityMBS) {
+      return;
+    }
+    double _oldValue_xjal = this.liquidityMBS;
+    this.liquidityMBS = liquidityMBS;
+    onChange_liquidityMBS_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liquidityMBS.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liquidityMBS()</code> method instead.
+   */
+  protected void onChange_liquidityMBS() {
+    onChange_liquidityMBS_xjal( liquidityMBS );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liquidityMBS_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liquidityState;
+
+  /**
+   * Returns default value for parameter <code>liquidityState</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liquidityState_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.0 
+;
+  }
+
+  public void set_liquidityState( double liquidityState ) {
+    if (liquidityState == this.liquidityState) {
+      return;
+    }
+    double _oldValue_xjal = this.liquidityState;
+    this.liquidityState = liquidityState;
+    onChange_liquidityState_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liquidityState.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liquidityState()</code> method instead.
+   */
+  protected void onChange_liquidityState() {
+    onChange_liquidityState_xjal( liquidityState );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liquidityState_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liquidityTreasury;
+
+  /**
+   * Returns default value for parameter <code>liquidityTreasury</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liquidityTreasury_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.0 
+;
+  }
+
+  public void set_liquidityTreasury( double liquidityTreasury ) {
+    if (liquidityTreasury == this.liquidityTreasury) {
+      return;
+    }
+    double _oldValue_xjal = this.liquidityTreasury;
+    this.liquidityTreasury = liquidityTreasury;
+    onChange_liquidityTreasury_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liquidityTreasury.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liquidityTreasury()</code> method instead.
+   */
+  protected void onChange_liquidityTreasury() {
+    onChange_liquidityTreasury_xjal( liquidityTreasury );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liquidityTreasury_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  marketReaction;
+
+  /**
+   * Returns default value for parameter <code>marketReaction</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _marketReaction_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1 
+;
+  }
+
+  public void set_marketReaction( double marketReaction ) {
+    if (marketReaction == this.marketReaction) {
+      return;
+    }
+    double _oldValue_xjal = this.marketReaction;
+    this.marketReaction = marketReaction;
+    onChange_marketReaction_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter marketReaction.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_marketReaction()</code> method instead.
+   */
+  protected void onChange_marketReaction() {
+    onChange_marketReaction_xjal( marketReaction );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_marketReaction_xjal( double oldValue ) {  
+  }
+
+
+  public 
+int  seedValue;
+
+  /**
+   * Returns default value for parameter <code>seedValue</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _seedValue_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+20 
+;
+  }
+
+  public void set_seedValue( int seedValue ) {
+    if (seedValue == this.seedValue) {
+      return;
+    }
+    int _oldValue_xjal = this.seedValue;
+    this.seedValue = seedValue;
+    onChange_seedValue_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter seedValue.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_seedValue()</code> method instead.
+   */
+  protected void onChange_seedValue() {
+    onChange_seedValue_xjal( seedValue );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_seedValue_xjal( int oldValue ) {  
+  }
+
+
+  public 
+double  sellMore;
+
+  /**
+   * Returns default value for parameter <code>sellMore</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _sellMore_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1 
+;
+  }
+
+  public void set_sellMore( double sellMore ) {
+    if (sellMore == this.sellMore) {
+      return;
+    }
+    double _oldValue_xjal = this.sellMore;
+    this.sellMore = sellMore;
+    onChange_sellMore_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter sellMore.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_sellMore()</code> method instead.
+   */
+  protected void onChange_sellMore() {
+    onChange_sellMore_xjal( sellMore );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_sellMore_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  capitalRatio;
+
+  /**
+   * Returns default value for parameter <code>capitalRatio</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _capitalRatio_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.08 
+;
+  }
+
+  public void set_capitalRatio( double capitalRatio ) {
+    if (capitalRatio == this.capitalRatio) {
+      return;
+    }
+    double _oldValue_xjal = this.capitalRatio;
+    this.capitalRatio = capitalRatio;
+    onChange_capitalRatio_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter capitalRatio.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_capitalRatio()</code> method instead.
+   */
+  protected void onChange_capitalRatio() {
+    onChange_capitalRatio_xjal( capitalRatio );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_capitalRatio_xjal( double oldValue ) {  
+  }
+
+
+  public 
+double  liborRate;
+
+  /**
+   * Returns default value for parameter <code>liborRate</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public double _liborRate_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+0.99 
+;
+  }
+
+  public void set_liborRate( double liborRate ) {
+    if (liborRate == this.liborRate) {
+      return;
+    }
+    double _oldValue_xjal = this.liborRate;
+    this.liborRate = liborRate;
+    onChange_liborRate_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter liborRate.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_liborRate()</code> method instead.
+   */
+  protected void onChange_liborRate() {
+    onChange_liborRate_xjal( liborRate );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_liborRate_xjal( double oldValue ) {  
+  }
+
+
+  public 
+int  stopTime;
+
+  /**
+   * Returns default value for parameter <code>stopTime</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _stopTime_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+100 
+;
+  }
+
+  public void set_stopTime( int stopTime ) {
+    if (stopTime == this.stopTime) {
+      return;
+    }
+    int _oldValue_xjal = this.stopTime;
+    this.stopTime = stopTime;
+    onChange_stopTime_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter stopTime.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_stopTime()</code> method instead.
+   */
+  protected void onChange_stopTime() {
+    onChange_stopTime_xjal( stopTime );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_stopTime_xjal( int oldValue ) {  
+  }
+
+
+  public 
+int  LendPcntTrained;
+
+  /**
+   * Returns default value for parameter <code>LendPcntTrained</code>.
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  public int _LendPcntTrained_DefaultValue_xjal() {
+    final BankingSystem self = this;
+    return 
+1 
+;
+  }
+
+  public void set_LendPcntTrained( int LendPcntTrained ) {
+    if (LendPcntTrained == this.LendPcntTrained) {
+      return;
+    }
+    int _oldValue_xjal = this.LendPcntTrained;
+    this.LendPcntTrained = LendPcntTrained;
+    onChange_LendPcntTrained_xjal( _oldValue_xjal );
+    onChange();
+  }
+
+  /**
+   * Calls "On change" action for parameter LendPcntTrained.<br>
+   * Note that 'oldValue' in that action will be unavailable if this method is called by user
+   * (current parameter value will be passed as 'oldValue').<br>
+   * Please call <code>set_LendPcntTrained()</code> method instead.
+   */
+  protected void onChange_LendPcntTrained() {
+    onChange_LendPcntTrained_xjal( LendPcntTrained );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  protected void onChange_LendPcntTrained_xjal( int oldValue ) {  
+  }
+
+
+  @Override
+  public void setParametersToDefaultValues() {
+    super.setParametersToDefaultValues();
+    initBanks = _initBanks_DefaultValue_xjal();
+    shockTime = _shockTime_DefaultValue_xjal();
+    regime = _regime_DefaultValue_xjal();
+    reactionTime = _reactionTime_DefaultValue_xjal();
+    recoveryRate = _recoveryRate_DefaultValue_xjal();
+    adaptiveP = _adaptiveP_DefaultValue_xjal();
+    alphaLarge = _alphaLarge_DefaultValue_xjal();
+    alphaSmall = _alphaSmall_DefaultValue_xjal();
+    isEN = _isEN_DefaultValue_xjal();
+    r_correction = _r_correction_DefaultValue_xjal();
+    betaLarge = _betaLarge_DefaultValue_xjal();
+    betaSmall = _betaSmall_DefaultValue_xjal();
+    FIRESALE = _FIRESALE_DefaultValue_xjal();
+    BASEL3 = _BASEL3_DefaultValue_xjal();
+    liquidityABS = _liquidityABS_DefaultValue_xjal();
+    liquidityAgency = _liquidityAgency_DefaultValue_xjal();
+    liquidityEquitysec = _liquidityEquitysec_DefaultValue_xjal();
+    liquidityMBS = _liquidityMBS_DefaultValue_xjal();
+    liquidityState = _liquidityState_DefaultValue_xjal();
+    liquidityTreasury = _liquidityTreasury_DefaultValue_xjal();
+    marketReaction = _marketReaction_DefaultValue_xjal();
+    seedValue = _seedValue_DefaultValue_xjal();
+    sellMore = _sellMore_DefaultValue_xjal();
+    capitalRatio = _capitalRatio_DefaultValue_xjal();
+    liborRate = _liborRate_DefaultValue_xjal();
+    stopTime = _stopTime_DefaultValue_xjal();
+    LendPcntTrained = _LendPcntTrained_DefaultValue_xjal();
+  }
+
+  @Override
+  public boolean setParameter(String _name_xjal, Object _value_xjal, boolean _callOnChange_xjal) {
+    switch ( _name_xjal ) {
+    case "initBanks":
+      if ( _callOnChange_xjal ) {
+        set_initBanks( ((Number) _value_xjal).intValue() );
+      } else {
+        initBanks = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "shockTime":
+      if ( _callOnChange_xjal ) {
+        set_shockTime( ((Number) _value_xjal).doubleValue() );
+      } else {
+        shockTime = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "regime":
+      if ( _callOnChange_xjal ) {
+        set_regime( (String) _value_xjal );
+      } else {
+        regime = (String) _value_xjal;
+      }
+      return true;
+    case "reactionTime":
+      if ( _callOnChange_xjal ) {
+        set_reactionTime( ((Number) _value_xjal).intValue() );
+      } else {
+        reactionTime = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "recoveryRate":
+      if ( _callOnChange_xjal ) {
+        set_recoveryRate( ((Number) _value_xjal).doubleValue() );
+      } else {
+        recoveryRate = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "adaptiveP":
+      if ( _callOnChange_xjal ) {
+        set_adaptiveP( ((Number) _value_xjal).doubleValue() );
+      } else {
+        adaptiveP = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "alphaLarge":
+      if ( _callOnChange_xjal ) {
+        set_alphaLarge( ((Number) _value_xjal).doubleValue() );
+      } else {
+        alphaLarge = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "alphaSmall":
+      if ( _callOnChange_xjal ) {
+        set_alphaSmall( ((Number) _value_xjal).doubleValue() );
+      } else {
+        alphaSmall = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "isEN":
+      if ( _callOnChange_xjal ) {
+        set_isEN( (Boolean) _value_xjal );
+      } else {
+        isEN = (Boolean) _value_xjal;
+      }
+      return true;
+    case "r_correction":
+      if ( _callOnChange_xjal ) {
+        set_r_correction( ((Number) _value_xjal).doubleValue() );
+      } else {
+        r_correction = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "betaLarge":
+      if ( _callOnChange_xjal ) {
+        set_betaLarge( ((Number) _value_xjal).doubleValue() );
+      } else {
+        betaLarge = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "betaSmall":
+      if ( _callOnChange_xjal ) {
+        set_betaSmall( ((Number) _value_xjal).doubleValue() );
+      } else {
+        betaSmall = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "FIRESALE":
+      if ( _callOnChange_xjal ) {
+        set_FIRESALE( ((Number) _value_xjal).intValue() );
+      } else {
+        FIRESALE = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "BASEL3":
+      if ( _callOnChange_xjal ) {
+        set_BASEL3( ((Number) _value_xjal).intValue() );
+      } else {
+        BASEL3 = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "liquidityABS":
+      if ( _callOnChange_xjal ) {
+        set_liquidityABS( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liquidityABS = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liquidityAgency":
+      if ( _callOnChange_xjal ) {
+        set_liquidityAgency( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liquidityAgency = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liquidityEquitysec":
+      if ( _callOnChange_xjal ) {
+        set_liquidityEquitysec( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liquidityEquitysec = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liquidityMBS":
+      if ( _callOnChange_xjal ) {
+        set_liquidityMBS( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liquidityMBS = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liquidityState":
+      if ( _callOnChange_xjal ) {
+        set_liquidityState( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liquidityState = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liquidityTreasury":
+      if ( _callOnChange_xjal ) {
+        set_liquidityTreasury( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liquidityTreasury = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "marketReaction":
+      if ( _callOnChange_xjal ) {
+        set_marketReaction( ((Number) _value_xjal).doubleValue() );
+      } else {
+        marketReaction = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "seedValue":
+      if ( _callOnChange_xjal ) {
+        set_seedValue( ((Number) _value_xjal).intValue() );
+      } else {
+        seedValue = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "sellMore":
+      if ( _callOnChange_xjal ) {
+        set_sellMore( ((Number) _value_xjal).doubleValue() );
+      } else {
+        sellMore = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "capitalRatio":
+      if ( _callOnChange_xjal ) {
+        set_capitalRatio( ((Number) _value_xjal).doubleValue() );
+      } else {
+        capitalRatio = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "liborRate":
+      if ( _callOnChange_xjal ) {
+        set_liborRate( ((Number) _value_xjal).doubleValue() );
+      } else {
+        liborRate = ((Number) _value_xjal).doubleValue();
+      }
+      return true;
+    case "stopTime":
+      if ( _callOnChange_xjal ) {
+        set_stopTime( ((Number) _value_xjal).intValue() );
+      } else {
+        stopTime = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    case "LendPcntTrained":
+      if ( _callOnChange_xjal ) {
+        set_LendPcntTrained( ((Number) _value_xjal).intValue() );
+      } else {
+        LendPcntTrained = ((Number) _value_xjal).intValue();
+      }
+      return true;
+    default:
+      return super.setParameter( _name_xjal, _value_xjal, _callOnChange_xjal );
+    }
+  }
+
+  @Override
+  public <T> T getParameter(String _name_xjal) {
+    Object _result_xjal;
+    switch ( _name_xjal ) {
+    case "initBanks": _result_xjal = initBanks; break;
+    case "shockTime": _result_xjal = shockTime; break;
+    case "regime": _result_xjal = regime; break;
+    case "reactionTime": _result_xjal = reactionTime; break;
+    case "recoveryRate": _result_xjal = recoveryRate; break;
+    case "adaptiveP": _result_xjal = adaptiveP; break;
+    case "alphaLarge": _result_xjal = alphaLarge; break;
+    case "alphaSmall": _result_xjal = alphaSmall; break;
+    case "isEN": _result_xjal = isEN; break;
+    case "r_correction": _result_xjal = r_correction; break;
+    case "betaLarge": _result_xjal = betaLarge; break;
+    case "betaSmall": _result_xjal = betaSmall; break;
+    case "FIRESALE": _result_xjal = FIRESALE; break;
+    case "BASEL3": _result_xjal = BASEL3; break;
+    case "liquidityABS": _result_xjal = liquidityABS; break;
+    case "liquidityAgency": _result_xjal = liquidityAgency; break;
+    case "liquidityEquitysec": _result_xjal = liquidityEquitysec; break;
+    case "liquidityMBS": _result_xjal = liquidityMBS; break;
+    case "liquidityState": _result_xjal = liquidityState; break;
+    case "liquidityTreasury": _result_xjal = liquidityTreasury; break;
+    case "marketReaction": _result_xjal = marketReaction; break;
+    case "seedValue": _result_xjal = seedValue; break;
+    case "sellMore": _result_xjal = sellMore; break;
+    case "capitalRatio": _result_xjal = capitalRatio; break;
+    case "liborRate": _result_xjal = liborRate; break;
+    case "stopTime": _result_xjal = stopTime; break;
+    case "LendPcntTrained": _result_xjal = LendPcntTrained; break;
+    default: _result_xjal = super.getParameter( _name_xjal ); break;
+    }
+    return (T) _result_xjal;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private static String[] _parameterNames_xjal;
+
+  @Override
+  public String[] getParameterNames() {
+    String[] result = _parameterNames_xjal;
+    if (result == null) {
+      List<String> list = new ArrayList<>( Arrays.asList( super.getParameterNames() ) );
+      list.add( "initBanks" );
+      list.add( "shockTime" );
+      list.add( "regime" );
+      list.add( "reactionTime" );
+      list.add( "recoveryRate" );
+      list.add( "adaptiveP" );
+      list.add( "alphaLarge" );
+      list.add( "alphaSmall" );
+      list.add( "isEN" );
+      list.add( "r_correction" );
+      list.add( "betaLarge" );
+      list.add( "betaSmall" );
+      list.add( "FIRESALE" );
+      list.add( "BASEL3" );
+      list.add( "liquidityABS" );
+      list.add( "liquidityAgency" );
+      list.add( "liquidityEquitysec" );
+      list.add( "liquidityMBS" );
+      list.add( "liquidityState" );
+      list.add( "liquidityTreasury" );
+      list.add( "marketReaction" );
+      list.add( "seedValue" );
+      list.add( "sellMore" );
+      list.add( "capitalRatio" );
+      list.add( "liborRate" );
+      list.add( "stopTime" );
+      list.add( "LendPcntTrained" );
+      result = list.toArray( new String[ list.size() ] );
+      _parameterNames_xjal = result;
+    }
+    return result;
+  }
+  // Plain Variables
+
+  public 
+int 
+ numBanks;
+  private 
+int 
+ numDebts;
+  public 
+int 
+ numFailedBanks;
+  public 
+int 
+ nrowRecord;
+  public 
+int 
+ nrowDebt;
+  public 
+long 
+ startTime;
+  public 
+long 
+ endTime;
+  public 
+int 
+ numLiquidityFailure;
+  public 
+int 
+ numSolvencyFailure;
+  public 
+List<Bank> 
+ rankedbanks;
+  public 
+boolean 
+ converged;
+  public 
+int 
+ convergedTime;
+  public 
+double 
+ TDErr;
+  public 
+double 
+ avgHousing;
+  public 
+String 
+ bankfile;
+  public 
+String 
+ overnightfile;
+  public 
+String 
+ shorttermfile;
+  public 
+String 
+ longtermfile;
+  public 
+double 
+ sysDelta;
+  public 
+double 
+ stepReward;
+  public 
+String 
+ thetafile;
+  public 
+double 
+ avgReward;
+  public 
+double 
+ totAvgReward;
+  public 
+double 
+ totRewardLarge;
+  public 
+String 
+ failurefile;
+  public 
+String 
+ lendpfile;
+
+  // Collection Variables
+  public 
+LinkedHashMap <
+Integer , 
+Bank > alivebanks = new LinkedHashMap<Integer, Bank>();
+  public 
+LinkedHashMap <
+Integer , 
+Bank > failedbanks = new LinkedHashMap<Integer, Bank>();
+  public 
+LinkedHashMap <
+Bank , 
+Integer > banksize = new LinkedHashMap<Bank, Integer>();
+  @AnyLogicInternalCodegenAPI
+  private static Map<String, IElementDescriptor> elementDesciptors_xjal = createElementDescriptors( BankingSystem.class );
+  
+  @AnyLogicInternalCodegenAPI
+  @Override
+  public Map<String, IElementDescriptor> getElementDesciptors() {
+    return elementDesciptors_xjal;
+  }
+  @AnyLogicCustomProposalPriority(type = AnyLogicCustomProposalPriority.Type.STATIC_ELEMENT)
+  public static final Scale scale = new Scale( 10.0 );
+
+  @Override
+  public Scale getScale() {
+    return scale;
+  }
+
+
+  // Events
+
+  public EventTimeout record = new EventTimeout(this);
+  public EventTimeout shock = new EventTimeout(this);
+  public EventTimeout clear = new EventTimeout(this);
+  public EventTimeout check = new EventTimeout(this);
+  public EventTimeout checkAlive = new EventTimeout(this);
+  public EventTimeout checkCapitalRatio = new EventTimeout(this);
+  public EventTimeout collectRL = new EventTimeout(this);	
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout _chart1_autoUpdateEvent_xjal = new EventTimeout(this);	
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout _chart2_autoUpdateEvent_xjal = new EventTimeout(this);
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public String getNameOf( EventTimeout _e ) {
+     if( _e == record ) return "record";
+     if( _e == shock ) return "shock";
+     if( _e == clear ) return "clear";
+     if( _e == check ) return "check";
+     if( _e == checkAlive ) return "checkAlive";
+     if( _e == checkCapitalRatio ) return "checkCapitalRatio";
+     if( _e == collectRL ) return "collectRL";
+     if( _e == _chart1_autoUpdateEvent_xjal ) return "chart1 auto update event";
+     if( _e == _chart2_autoUpdateEvent_xjal ) return "chart2 auto update event";
+    return super.getNameOf( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public EventTimeout.Mode getModeOf( EventTimeout _e ) {
+    if ( _e == record ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == shock ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == clear ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == check ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == checkAlive ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == checkCapitalRatio ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == collectRL ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == _chart1_autoUpdateEvent_xjal ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    if ( _e == _chart2_autoUpdateEvent_xjal ) return EVENT_TIMEOUT_MODE_CYCLIC;
+    return super.getModeOf( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public double getFirstOccurrenceTime( EventTimeout _e ) {
+    double _t;
+    if ( _e == record ) {
+      _t = 
+1 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == shock ) {
+      _t = 
+shockTime 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == clear ) {
+      _t = 
+2.5 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == check ) {
+      _t = 
+5.95 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == checkAlive ) {
+      _t = 
+2.9 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == checkCapitalRatio ) {
+      _t = 
+2.85 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == collectRL ) {
+      _t = 
+2.56 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == _chart1_autoUpdateEvent_xjal ) {
+      _t = 
+1.01 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if ( _e == _chart2_autoUpdateEvent_xjal ) {
+      _t = 
+6 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    return super.getFirstOccurrenceTime( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public double evaluateTimeoutOf( EventTimeout _e ) {
+    double _t;
+    if( _e == record) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == shock) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == clear) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == check) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == checkAlive) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == checkCapitalRatio) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == collectRL) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == _chart1_autoUpdateEvent_xjal) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    if( _e == _chart2_autoUpdateEvent_xjal) {
+      _t = 
+3 
+;
+      _t = toModelTime( _t, MONTH );
+      return _t;
+    }
+    return super.evaluateTimeoutOf( _e );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void executeActionOf( EventTimeout _e ) {
+    if ( _e == record ) {
+      EventTimeout self = _e;
+
+
+updateDegreeDist();
+if(converged || time()>0)	{
+	if(time()==stopTime){
+		//System.out.println(totAvgReward*1.0/(time()/100));
+		//recordTheta();
+	}
+   System.out.println(
+    "Time: "+time()
+    +" - Failed: "+numFailedBanks
+    +": "+numLiquidityFailure
+    +": "+numSolvencyFailure);	
+	
+    recordFailure();
+    recordNetwork(OVERNIGHT);
+    recordNetwork(SHORTTERM);
+    recordNetwork(LONGTERM);
+    recordBank();
+    Date dateend = new Date();
+	System.out.println("record ends: "+dateend);
+}
+
+
+
+if(converged || rankedbanks==null)	rank();
+/*endTime   = System.currentTimeMillis();
+long totalTime = endTime - startTime;
+System.out.println(totalTime/1000/60);
+startTime = endTime;*/ 
+;
+      return;
+    }
+    if ( _e == shock ) {
+      EventTimeout self = _e;
+
+
+if(time()==shockTime) {
+	for(Bank b : banks) {
+		if(b.isAlive) {
+			if(regime.equals("beforecrisis"))
+				b.setRealEstateLoan(realestatepBefore.get());
+			else
+				b.setRealEstateLoan(realestatepAfter.get());
+		}
+	}
+}
+
+for(Bank b:banks){
+	if(b.isAlive){
+		//b.CashShock(0.1);
+		//b.InterbankShock(0.05);
+	}
+}
+//if(pricedrop.canReadMore() && time()<(shockTime+3*(reactionTime))) {
+if(pricedrop.canReadMore()){
+	double r = r_correction*1.0*pricedrop.readDouble();
+	if(r<0) {
+		for(Bank b : banks) {
+			if(b.isAlive) {
+				
+				b.HPIShock(-r);
+			}
+		}
+	} else {
+	}
+}
+
+/*if(time()==shockTime+reactionTime*3)
+	//recoveryRate = 0.7;
+	adaptiveP = 0.7;
+if(time()>shockTime+(reactionTime+2)*3)
+	//recoveryRate = 0.9;
+	//adaptiveP = 0.3;
+if(time()>shockTime+(reactionTime+4)*3)
+	//recoveryRate = 0.95;
+	adaptiveP = 0.3;
+if(time()>shockTime+(reactionTime+8)*3)
+	//recoveryRate = 0.995;
+	adaptiveP = 0.0;*/ 
+;
+      return;
+    }
+    if ( _e == clear ) {
+      EventTimeout self = _e;
+
+
+if(!converged)	return;
+/********** get system **********/
+double[][] pi = new double[alivebanks.size()][alivebanks.size()];
+double[] pays = new double[alivebanks.size()];
+double[] cash = new double[alivebanks.size()];
+
+int i = 0;
+for(Bank b : alivebanks.values()) {
+	
+	pi[i] = b.payDebt();
+	pays[i] = b.totScheduledOvernight+b.totScheduledShortterm+b.totScheduledLongterm;
+	cash[i++] = b.balancesheet.cash+b.balancesheet.balanceus+b.balancesheet.balancenus+b.balancesheet.fed;//+b.expBorrowing;
+	if(b.balancesheet.cash+b.balancesheet.balanceus+b.balancesheet.balancenus+b.balancesheet.fed<0){
+		System.out.println("ERROR");
+	}
+}
+
+
+/********** iteration **********/
+Matrix piMat = new Matrix(pi,alivebanks.size(),alivebanks.size());
+double[] fpays = pays;
+int n = 0;
+Vector<Integer> passed = new Vector<Integer>();
+Vector<Integer> currFail = new Vector<Integer>();
+do{
+	n = 0;
+	Matrix fpaysMat = new Matrix(fpays,alivebanks.size());
+	Matrix rec = piMat.transpose().times(fpaysMat).plus(new Matrix(cash,alivebanks.size()));
+	//Matrix residule = rec.minus(new Matrix(pays,alivebanks.size()));
+	int ind = 0;
+	for(Bank b : alivebanks.values()) {
+		if(1.0*rec.getArray()[ind][0]/pays[ind]<0.01 && (!passed.contains(b.bankId))){
+			/*int shortage = (int)((0.001*pays[ind]-rec.getArray()[ind][0]));					
+			if(FIRESALE == 1 && b.balancesheet.treasury+b.balancesheet.agency+b.balancesheet.state
+			+b.balancesheet.mbs+b.balancesheet.abs+b.balancesheet.equitysec>= shortage){
+						int[] r = b.pickSec(shortage);
+						//marketPriceDrop(r[0],r[1],r[2],r[3],r[4],r[5],0);	
+						cash[ind] += shortage;//r[0] + r[1] + r[2];				
+			}		
+			else{*/
+				if(currFail.contains(b.bankId)) fpays[ind] = rec.getArray()[ind][0];
+				else {
+					n++;
+					fpays[ind] = rec.getArray()[ind][0];
+					currFail.addElement(b.bankId);	
+				} //else {passed.addElement(b.bankId);}
+				
+			//}	
+		}
+		ind++;			
+	}
+	
+	//System.out.println(n);
+}while(n>0);
+
+int test = 0;
+
+/********** cleared **********/
+i = 0;
+for(Bank b : alivebanks.values()) {
+	int p = (int)Math.ceil(fpays[i++]);
+	test += p;
+	clearingVec.deliver(p, b);
+}
+//System.out.println(test);
+for(int id : currFail) {
+	alivebanks.get(id).fail();
+	
+}
+ 
+;
+      return;
+    }
+    if ( _e == check ) {
+      EventTimeout self = _e;
+
+
+TDErr = 0.0;
+int n = 0;
+for(Bank b : banks) {	
+	if(b.isAlive && (!Double.isNaN(b.avgTDErr))) {
+		TDErr += b.avgTDErr;
+		n++;
+	}
+}
+TDErr /= n;
+
+//if(!converged && ((TDErr<0.01) || (time()>50))) {
+if(!converged && (time()>=0)) {
+	converged=true;
+	convergedTime = (int)Math.ceil(time());
+	for(Bank b : banks) b.initSettlement();
+}
+
+avgHousing = 0.0;
+n = 0;
+for(Bank b : banks) {
+	if(b.isAlive && b.realestateloan>0) {
+		avgHousing += 1.0*b.realestateloan/(b.balancesheet.sec+b.balancesheet.otherasset);
+		n++;
+	}
+}
+avgHousing = n>0? avgHousing/n : 0.0;
+
+
+ 
+;
+      return;
+    }
+    if ( _e == checkAlive ) {
+      EventTimeout self = _e;
+
+int indx;
+do{
+indx = 0;
+for(Bank b : banks){
+	if(converged && b.isAlive && b.balancesheet.equity<0) {	
+	b.overnightWriteDown = 1;
+	b.shorttermWriteDown = uniform(0,.2);
+	b.longtermWriteDown = uniform(0,.2);
+	b.failureType="solvency";
+	b.isAlive = false;
+	numSolvencyFailure++;
+		if (FIRESALE == 1){
+			indx +=1;
+			int treasurySell = 0;
+			int agencySell = 0;
+			int stateSell = 0;
+			int absSell = 0;
+			int mbsSell = 0;
+			int equitysecSell = 0;
+			if(b.balancesheet.treasury>0)treasurySell = b.balancesheet.treasury;
+			if(b.balancesheet.agency>0)agencySell = b.balancesheet.agency;
+			if(b.balancesheet.state>0)stateSell = b.balancesheet.state;
+			if(b.balancesheet.abs>0)absSell = b.balancesheet.abs;
+			if(b.balancesheet.mbs>0)mbsSell = b.balancesheet.mbs;
+			if(b.balancesheet.equitysec>0)equitysecSell = b.balancesheet.equitysec;
+			marketPriceDrop(treasurySell,agencySell,stateSell,absSell,mbsSell,equitysecSell,0);
+		}		
+	}
+	if(converged && b.isAlive && 
+	b.balancesheet.cash+b.balancesheet.balanceus+
+	b.balancesheet.balancenus+b.balancesheet.fed<0) {	
+		double shortage = -(double)(sellMore*(b.balancesheet.cash+b.balancesheet.balanceus+
+				b.balancesheet.balancenus+b.balancesheet.fed));		
+		if (FIRESALE == 1 
+			&& b.balancesheet.sec > shortage){
+				int[] r = b.pickSec(shortage);
+				marketPriceDrop(r[0],r[1],r[2],r[3],r[4],r[5],0);
+		}
+			
+		else{
+			
+			b.overnightWriteDown = 0;
+			b.shorttermWriteDown = 0;
+			b.longtermWriteDown = 0;
+			b.failureType="liquidity";
+			b.isAlive = false;
+			numLiquidityFailure++;	
+		}
+		
+	}	
+	
+}	
+}while(indx>0);
+
+
+ 
+;
+      return;
+    }
+    if ( _e == checkCapitalRatio ) {
+      EventTimeout self = _e;
+
+int ind = 0;
+
+if(FIRESALE==1 && BASEL3 == 0){
+
+for(Bank b : banks){
+		if(converged && b.isAlive && b.balancesheet.capitalRatio < capitalRatio && b.balancesheet.capitalRatio > 0) {	
+			double amount = b.balancesheet.rwa - b.balancesheet.equity/capitalRatio;
+
+		// sell liquid asset first
+			int[] r = new int [5];;
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			int liquid = b.balancesheet.state+b.balancesheet.treasury+b.balancesheet.agency;
+			if(liquid+b.balancesheet.fed+b.balancesheet.balanceus+b.balancesheet.balancenus > b.balancesheet.cashassetRatio*b.balancesheet.liab  ){
+				if (b.balancesheet.state>0){
+					int sell =  min(b.balancesheet.state, (int)(amount/b.weightState));
+					b.balancesheet.rwa -= (int)(sell*b.weightState);
+					b.balancesheet.state -= sell;
+					b.balancesheet.cash += sell;
+					amount -= sell*b.weightState;
+					r[0] = sell;
+				}
+				if(b.balancesheet.state<= 0 && amount>0 && b.balancesheet.agency > 0 ){
+					int sell =  min(b.balancesheet.agency, (int)(amount/b.weightAgency));
+					b.balancesheet.rwa -= (int) (sell*b.weightAgency);
+					b.balancesheet.agency -= sell;
+					b.balancesheet.cash += sell;
+					amount -= sell*b.weightAgency;
+					r[1] = sell;
+				}
+			}
+
+			else{
+				
+					if(b.balancesheet.abs>0 && amount > 0  ){
+						int sell =  min(b.balancesheet.abs, (int)(amount/b.weightABS));
+						b.balancesheet.rwa -= (int) (sell*b.weightABS);
+						b.balancesheet.abs -= sell;
+						b.balancesheet.cash += sell;
+						amount -= sell*b.weightABS;
+						r[2] = sell;
+	
+						}
+					if(b.balancesheet.abs <= 0  && amount>0 && b.balancesheet.mbs>0  ){
+						int sell =  min(b.balancesheet.mbs,  (int)(amount/b.weightMBS));
+						b.balancesheet.rwa -= (int) (sell*b.weightMBS);
+						b.balancesheet.mbs -= sell;
+						b.balancesheet.cash += sell;
+						amount -= sell*b.weightMBS;
+						r[3] = sell;
+	
+						}
+					if(b.balancesheet.abs <= 0  && amount>0 && b.balancesheet.mbs<=0 && b.balancesheet.equitysec > 0 ){
+						int sell =  min(b.balancesheet.equitysec, (int)(amount/b.weightEquitysec));
+						b.balancesheet.rwa -= (int) (sell*b.weightEquitysec);
+						b.balancesheet.equitysec -= sell;
+						b.balancesheet.cash += sell;
+						amount -= sell*b.weightEquitysec;
+						r[4] = sell;
+	
+						}
+					//b.balancesheet.capitalRatio = 1.0* b.balancesheet.equity/b.balancesheet.rwa;
+					ind ++;
+					marketPriceDrop(0,r[0],r[1],r[2],r[3],r[4],0);
+				}
+				
+				
+		}
+	}
+}
+
+
+if(FIRESALE==1 && BASEL3 == 1){
+for(Bank b : banks){
+		if(converged && b.isAlive && b.balancesheet.capitalRatio < capitalRatio && b.balancesheet.capitalRatio > 0) {	
+			double amount = b.balancesheet.rwa - b.balancesheet.equity/capitalRatio;
+
+		// sell liquid asset first
+			int[] r = new int [5];;
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			Arrays.fill(r,0);
+			int liquid = b.balancesheet.state+b.balancesheet.treasury+b.balancesheet.agency;
+			int illiquid = b.balancesheet.abs+b.balancesheet.mbs+b.balancesheet.equitysec;
+			if (b.balancesheet.state>0){
+					int sell =  min(b.balancesheet.state, (int)(amount/b.weightState));
+					b.balancesheet.rwa -= (int)(sell*b.weightState);
+					b.balancesheet.state -= sell;
+					b.balancesheet.cash += sell;
+					amount -= sell*b.weightState;
+					r[0] = sell;
+				}
+				if(b.balancesheet.state<= 0 && amount>0 && b.balancesheet.agency > 0 ){
+					int sell =  min(b.balancesheet.agency, (int)(amount/b.weightAgency));
+					b.balancesheet.rwa -= (int) (sell*b.weightAgency);
+					b.balancesheet.agency -= sell;
+					b.balancesheet.cash += sell;
+					amount -= sell*b.weightAgency;
+					r[1] = sell;
+				}
+				
+					if(b.balancesheet.state<=0 && b.balancesheet.agency<=0&&b.balancesheet.abs>0 && amount > 0  ){
+						int sell =  min(b.balancesheet.abs, (int)(amount/b.weightABS));
+						b.balancesheet.rwa -= (int) (sell*b.weightABS);
+						b.balancesheet.abs -= sell;
+						b.balancesheet.cash += sell;
+						amount -= sell*b.weightABS;
+						r[2] = sell;
+	
+						}
+					if(b.balancesheet.state<=0 && b.balancesheet.agency<=0&&b.balancesheet.abs <= 0  && amount>0 && b.balancesheet.mbs>0  ){
+						int sell =  min(b.balancesheet.mbs,  (int)(amount/b.weightMBS));
+						b.balancesheet.rwa -= (int) (sell*b.weightMBS);
+						b.balancesheet.mbs -= sell;
+						b.balancesheet.cash += sell;
+						amount -= sell*b.weightMBS;
+						r[3] = sell;
+	
+						}
+					if(b.balancesheet.state<=0 && b.balancesheet.agency<=0&&b.balancesheet.abs <= 0  && amount>0 && b.balancesheet.mbs<=0 && b.balancesheet.equitysec > 0 ){
+						int sell =  min(b.balancesheet.equitysec, (int)(amount/b.weightEquitysec));
+						b.balancesheet.rwa -= (int) (sell*b.weightEquitysec);
+						b.balancesheet.equitysec -= sell;
+						b.balancesheet.cash += sell;
+						amount -= sell*b.weightEquitysec;
+						r[4] = sell;
+	
+						}
+					//b.balancesheet.capitalRatio = 1.0* b.balancesheet.equity/b.balancesheet.rwa;
+					ind ++;
+					marketPriceDrop(0,r[0],r[1],r[2],r[3],r[4],0);	
+				
+		}
+	}
+}
+								 
+;
+      return;
+    }
+    if ( _e == collectRL ) {
+      EventTimeout self = _e;
+
+if(time()<8.6)return;
+
+sysDelta = 0;
+double stepReward = 0;
+int totAsset = 0;
+double AvgLendPercent = 0;
+ 
+for(Bank b: banks){
+	if (b.bankId==0)totRewardLarge += b.RLReward/b.oldBalancesheet.asset;
+	if(b.isAlive && b.bankId!=0){
+		stepReward += b.RLReward/b.oldBalancesheet.asset;	
+		totAsset +=b.oldBalancesheet.asset;		
+		AvgLendPercent += b.lendPercent;
+	}
+}
+stepReward = stepReward/alivebanks.size();
+AvgLendPercent = AvgLendPercent/alivebanks.size();
+//System.out.println(AvgLendPercent);
+recordLendP(AvgLendPercent);
+totAvgReward += stepReward;
+if(time()==(stopTime-1.44)){
+		//System.out.println(totAvgReward/time());
+}	
+
+ 
+;
+      return;
+    }
+    if ( _e == _chart1_autoUpdateEvent_xjal ) {
+      chart1.updateData();
+      return;
+    }
+    if ( _e == _chart2_autoUpdateEvent_xjal ) {
+      chart2.updateData();
+      return;
+    }
+    super.executeActionOf( _e );
+  }
+
+	
+
+  /** Internal constant, shouldn't be accessed by user */
+  @AnyLogicInternalCodegenAPI
+  protected static final int _STATECHART_COUNT_xjal = 0;
+
+
+  // Embedded Objects
+
+
+  public String getNameOf( Agent ao ) {
+    return super.getNameOf( ao );
+  }
+
+  public AgentAnimationSettings getAnimationSettingsOf( Agent ao ) {
+    return super.getAnimationSettingsOf( ao );
+  }
+
+  public class _banks_Population extends AgentArrayList<Bank> {
+    _banks_Population( Agent owner ) {
+      super( owner );
+    }
+
+    @AnyLogicInternalCodegenAPI
+    public Bank instantiateAgent( int index ) {
+    	return instantiate_banks_xjal( index );
+    }
+
+    @AnyLogicInternalCodegenAPI
+    public void callSetupParameters( Bank agent, int index, TableInput tableInput ) {
+      setupParameters_banks_xjal( agent, index, tableInput );
+    }
+
+    @AnyLogicInternalCodegenAPI
+    public void callCreate( Bank agent, int index, TableInput tableInput ) {
+      doBeforeCreate_banks_xjal( agent, index, tableInput );
+      agent.create();
+    }
+
+    @AnyLogicInternalCodegenAPI
+    public boolean isPresentationEnabled() {
+      return false;
+    }
+
+  }
+  
+  @AnyLogicCustomProposalType(value = AnyLogicCustomProposalType.Label.POPULATION, customText = "Bank")
+  public _banks_Population banks = new _banks_Population( this );
+
+  public String getNameOf( AgentList<?> aolist ) {
+    if( aolist == banks ) return "banks";
+    return super.getNameOf( aolist );
+  }
+  
+  public AgentAnimationSettings getAnimationSettingsOf( AgentList<?> aolist ) {
+    return super.getAnimationSettingsOf( aolist );
+  }
+
+  /**
+   * Returns the agent element at the specified position in banks
+   * population.
+   * @see com.anylogic.engine.AgentList#get(int)
+   * @since 7.3.7
+   */
+  public Bank banks(int index) {
+    return banks.get( index );
+  }
+
+  /**
+   * This method creates and adds new embedded object in the replicated embedded object collection banks<br>
+   * @return newly created embedded object
+   */
+  public Bank add_banks() {
+    int index = banks.size();
+    Bank _result_xjal = instantiate_banks_xjal( index );
+    banks.callSetupParameters( _result_xjal, index );
+    banks.callCreate( _result_xjal, index );
+    _result_xjal.start();
+    return _result_xjal;
+  }
+
+  /**
+   * This method creates and adds new embedded object in the replicated embedded object collection banks<br>
+   * This method uses given parameter values to setup created embedded object<br>
+   * Index of this new embedded object instance can be obtained through calling <code>banks.size()</code> method <strong>before</strong> this method is called
+   * @param bankId
+   * @param rangeTarget
+   * @param type
+   * @param cash2asset
+   * @param balus2asset
+   * @param balnus2asset
+   * @param fed2asset
+   * @param fedfundsld2asset
+   * @param fedfundbot2liab
+   * @param fedsecbot2asset
+   * @param fedsecsld2liab
+   * @param loan2asset
+   * @param liab2asset
+   * @param deposit2liab
+   * @param brwmy2liab
+   * @param asset
+   * @param scoreDecay
+   * @param borrowingThred
+   * @param overnightAssetRatio
+   * @param longtermAssetRatio
+   * @param overnightAlpha
+   * @param shorttermAlpha
+   * @param longtermAlpha
+   * @param overnightBeta
+   * @param shorttermBeta
+   * @param longtermBeta
+   * @param matchRate
+   * @param shorttermAssetRatio
+   * @param settlementAdj
+   * @param sec2asset
+   * @param treasury2sc
+   * @param state2sc
+   * @param agency2sc
+   * @param abs2sc
+   * @param mbs2sc
+   * @param equitysec2sc
+   * @param weightABS
+   * @param weightAgency
+   * @param weightCash
+   * @param weightEquitysec
+   * @param weightInterbank
+   * @param weightMBS
+   * @param weightOtherasset
+   * @param weightState
+   * @param weightTreasury
+   * @param cashassetHoldingRatio
+   * @param interestRate
+   * @return newly created embedded object
+   */
+  public Bank add_banks( int bankId, double rangeTarget, Size type, double cash2asset, double balus2asset, double balnus2asset, double fed2asset, double fedfundsld2asset, double fedfundbot2liab, double fedsecbot2asset, double fedsecsld2liab, double loan2asset, double liab2asset, double deposit2liab, double brwmy2liab, int asset, double scoreDecay, double borrowingThred, double overnightAssetRatio, double longtermAssetRatio, double overnightAlpha, double shorttermAlpha, double longtermAlpha, double overnightBeta, double shorttermBeta, double longtermBeta, double matchRate, double shorttermAssetRatio, double settlementAdj, double sec2asset, double treasury2sc, double state2sc, double agency2sc, double abs2sc, double mbs2sc, double equitysec2sc, double weightABS, double weightAgency, double weightCash, double weightEquitysec, double weightInterbank, double weightMBS, double weightOtherasset, double weightState, double weightTreasury, double cashassetHoldingRatio, double interestRate ) {
+    int index = banks.size();
+    Bank _result_xjal = instantiate_banks_xjal( index );
+    // Setup parameters
+    _result_xjal.markParametersAreSet();
+    _result_xjal.bankId = bankId;
+    _result_xjal.rangeTarget = rangeTarget;
+    _result_xjal.type = type;
+    _result_xjal.cash2asset = cash2asset;
+    _result_xjal.balus2asset = balus2asset;
+    _result_xjal.balnus2asset = balnus2asset;
+    _result_xjal.fed2asset = fed2asset;
+    _result_xjal.fedfundsld2asset = fedfundsld2asset;
+    _result_xjal.fedfundbot2liab = fedfundbot2liab;
+    _result_xjal.fedsecbot2asset = fedsecbot2asset;
+    _result_xjal.fedsecsld2liab = fedsecsld2liab;
+    _result_xjal.loan2asset = loan2asset;
+    _result_xjal.liab2asset = liab2asset;
+    _result_xjal.deposit2liab = deposit2liab;
+    _result_xjal.brwmy2liab = brwmy2liab;
+    _result_xjal.asset = asset;
+    _result_xjal.scoreDecay = scoreDecay;
+    _result_xjal.borrowingThred = borrowingThred;
+    _result_xjal.overnightAssetRatio = overnightAssetRatio;
+    _result_xjal.longtermAssetRatio = longtermAssetRatio;
+    _result_xjal.overnightAlpha = overnightAlpha;
+    _result_xjal.shorttermAlpha = shorttermAlpha;
+    _result_xjal.longtermAlpha = longtermAlpha;
+    _result_xjal.overnightBeta = overnightBeta;
+    _result_xjal.shorttermBeta = shorttermBeta;
+    _result_xjal.longtermBeta = longtermBeta;
+    _result_xjal.matchRate = matchRate;
+    _result_xjal.shorttermAssetRatio = shorttermAssetRatio;
+    _result_xjal.settlementAdj = settlementAdj;
+    _result_xjal.sec2asset = sec2asset;
+    _result_xjal.treasury2sc = treasury2sc;
+    _result_xjal.state2sc = state2sc;
+    _result_xjal.agency2sc = agency2sc;
+    _result_xjal.abs2sc = abs2sc;
+    _result_xjal.mbs2sc = mbs2sc;
+    _result_xjal.equitysec2sc = equitysec2sc;
+    _result_xjal.weightABS = weightABS;
+    _result_xjal.weightAgency = weightAgency;
+    _result_xjal.weightCash = weightCash;
+    _result_xjal.weightEquitysec = weightEquitysec;
+    _result_xjal.weightInterbank = weightInterbank;
+    _result_xjal.weightMBS = weightMBS;
+    _result_xjal.weightOtherasset = weightOtherasset;
+    _result_xjal.weightState = weightState;
+    _result_xjal.weightTreasury = weightTreasury;
+    _result_xjal.cashassetHoldingRatio = cashassetHoldingRatio;
+    _result_xjal.interestRate = interestRate;
+    // Finish embedded object creation
+    banks.callCreate( _result_xjal, index );
+    _result_xjal.start();
+    return _result_xjal;
+  }
+
+  /**
+   * This method removes the given embedded object from the replicated embedded object collection banks<br>
+   * The given object is destroyed, but not immediately in common case.
+   * @param object the active object - element of replicated embedded object banks - which should be removed
+   * @return <code>true</code> if object was removed successfully, <code>false</code> if it doesn't belong to banks
+   */
+  public boolean remove_banks( Bank object ) {
+    if( ! banks._remove( object ) ) {
+      return false;
+    }
+    object.removeFromFlowchart();
+    object.setDestroyed();
+    return true;
+  }
+
+  /**
+   * Creates an embedded object instance and adds it to the end of replicated embedded object list<br>
+   * <i>This method should not be called by user</i>
+   */
+  protected Bank instantiate_banks_xjal( final int index ) {
+    Bank _result_xjal = new Bank( getEngine(), this, banks );
+    
+    banks._add( _result_xjal );
+
+    return _result_xjal;
+  }
+
+  /**
+   * Setups parameters of an embedded object instance<br>
+   * This method should not be called by user
+   */
+  private void setupParameters_banks_xjal( final Bank self, final int index, TableInput _t ) {
+    self.bankId = 
+++numBanks 
+;
+    self.rangeTarget = self._rangeTarget_DefaultValue_xjal();
+    self.type = 
+numBanks<2? LARGE : SMALL 
+;
+    self.cash2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 14); 
+;
+    self.balus2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 2); 
+;
+    self.balnus2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 11); 
+;
+    self.fed2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 12); 
+;
+    self.fedfundsld2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 4); 
+;
+    self.fedfundbot2liab = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 5); 
+;
+    self.fedsecbot2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 6); 
+;
+    self.fedsecsld2liab = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 7); 
+;
+    self.loan2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 8); 
+;
+    self.liab2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 10); 
+;
+    self.deposit2liab = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 3); 
+;
+    self.brwmy2liab = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 9); 
+;
+    self.asset = 
+(int)initTargetInput.getCellNumericValue(1, numBanks+1, 13); 
+;
+    self.scoreDecay = self._scoreDecay_DefaultValue_xjal();
+    self.borrowingThred = 
+0.0 
+;
+    self.overnightAssetRatio = self._overnightAssetRatio_DefaultValue_xjal();
+    self.longtermAssetRatio = self._longtermAssetRatio_DefaultValue_xjal();
+    self.overnightAlpha = self._overnightAlpha_DefaultValue_xjal();
+    self.shorttermAlpha = self._shorttermAlpha_DefaultValue_xjal();
+    self.longtermAlpha = self._longtermAlpha_DefaultValue_xjal();
+    self.overnightBeta = self._overnightBeta_DefaultValue_xjal();
+    self.shorttermBeta = self._shorttermBeta_DefaultValue_xjal();
+    self.longtermBeta = self._longtermBeta_DefaultValue_xjal();
+    self.matchRate = self._matchRate_DefaultValue_xjal();
+    self.shorttermAssetRatio = self._shorttermAssetRatio_DefaultValue_xjal();
+    self.settlementAdj = self._settlementAdj_DefaultValue_xjal();
+    self.sec2asset = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 21); 
+;
+    self.treasury2sc = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 15); 
+;
+    self.state2sc = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 17); 
+;
+    self.agency2sc = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 16); 
+;
+    self.abs2sc = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 19); 
+;
+    self.mbs2sc = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 18); 
+;
+    self.equitysec2sc = 
+initTargetInput.getCellNumericValue(1, numBanks+1, 20); 
+;
+    self.weightABS = self._weightABS_DefaultValue_xjal();
+    self.weightAgency = self._weightAgency_DefaultValue_xjal();
+    self.weightCash = self._weightCash_DefaultValue_xjal();
+    self.weightEquitysec = self._weightEquitysec_DefaultValue_xjal();
+    self.weightInterbank = self._weightInterbank_DefaultValue_xjal();
+    self.weightMBS = self._weightMBS_DefaultValue_xjal();
+    self.weightOtherasset = self._weightOtherasset_DefaultValue_xjal();
+    self.weightState = self._weightState_DefaultValue_xjal();
+    self.weightTreasury = self._weightTreasury_DefaultValue_xjal();
+    self.cashassetHoldingRatio = self._cashassetHoldingRatio_DefaultValue_xjal();
+    self.interestRate = self._interestRate_DefaultValue_xjal();
+  }
+
+  /**
+   * Setups an embedded object instance<br>
+   * This method should not be called by user
+   */
+  @AnyLogicInternalCodegenAPI
+  private void doBeforeCreate_banks_xjal( Bank self, final int index, TableInput _t ) {
+    self.setEnvironment( this );
+
+    // Port connections
+  }
+
+  // Functions
+
+  void failed( Bank bank ) { 
+
+alivebanks.remove(bank.bankId);
+failedbanks.put(bank.bankId, bank); 
+  }
+
+  void initNetwork(  ) { 
+
+System.out.println("Start");
+Date date = new Date();
+System.out.println(date);
+	
+initFedFundNetwork();
+initFedSecNetwork();
+initLoanNetwork();
+initTheta();
+ 
+  }
+
+  void initFedFundNetwork(  ) { 
+
+/*// Rank borrowing and lending
+Map<Bank,Integer> fedfundsld = new HashMap<Bank,Integer>();
+Map<Bank,Integer> fedfundbot = new HashMap<Bank,Integer>();
+for(int i=0;i<numBanks;i++){
+	Bank b = banks.get(i);
+	fedfundsld.put(b, b.balancesheet.fedfundsld);
+	fedfundbot.put(b, b.balancesheet.fedfundbot);
+}
+// match top borrowing with top lending
+matchDebt(fedfundsld,fedfundbot,OVERNIGHT);*/
+
+while(initOvernightNetwork.canReadMore()) {
+	int out = initOvernightNetwork.readInt();
+	int in = initOvernightNetwork.readInt();
+	int amount = Integer.parseInt(initOvernightNetwork.readString().trim());
+    if(in>=initBanks || out>=initBanks)	continue;
+	Bank lender = banks.get(out);
+
+	Bank borrower = banks.get(in);
+    if(amount>0) {
+		Debt d = new Debt(++numDebts, OVERNIGHT, lender, borrower, amount);
+		bank.deliver(d, borrower);
+		bank.deliver(d, lender);
+	}
+}
+initOvernightNetwork.close();
+//System.out.println("Initialized fed-funds network"); 
+  }
+
+  void initFedSecNetwork(  ) { 
+
+// Rank borrowing and lending
+/*Map<Bank,Integer> fedsecsld = new HashMap<Bank,Integer>();
+Map<Bank,Integer> fedsecbot = new HashMap<Bank,Integer>();
+for(int i=0;i<numBanks;i++){
+	Bank b = banks.get(i);
+	fedsecsld.put(b, b.balancesheet.fedsecsld);
+	fedsecbot.put(b, b.balancesheet.fedsecbot);
+}
+//Queue<Bank> fedsecsldRank = rank(fedsecsld);
+//Queue<Bank> fedsecbotRank = rank(fedsecbot);
+// match top borrowing with top lending
+matchDebt(fedsecbot,fedsecsld,SHORTTERM);*/
+
+while(initShorttermNetwork.canReadMore()) {
+	int out = initShorttermNetwork.readInt();
+	int in = initShorttermNetwork.readInt();
+	int amount = Integer.parseInt(initShorttermNetwork.readString().trim());
+	if(in>=initBanks || out>=initBanks)	continue;
+	Bank lender = banks.get(out);
+	Bank borrower = banks.get(in);
+    if(amount>0) {
+		Debt d = new Debt(++numDebts, SHORTTERM, lender, borrower, amount);
+		bank.deliver(d, borrower);
+		bank.deliver(d, lender);
+	}
+}
+initShorttermNetwork.close();
+//System.out.println("Initialized fed-securities network"); 
+  }
+
+  void updateDegreeDist(  ) { 
+
+overnightDegreeOut.reset();
+overnightDegreeIn.reset();
+//shorttermDegree.reset();
+//longtermDegree.reset();
+for(Bank b : banks) {
+	if(b.isAlive){
+		//overnightDegreeOut.add(b.overnightConn.getConnectionsNumber());
+		int n = b.getNLending(OVERNIGHT);
+		if(n>0)	overnightDegreeOut.add(n);
+		n = b.getNBorrowing(OVERNIGHT);
+		if(n>0)	overnightDegreeIn.add(n);
+		//shorttermDegree.add(b.shorttermConn.getConnectionsNumber());
+		//longtermDegree.add(b.longtermConn.getConnectionsNumber());
+	}
+}
+/*int line = (int)(time()/3)+2;
+degreeRecord.setCellValue(overnightDegree.mean(), 1, line, 1);
+degreeRecord.setCellValue(shorttermDegree.mean(), 1, line, 2);
+degreeRecord.setCellValue(longtermDegree.mean(), 1, line, 3);
+degreeRecord.setCellValue(time(), 1, line, 4);*/ 
+  }
+
+  void initLoanNetwork(  ) { 
+
+// Rank borrowing and lending
+/*Map<Bank,Integer> loan = new HashMap<Bank,Integer>();
+Map<Bank,Integer> brwmy = new HashMap<Bank,Integer>();
+for(int i=0;i<numBanks;i++){
+	Bank b = banks.get(i);
+	loan.put(b, b.balancesheet.loan);
+	brwmy.put(b, b.balancesheet.brwmy);
+}
+//Queue<Bank> loanRank = rank(loan);
+//Queue<Bank> brwmyRank = rank(brwmy);
+// match top borrowing with top lending
+matchDebt(loan,brwmy,LONGTERM);*/
+while(initLongtermNetwork.canReadMore()) {
+	int out = initLongtermNetwork.readInt();
+	int in = initLongtermNetwork.readInt();
+	int amount = Integer.parseInt(initLongtermNetwork.readString().trim());
+	if(in>=initBanks || out>=initBanks)	continue;
+	Bank lender = banks.get(out);
+	Bank borrower = banks.get(in);
+    if(amount>0) {
+		Debt d = new Debt(++numDebts, LONGTERM, lender, borrower, amount);
+		bank.deliver(d, borrower);
+		bank.deliver(d, lender);
+	}
+}
+initLongtermNetwork.close();
+//System.out.println("Initialized loan network");
+//System.out.println("FIRESALE="+FIRESALE+" MarketReaction="+marketReaction); 
+  }
+
+  void recordNetwork( DebtType type ) { 
+
+List<Bank> conns = null;
+switch(type) {
+	case OVERNIGHT:
+		try {
+		
+		 	FileWriter fstream = new FileWriter(overnightfile,true);
+			BufferedWriter out = new BufferedWriter(fstream);
+	
+			for(Bank lender : banks) {
+				if(lender.isAlive) {
+					 conns = lender.overnightConn.getConnections();
+					 for(Bank borrower : conns) {
+					 	
+	
+						 	String str = Integer.toString(lender.bankId)+','
+						 							+Integer.toString(borrower.bankId)+','
+						 							+Integer.toString(lender.lendingValue(type, borrower))+','
+						 							+Double.toString(time())
+						 							;
+						    out.write(str);
+						    out.newLine();
+					 }
+				}
+			}
+			
+			out.close();
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		break;
+	case SHORTTERM:
+		try {
+		 	FileWriter fstream = new FileWriter(shorttermfile,true);
+			BufferedWriter out = new BufferedWriter(fstream);
+		
+			for(Bank lender : banks) {
+				if(lender.isAlive) {
+					 conns = lender.shorttermConn.getConnections();
+					 for(Bank borrower : conns) {
+						String str = Integer.toString(lender.bankId)+','
+												+Integer.toString(borrower.bankId)+	','
+												+Integer.toString(lender.lendingValue(type, borrower))+	','
+												+Double.toString(time()) ;
+									
+					    out.write(str);
+					    out.newLine();
+					 }
+				}
+			}
+	
+		    out.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    
+		break;
+	case LONGTERM:
+		try {
+		 	FileWriter fstream = new FileWriter(longtermfile,true);
+			BufferedWriter out = new BufferedWriter(fstream);
+	
+			for(Bank lender : banks) {
+				if(lender.isAlive) {
+					 conns = lender.longtermConn.getConnections();
+					 for(Bank borrower : conns) {
+						String str = Integer.toString(lender.bankId)+','
+												+Integer.toString(borrower.bankId)+','
+												+Integer.toString(lender.lendingValue(type, borrower))+','
+												+Double.toString(time());
+					    out.write(str);
+					    out.newLine();
+					 }
+				}
+			}
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		break;
+}
+
+
+
+ 
+  }
+
+  void recordBank(  ) { 
+
+try {
+	FileWriter fstream = new FileWriter(bankfile,true);
+	BufferedWriter out = new BufferedWriter(fstream);
+
+
+	double sumCI = 0;
+	for(Bank bank : banks) {
+		String str = Integer.toString(bank.bankId)+','
+		+Integer.toString(bank.asset)+','
+		+Double.toString(time())+','
+		+Integer.toString(bank.HPILoss)+','
+		+Integer.toString(bank.writedownLoss)+','
+		+Integer.toString(bank.equityLoss)+','
+		+Boolean.toString(bank.isAlive)+','
+		+Integer.toString(bank.balancesheet.liab)+','
+		+Integer.toString(bank.lendInternalTest)+','
+		+Integer.toString(bank.writedownLoss)+','
+		+Integer.toString(bank.longtermBorrowingInternal+bank.overnightBorrowingInternal+bank.shorttermBorrowingInternal)+','
+		+Integer.toString(bank.longtermLendingInternal+bank.overnightLendingInternal+bank.shorttermLendingInternal)+','
+		+Double.toString(bank.liab2asset*bank.asset)+','
+		;
+	    sumCI = sumCI + (bank.longtermLendingInternal+bank.overnightLendingInternal+bank.shorttermLendingInternal)
+	    *(1-1.0*(bank.longtermBorrowingInternal+bank.overnightBorrowingInternal+bank.shorttermBorrowingInternal)/bank.balancesheet.liab);
+	
+		    out.write(str);
+		    out.newLine();
+	    
+	   // bankRecord.println(str);
+	}
+	sumCI = sumCI/alivebanks.size();
+	//System.out.println(sumCI);
+	
+	out.close();
+
+} catch(IOException e) {
+		e.printStackTrace();
+} 
+  }
+
+  void rank(  ) { 
+
+List<Bank> rs = new LinkedList();
+Set<Integer> val = new TreeSet<Integer>(banksize.values());
+for(double v : val){
+	for(Bank b : banksize.keySet()){
+		if(banksize.get(b)==v)	rs.add(b);
+	}
+}
+Collections.reverse(rs);
+rankedbanks = rs; 
+  }
+
+  void marketPriceDrop( int TREASURY, int AGENCY, int STATE, int ABS, int MBS, int EQUITYSEC, int REALESTATELOAN ) { 
+
+int[] treasury = new int[alivebanks.size()];
+int[] agency = new int[alivebanks.size()];
+int[] state = new int[alivebanks.size()];
+int[] abs = new int[alivebanks.size()];
+int[] mbs = new int[alivebanks.size()];
+int[] equitysec = new int[alivebanks.size()];
+int i=0;
+
+for(Bank b: alivebanks.values()){
+treasury[i] = b.balancesheet.treasury;
+agency[i]= b.balancesheet.agency;
+state[i]= b.balancesheet.state;
+abs[i]= b.balancesheet.abs;
+mbs[i]= b.balancesheet.mbs;
+equitysec[i++]= b.balancesheet.equitysec;	
+}
+
+
+double salePercentTreasury = 1.0*TREASURY/ Arrays.stream(treasury).sum();
+double deductTreasury = 1.0*exp(-liquidityTreasury*marketReaction*salePercentTreasury);// price after sale
+double salePercentAgency = 1.0*AGENCY/ Arrays.stream(agency).sum();
+double deductAgency = 1.0*exp(-liquidityAgency*marketReaction*salePercentAgency);// price after sale
+double salePercentState = 1.0*STATE/ Arrays.stream(state).sum();
+double deductState = 1.0*exp(-liquidityState*marketReaction*salePercentState);// price after sale
+double salePercentABS = 1.0*ABS/ Arrays.stream(abs).sum();
+double deductAbs = 1.0*exp(-liquidityABS*marketReaction*salePercentABS);// price after sale
+double salePercentMbs = 1.0*MBS/ Arrays.stream(mbs).sum();
+double deductMbs = 1.0*exp(-liquidityMBS*marketReaction*salePercentMbs);// price after sale
+double salePercentEquitysec = 1.0*EQUITYSEC/ Arrays.stream(equitysec).sum();
+double deductEquitysec = 1.0*exp(-liquidityEquitysec*marketReaction*salePercentEquitysec);// price after sale
+
+double totalDeduct = 0;
+
+for(Bank bb : alivebanks.values()){	
+
+	if(bb.balancesheet.treasury>0)bb.balancesheet.treasury = (int)(bb.balancesheet.treasury*deductTreasury);
+	if(bb.balancesheet.agency>0)bb.balancesheet.agency = (int)(bb.balancesheet.agency*deductAgency);
+	if(bb.balancesheet.state>0)bb.balancesheet.state = (int)(bb.balancesheet.state*deductState);
+	if(bb.balancesheet.abs>0)bb.balancesheet.abs = (int)(bb.balancesheet.abs*deductAbs);
+	if(bb.balancesheet.mbs>0)bb.balancesheet.mbs = (int)(bb.balancesheet.mbs*deductMbs);
+	if(bb.balancesheet.equitysec>0)bb.balancesheet.equitysec = (int)(bb.balancesheet.equitysec*deductEquitysec);
+
+	int testsec = bb.balancesheet.treasury+ bb.balancesheet.state+bb.balancesheet.agency
++bb.balancesheet.abs+bb.balancesheet.mbs+bb.balancesheet.othersec+bb.balancesheet.equitysec;
+	int asset1 = bb.balancesheet.asset;
+	bb.updateBalanceSheet(NONE);	
+	int loss = bb.balancesheet.asset - asset1;
+	bb.RLReward += loss;
+}
+ 
+  }
+
+  void recordTheta(  ) { 
+
+try {
+	FileWriter fstream = new FileWriter(thetafile,true);
+	BufferedWriter out = new BufferedWriter(fstream);
+
+	for(Bank bank : banks) {
+
+		String str = Integer.toString(bank.bankId)+',';
+		for(int i=0; i<bank.RLState.length-1; i++){
+//			str += Double.toString(bank.theta[i])+',';		
+			String strTheta = String.format("%.6f", bank.theta[i]);
+			str += strTheta+',';
+		}
+		
+		str += String.format("%.6f", bank.theta[bank.RLState.length-1]);
+		//Double.toString(bank.theta[bank.RLState.length-1]);
+	
+	    out.write(str);
+	    out.newLine();
+	}
+
+
+	out.close();  
+	fstream.close();
+	
+} catch(IOException e) {
+	e.printStackTrace();
+}
+finally{
+}
+
+
+ 
+  }
+
+  void initTheta(  ) { 
+
+/*
+while(initThetaFile.canReadMore()) {
+	int in = initThetaFile.readInt();
+	Bank bank = banks.get(in-1);
+	//if(in>=initBanks )	continue;
+	
+	for(int i = 0; i<bank.RLState.length; i++){
+		bank.theta[i] = Double.parseDouble(initThetaFile.readString().trim());
+	}	
+	
+}
+*/
+
+
+while(initThetaFile.canReadMore()) {
+	String strLine = initThetaFile.readLine();
+	
+	String[] values = strLine.split(",");
+	int in = Integer.parseInt(values[0]);
+	Bank bank = banks.get(in-1);
+	
+
+	for(int i = 0; i<bank.RLState.length; i++){
+		bank.theta[i] = Double.parseDouble(values[i+1].trim());
+	}	
+	
+}
+
+
+initThetaFile.close();
+ 
+  }
+
+  void recordFailure(  ) { 
+
+	String str = Double.toString(time())+',';
+	str += Integer.toString(numFailedBanks)+',';
+	str += Integer.toString(numLiquidityFailure)+',';
+	str += Integer.toString(numSolvencyFailure)+',';
+	
+    try {
+    	FileWriter fstream = new FileWriter(failurefile,true);
+	    BufferedWriter out = new BufferedWriter(fstream);
+	    out.write(str);
+	    out.newLine();
+	    out.close();
+    } catch(IOException e) {
+		e.printStackTrace();
+	}
+    
+ 
+  }
+
+  void recordLendP( double AvgLendPercent ) { 
+
+	String str = Double.toString(time())+',';
+	str += Double.toString(AvgLendPercent)+',';
+	
+    try {
+    	FileWriter fstream = new FileWriter(lendpfile,true);
+	    BufferedWriter out = new BufferedWriter(fstream);
+	    out.write(str);
+	    out.newLine();
+	    out.close();
+    } catch(IOException e) {
+		e.printStackTrace();
+	}
+    
+ 
+  }
+  // Custom Distributions
+  @AnyLogicInternalCodegenAPI
+  private final static double[] _realestatepBefore_Values_xjal = _realestatepBefore_Values_xjal();
+  @AnyLogicInternalCodegenAPI
+  private final static double[] _realestatepBefore_Values_xjal() {
+    return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8.63599317867898E-8, 3.18197939979469E-5, 1.12278919340756E-4, 1.73444633244046E-4, 2.38463783773076E-4, 3.14947743997114E-4, 4.87828203596579E-4, 5.06088388662749E-4, 6.74539851416206E-4, 6.78574776430164E-4, 8.81846652379699E-4, 9.60390442300088E-4, 0.00130834132960743, 0.00137912849234963, 0.00182129555683022, 0.00207129619535594, 0.00297074146950884, 0.00324455949777947, 0.004834487317917, 0.00554965622957718, 0.0115973345591413, 0.0118149692983152, 0.0168101231674521, 0.0236145047818259, 0.0260187754856514, 0.0355434858590995, 0.0371242893137327, 0.0383335740696523, 0.0390406313414722, 0.0493392380747455, 0.0515069507549926, 0.0518235446051056, 0.0547043542619418, 0.056586217670063, 0.0569414389784878, 0.0623850836717965, 0.0710815837627295, 0.0749152253749996, 0.077110552808272, 0.0801384515022798, 0.0818711041119805, 0.0838013048363446, 0.0866862203800825, 0.103228073216868, 0.104552508916218, 0.108464183831729, 0.126319717780345, 0.131020021097489, 0.132329122414075, 0.142610293699601, 0.14336587392209, 0.144656639500398, 0.149463987918395, 0.154489465818831, 0.160095000363522, 0.163312512485501, 0.166796692824661, 0.174766827105041, 0.175154895502409, 0.177643247904851, 0.178772760485916, 0.179549049545335, 0.179725984376101, 0.182512294766145, 0.182589918107237, 0.183417725083264, 0.185709674325465, 0.185986863010383, 0.187602249318696, 0.191407118864337, 0.191795175680996, 0.196962181052272, 0.19818457214416, 0.19878288722572, 0.200438476165471, 0.20051674052139, 0.200679769730911, 0.200901887872469, 0.20397593220946, 0.207986046850318, 0.208965857503172, 0.209511701150933, 0.210755497341342, 0.212169164137751, 0.213717261884706, 0.214720788286526, 0.217762204892636, 0.219397522341375, 0.219497911556302, 0.220280404569453, 0.220487073202405, 0.220618692074731, 0.221294202067365, 0.222273846946912, 0.222656085127599, 0.223137902801565, 0.225910785160451, 0.225921458566692, 0.22882496035366, 0.230551963478223, 0.232656784962568, 0.235940292231683, 0.236937138109339, 0.237413311077893, 0.23818015285019, 0.238249946738202, 0.239178211399614, 0.23956112845019, 0.240284837643124, 0.24046545401429, 0.24148016977438, 0.243294926834513, 0.243877177281158, 0.245580129121597, 0.246208377392308, 0.247652318160514, 0.247738188597285, 0.248082818835339, 0.24863654177721, 0.249032623241597, 0.25074974504375, 0.250913953209933, 0.25204969451925, 0.252238333028129, 0.254598550954983, 0.25551213631949, 0.256726999984392, 0.257375514788469, 0.257459328549013, 0.258003515247374, 0.259026345437675, 0.259557090765434, 0.260239502985065, 0.262456539745665, 0.262561301597692, 0.2625628089077, 0.262577533355625, 0.263311930919068, 0.263720080208994, 0.26558184671827, 0.265804050869235, 0.270590438716179, 0.271049932525535, 0.271315871739322, 0.272178808802059, 0.27251653236755, 0.273244453736383, 0.274390910146307, 0.27494653775302, 0.276989323257654, 0.277657115175623, 0.278067388050584, 0.278383253436736, 0.278424808700113, 0.278701951389192, 0.279301897838115, 0.279382088916364, 0.281292498248885, 0.28242521284305, 0.282581325482552, 0.286295356852336, 0.286444825049082, 0.287073857553337, 0.287212353434342, 0.287957231472461, 0.288761303604201, 0.288970818531348, 0.288989949396732, 0.2894381647016, 0.291282355105148, 0.291373139515789, 0.291689463852767, 0.293463452776062, 0.294195654195364, 0.295506110575294, 0.295945562367655, 0.296152467556189, 0.296989016318781, 0.297229844237919, 0.298165993741216, 0.298394640098617, 0.29907800880255, 0.299134383707218, 0.29995233969594, 0.300348496279425, 0.300961242944076, 0.301183371239875, 0.301845125952957, 0.302838430335504, 0.30286430147181, 0.302995176163192, 0.303051662391913, 0.3036866595675, 0.303740119771281, 0.303829734972007, 0.304454631066394, 0.304836561056956, 0.305881940849919, 0.308352170797888, 0.308366658191679, 0.310137729586058, 0.31173409909578, 0.311784400056986, 0.312285456057578, 0.312662258143522, 0.313996146791528, 0.314394074629395, 0.315202079918963, 0.316294842948083, 0.31801544192901, 0.318483319582482, 0.31860169294056, 0.318894792882184, 0.319291596511184, 0.320011198709307, 0.320688484484054, 0.321250614830161, 0.321500064352456, 0.324039984990679, 0.327783818894838, 0.328014625250462, 0.32808114964063, 0.329547105521577, 0.329826713325482, 0.329948915250687, 0.330287624947073, 0.330605260834017, 0.3310772153261, 0.331249078363591, 0.331283242168906, 0.33146628587022, 0.331579650591165, 0.332182891750301, 0.332677392214459, 0.332709204927927, 0.33499738005445, 0.335165777593744, 0.335762388169132, 0.335802460887103, 0.336571667480731, 0.337060198080074, 0.33717194412925, 0.337216309347331, 0.337467299542602, 0.338217665689489, 0.338298747207394, 0.339073566306502, 0.339694500412232, 0.339711766993972, 0.339980847242991, 0.340196636040732, 0.340481376855866, 0.340724105052972, 0.341636754843443, 0.341949198480674, 0.34315773022413, 0.343708862585548, 0.34410596655413, 0.344577386252057, 0.344982258547044, 0.345807116312305, 0.345934601343276, 0.346397218167781, 0.346911929081691, 0.347400471328804, 0.347402286916825, 0.347560472852974, 0.347665217699984, 0.349019622078833, 0.349437789709778, 0.35011647816184, 0.350135934290251, 0.350897004010681, 0.350906095551895, 0.351099037064109, 0.352123974286387, 0.352254056354706, 0.353034770711987, 0.35304466318646, 0.353332847866198, 0.354197171176115, 0.354815050204491, 0.355017075431372, 0.356168362746436, 0.356272297352873, 0.356453933336271, 0.356928143149476, 0.356958552242608, 0.357366185182347, 0.357813018028123, 0.358419319498138, 0.358793239360039, 0.359959843350995, 0.360136302317112, 0.360210568449748, 0.360252206182045, 0.361784940062758, 0.362224457357348, 0.362350149090245, 0.362507129977588, 0.362750009873394, 0.363178524940636, 0.363272008863719, 0.364618062960059, 0.3647614151575, 0.36483343730907, 0.365721060085513, 0.366049832187851, 0.366131248439106, 0.366145021423921, 0.366310857967506, 0.366461598782662, 0.367068967325039, 0.367226908259606, 0.367736945038945, 0.36815708548533, 0.368325392929619, 0.368636345639444, 0.369013354047826, 0.369200664674447, 0.369577627937136, 0.370378781023439, 0.370514007011018, 0.371952995265966, 0.372202875342451, 0.372538892427189, 0.37382552722529, 0.374776840642718, 0.374808825412996, 0.378026664823662, 0.378656967751101, 0.379011127752912, 0.379267089816805, 0.380721890742836, 0.381135288008123, 0.381688809593234, 0.382079974957309, 0.382423115704741, 0.382504847546702, 0.382617958188741, 0.382845950127864, 0.382957243409337, 0.383329215430793, 0.383446020746478, 0.383930074029503, 0.384759090652151, 0.384844903134777, 0.385119135678067, 0.385458292159101, 0.385682384303794, 0.385730224942102, 0.386436864298996, 0.387562820824309, 0.387656959046587, 0.38772143285867, 0.387940098550412, 0.388115490148796, 0.388980430853296, 0.389258595709027, 0.38939752369884, 0.38944733113143, 0.389627886735675, 0.39017310986194, 0.390178365474862, 0.390379202614145, 0.390546751910622, 0.390765530242703, 0.391190940134199, 0.391219107086271, 0.39183967558287, 0.391909587423633, 0.392493682062396, 0.392505254280599, 0.392714420256513, 0.392906994939878, 0.394095630143322, 0.394152412869771, 0.394298633197324, 0.394343886391605, 0.395169376889396, 0.395786771297906, 0.396514749907101, 0.397523662172469, 0.398265555393908, 0.399149685863879, 0.399721503254573, 0.399877876651614, 0.40068197755802, 0.400740929223589, 0.401912179905912, 0.40217205961699, 0.403057134144168, 0.403060617629642, 0.40326766503013, 0.403581972591934, 0.403872942846442, 0.404008556277782, 0.404538784863758, 0.40482953175563, 0.405344415127698, 0.405629547257968, 0.406585548102785, 0.406734968436303, 0.406763641497288, 0.406994626967858, 0.407300242799001, 0.407395267721308, 0.407419226687981, 0.407448345988193, 0.407954928649928, 0.407958192842926, 0.408218817019778, 0.408345048351005, 0.409008643549722, 0.409255781907834, 0.409473894865866, 0.409656994122122, 0.410351204214758, 0.41035874771589, 0.410519645051989, 0.410782502847957, 0.411018806581197, 0.411802458326703, 0.411932664285346, 0.411990200421932, 0.412065863266373, 0.412423779897072, 0.412649766981581, 0.413518036929647, 0.41399402827239, 0.414132202464135, 0.41466094750664, 0.414716330518735, 0.414954352021796, 0.414984602247598, 0.415203476870052, 0.415206343296394, 0.415267947480394, 0.415757731297318, 0.416194600930392, 0.41641146988516, 0.41665331150765, 0.41680017812059, 0.417110313701615, 0.417293205855786, 0.417325217422179, 0.417650113364013, 0.41791821903024, 0.418523787290195, 0.419058180611052, 0.419126464430269, 0.419176007448355, 0.4195672113629, 0.419679460300507, 0.419707995464096, 0.419928234775138, 0.420851811846041, 0.421398230843052, 0.42144883508006, 0.421983696925045, 0.422371922231931, 0.422753088704539, 0.423134214981635, 0.423187682299236, 0.424238373594304, 0.425587846415956, 0.425693958830215, 0.425776204960032, 0.4266877039558, 0.426743850037434, 0.426943246173314, 0.427418938440821, 0.427649947917362, 0.427859186299264, 0.428604339642179, 0.42883648652147, 0.430024092035822, 0.43034111398455, 0.430366137705215, 0.430473210495731, 0.430889112489569, 0.430992321332039, 0.431008003644223, 0.431423727558568, 0.432246466859025, 0.432400310169973, 0.432404621832381, 0.432624999918385, 0.433322258981815, 0.433494711199429, 0.433573311721756, 0.434102667900106, 0.434128062022909, 0.434370963258018, 0.434552113735957, 0.434691324563422, 0.435928983655088, 0.435940321743997, 0.436470812666925, 0.436679591104657, 0.436710822515583, 0.437593046665062, 0.438075073705991, 0.438218952133995, 0.438242981921766, 0.438269364721323, 0.438281764249515, 0.439090547761719, 0.439127765169402, 0.43920435381081, 0.439256830245376, 0.439308821923248, 0.439648325401863, 0.439745594727657, 0.440360185294902, 0.440457864456495, 0.440734130125748, 0.440768739452138, 0.441406446356787, 0.441509552155697, 0.441553173831159, 0.44173726107616, 0.44234073958247, 0.442473403439727, 0.44291861940561, 0.443028661082728, 0.443064948051945, 0.443195944971076, 0.443232669344877, 0.44423020089441, 0.444666841318549, 0.445037361426032, 0.445389547080289, 0.445834118282288, 0.445962907765608, 0.446573609606291, 0.446945637909623, 0.447068417377767, 0.447136052503594, 0.447231100207222, 0.447239909757501, 0.447377498985589, 0.447487759003213, 0.447948578288473, 0.448001137477432, 0.448010519252817, 0.448037819361943, 0.448297760816884, 0.448585504719915, 0.448681536521905, 0.44875706954501, 0.449244047757362, 0.449385969623573, 0.449485522555886, 0.449676653374388, 0.449867333330603, 0.450315358302653, 0.450528388503389, 0.450847746411138, 0.450892475898696, 0.451199171327283, 0.451254720401543, 0.451267214512193, 0.451334136464, 0.451387700790026, 0.451632203070877, 0.452072083042837, 0.452173088601433, 0.452242114667504, 0.452692666406623, 0.452711842794706, 0.452980793607266, 0.453052181216784, 0.453357648829051, 0.453379962372651, 0.45350306429384, 0.454994086087899, 0.455705020095621, 0.456469678637235, 0.457181531615113, 0.457620858986582, 0.457923305003926, 0.458293214276999, 0.458931259750727, 0.458936851196914, 0.458988195467063, 0.459129984945223, 0.459214152113773, 0.459502450427029, 0.460264210513069, 0.460575200933551, 0.461590751850242, 0.461665431916893, 0.461899981512333, 0.462043414243765, 0.462740452850976, 0.462767012284743, 0.463041866409289, 0.463126073671454, 0.463322953529803, 0.463561365469234, 0.463640538370036, 0.4638051265381, 0.464099909239176, 0.464196806297259, 0.464525265046108, 0.465058413022268, 0.465208708591119, 0.465759319876252, 0.465821261171646, 0.466117249004785, 0.466349059264333, 0.466823733932731, 0.466955979462555, 0.467091773151191, 0.467289782119038, 0.467739650718058, 0.467944434711564, 0.467954463316372, 0.468114562109251, 0.468186046009587, 0.46880445749229, 0.4690223300532, 0.469328185389719, 0.469507637309344, 0.469573501283644, 0.469620818201003, 0.469734623943496, 0.470554801035054, 0.471062434021143, 0.4711352189074, 0.471456967833507, 0.471669905997136, 0.471827096969921, 0.47202997451018, 0.472314059004668, 0.47261326062082, 0.472782704489192, 0.472834855197855, 0.473747418418179, 0.474187206897327, 0.474229457543676, 0.474803255162987, 0.474827631466233, 0.475017871818807, 0.475149419729863, 0.475265119752658, 0.475353166475549, 0.475440239101828, 0.475573484144386, 0.47558910147675, 0.476181652119842, 0.476548549792193, 0.47727929063912, 0.477313087728351, 0.477632509183386, 0.477702296353313, 0.477833408476616, 0.477918991390396, 0.478307239032493, 0.478463187409322, 0.478467130799088, 0.478608927676243, 0.479063419765236, 0.479144796427363, 0.479175495350937, 0.479177836326482, 0.479536167949891, 0.479547867027686, 0.479557110437727, 0.479778523350164, 0.479785952486419, 0.480686019079368, 0.480844993327838, 0.481222645595627, 0.481610108540856, 0.481663888468501, 0.481787245947, 0.482328028268563, 0.482479677719882, 0.482904114380657, 0.483386290302717, 0.483398947098322, 0.483422319376761, 0.483575617236157, 0.483624486880549, 0.483836746530043, 0.484270810996551, 0.484421524042678, 0.48481028120704, 0.484962605273847, 0.485005788506441, 0.485287168748273, 0.485378252267628, 0.485479117008394, 0.485480523026936, 0.485512521569339, 0.485902966987769, 0.485954420729709, 0.485992538453926, 0.486163915832682, 0.486467858414951, 0.486534113610915, 0.486537523519728, 0.486788201384154, 0.487427445697099, 0.487601112765592, 0.488132824889842, 0.48873303563764, 0.489493198077163, 0.48970235337489, 0.489977729631959, 0.489988043991013, 0.490075028548506, 0.490088937426271, 0.490129424552022, 0.490179316998108, 0.490357773835414, 0.490508182225017, 0.490582911167853, 0.490585855157221, 0.490588992129868, 0.491183636928692, 0.491418433291918, 0.491481208557708, 0.491847699124704, 0.49186436200159, 0.492302618888098, 0.492367851582263, 0.492643518453037, 0.492777349768875, 0.49302251934594, 0.494363063849163, 0.494482735081399, 0.494620850710832, 0.494774061773998, 0.49490837249074, 0.494978214087276, 0.495700641842365, 0.496227326492634, 0.496509402435373, 0.496636017839025, 0.496727401827857, 0.496889415331275, 0.497109570279138, 0.497198751500239, 0.497752478536512, 0.498330680240885, 0.498425695584082, 0.498941445750738, 0.498988855562007, 0.499076125086078, 0.499477532313687, 0.4995837256375, 0.500213850647576, 0.500328774685094, 0.500748920269946, 0.500797150511283, 0.501090140016343, 0.501263718080818, 0.501279941750226, 0.501500481090182, 0.501996207044225, 0.502102218326898, 0.502197092561013, 0.502290799356814, 0.502406771241735, 0.502712365146693, 0.502837321780074, 0.503096507931172, 0.503294939366514, 0.503951741644413, 0.504635961201956, 0.504711717318169, 0.50526645434597, 0.505302220092723, 0.505414687813927, 0.505420769275736, 0.50557224071883, 0.506215250460536, 0.506518951522777, 0.506766279824565, 0.507303603326102, 0.507401766467889, 0.507462715747215, 0.507964056469081, 0.508023636396314, 0.508374020007024, 0.5085297181624, 0.508647892471176, 0.508826664442784, 0.50884434807326, 0.509049191076666, 0.509370215493221, 0.509401749083155, 0.509735649129351, 0.510066738769769, 0.510092937143833, 0.510200570075268, 0.510447673869889, 0.510730301674414, 0.510751922117153, 0.511179795707241, 0.51167905974742, 0.511852186835382, 0.511997505854931, 0.512042961280571, 0.512290010286043, 0.512397822201262, 0.512671052415379, 0.513044200471388, 0.513113290144619, 0.513245347522587, 0.51403573880052, 0.514145612381288, 0.514591744329805, 0.514734602319932, 0.51494853803662, 0.515062899654445, 0.515715152242119, 0.515959844972292, 0.516466558451079, 0.516546831252211, 0.516571658393329, 0.516761127354624, 0.516894349960248, 0.516996572469579, 0.517060384212542, 0.517081301380758, 0.517139377583753, 0.51758891606788, 0.517854738421408, 0.51804154738734, 0.518200316324937, 0.518579787803668, 0.519103304549619, 0.519110933953907, 0.519128279041184, 0.519514596623287, 0.51991949732804, 0.520555011086794, 0.5205684284424, 0.520589786294287, 0.520915141313165, 0.520968933098928, 0.521295322404226, 0.521786118598862, 0.522009813850452, 0.52208257656308, 0.522203152089632, 0.522307725592481, 0.522967596750637, 0.523057929030507, 0.523184630129065, 0.523382881213105, 0.523451210895353, 0.523557035898247, 0.523583482526986, 0.523688891757707, 0.523737214516102, 0.523802638890842, 0.523918672597981, 0.524183085275025, 0.524358734772103, 0.524558972812482, 0.524605085345096, 0.524829590529034, 0.524831808496472, 0.525267041929219, 0.525297262711045, 0.525435843360924, 0.525461153773428, 0.525648556710525, 0.525719653906841, 0.526016235980863, 0.526043272755418, 0.526638934168578, 0.526808388450102, 0.526859906229109, 0.527018834715398, 0.527527637535227, 0.527566065613367, 0.527634389828933, 0.527781184921085, 0.5281085441684, 0.52827627941451, 0.52828387249509, 0.52866301398283, 0.528934699122439, 0.529045358805158, 0.529060139980349, 0.529285934947875, 0.529384733925823, 0.529429442253624, 0.529635988734474, 0.529681326358161, 0.529892389822489, 0.529918649249447, 0.530257114396961, 0.530353110572707, 0.530386789932636, 0.530387974142377, 0.530494524847573, 0.530596017933111, 0.530662151848185, 0.53120001959755, 0.531268080739158, 0.531484893898808, 0.532280063361741, 0.532387865088435, 0.532990526402332, 0.533318279884566, 0.533554327036657, 0.534026353137971, 0.534621061445676, 0.535050707829892, 0.535209650795376, 0.535245346774486, 0.535274836637777, 0.535366070884734, 0.535431170436185, 0.535669549430465, 0.535737989814056, 0.535768035977096, 0.535847550973789, 0.53600620001979, 0.536405283972484, 0.536503198653833, 0.536872222836386, 0.53711319087466, 0.537271473354782, 0.537371390875588, 0.537806302277392, 0.538383950123963, 0.538519977266319, 0.538573999902215, 0.538767652359498, 0.538771498142151, 0.538859828633583, 0.538959593630733, 0.539338102160836, 0.539449257630401, 0.540108549207221, 0.540183199542336, 0.540951770465877, 0.541492328426207, 0.541578554308801, 0.541842597511502, 0.542055936952141, 0.542493469480504, 0.543243310905192, 0.543443148202606, 0.543589140046314, 0.543601379128486, 0.543743557664509, 0.543879505854081, 0.54399059467953, 0.544180662019362, 0.544408089352912, 0.544667774397585, 0.544844194266889, 0.545359133745591, 0.545444624903742, 0.545450188730023, 0.545513720631409, 0.545654017444192, 0.545736761559822, 0.546259540124335, 0.546309716944469, 0.546445010384733, 0.546493670469897, 0.546794613047169, 0.546804243579622, 0.547449179611237, 0.547501489925552, 0.547686464603336, 0.547867479655583, 0.548139669985849, 0.548365094289435, 0.548481061343846, 0.548628005864827, 0.548841074370385, 0.54886843845431, 0.549153269428035, 0.549240214692081, 0.549330941228803, 0.549434462453383, 0.549508253321382, 0.549767025457002, 0.549949340963101, 0.55003098776713, 0.550180122938303, 0.550424591568219, 0.55049554043712, 0.551005415880671, 0.551078223878128, 0.551156568905246, 0.551206962245128, 0.55133954975341, 0.551403550124457, 0.551408327818854, 0.552242691834453, 0.552617223636451, 0.552716264427717, 0.552773469925654, 0.552915560982819, 0.552953606047766, 0.552972976281833, 0.553131324251603, 0.553205047588899, 0.554215315727243, 0.554308675794949, 0.55440307042847, 0.554514071960451, 0.554767271703124, 0.554794419274487, 0.554951488900502, 0.55496504423542, 0.555282498961447, 0.555375384482765, 0.555396914404597, 0.556407166977552, 0.556947800668071, 0.55720744007661, 0.557502273340851, 0.557802768062537, 0.557975005145085, 0.558031972559776, 0.55811826693707, 0.558638429945198, 0.558751402334632, 0.55944482798798, 0.559494102323481, 0.559677463107302, 0.559749172161567, 0.559785417768238, 0.55983299382354, 0.560137442887082, 0.560571753352828, 0.560806194157387, 0.560950736808443, 0.561175991042518, 0.561460848498539, 0.561950431421743, 0.562184761422861, 0.562293796466075, 0.562317868483877, 0.562387938843624, 0.562423975017156, 0.562548011992872, 0.563156246488805, 0.563186818862357, 0.563323976760007, 0.563585910700073, 0.563931092130872, 0.563933674199395, 0.564456430108929, 0.564494130813906, 0.564596741871221, 0.564925788947804, 0.565006399728018, 0.565054265050359, 0.565077992240209, 0.565191300383591, 0.56524051215689, 0.565316068317642, 0.565343376967989, 0.565387378969645, 0.565435866513904, 0.566049880212177, 0.566067796653257, 0.566206160579749, 0.566234343298738, 0.566515067386905, 0.566622474340806, 0.566688642290264, 0.566709352677819, 0.566711905794546, 0.566908404035188, 0.566923766481807, 0.567109160750569, 0.567194871150271, 0.567694347327498, 0.568109563228058, 0.56831223153715, 0.568673967081555, 0.568844382322972, 0.569010012650759, 0.56915751121821, 0.569202364492487, 0.569230934539339, 0.569303638977738, 0.569589578700465, 0.569841679779084, 0.570454360103011, 0.570826943331117, 0.570915366169778, 0.571183748585293, 0.571569222807637, 0.571646123537203, 0.571674299497474, 0.571872239252001, 0.571942008756439, 0.571968642153332, 0.572074908654369, 0.572191738132039, 0.572213993046563, 0.572449022870582, 0.572468240655019, 0.573044252035814, 0.573204990881632, 0.57349395191585, 0.573540139337418, 0.573715103238186, 0.573822180756749, 0.573856705502591, 0.574073865021341, 0.574227251217513, 0.574509022305526, 0.574569412140125, 0.574643663238984, 0.575077870168049, 0.575784442280247, 0.57616266595623, 0.576428022138784, 0.576623316016504, 0.576883374676237, 0.577128475241772, 0.577223569678092, 0.577296122127797, 0.577330333476976, 0.577452403722829, 0.577744182924456, 0.5780450591756, 0.578051012392093, 0.578163622314535, 0.578283262299268, 0.578388361251116, 0.57853673017538, 0.578615298816789, 0.578759130125585, 0.579073534915377, 0.579118135837343, 0.579329480358868, 0.579546257796, 0.580761078478445, 0.58091633712334, 0.582040159894218, 0.58240966126038, 0.582541423412223, 0.582600306599401, 0.582720231568098, 0.582929146022666, 0.583289947759549, 0.583373087169281, 0.583451829162803, 0.58354444751151, 0.58369848262872, 0.583755677373033, 0.584153177611418, 0.584539896653979, 0.58456490606513, 0.58503383237915, 0.585039281115306, 0.585396559648117, 0.585416477798639, 0.586584409306949, 0.587198672251115, 0.587312052701008, 0.587575978189556, 0.587780693213996, 0.588085254794083, 0.5882203417269, 0.588351338566599, 0.589016872563229, 0.589242062505841, 0.589434523988435, 0.589659659337158, 0.589979774809052, 0.590304666505246, 0.590635384884905, 0.590815545565398, 0.590945091667326, 0.590965597189367, 0.591011092944134, 0.591032119000705, 0.591094743082075, 0.591274895121844, 0.591319484677048, 0.591537652810947, 0.591719389499672, 0.591776746434461, 0.592241222282423, 0.59289302409424, 0.593386155861317, 0.593525983579863, 0.593692438355571, 0.593848132761034, 0.594013858851316, 0.594176484387877, 0.594215136758361, 0.594421981246261, 0.594569388644873, 0.594626444838768, 0.594772289929385, 0.595168543384232, 0.59527059484589, 0.595370062304192, 0.595396316275346, 0.595721995495858, 0.595735898232225, 0.596035196519337, 0.596067098165198, 0.596194929410029, 0.596267887825316, 0.596989507846052, 0.597284503102385, 0.597311754670576, 0.597353415401184, 0.597525823128281, 0.597531429704538, 0.597770799406726, 0.597981084414241, 0.598046983137361, 0.598116886537206, 0.598358078470063, 0.598698364970289, 0.598827722188729, 0.598860916598163, 0.599640946138015, 0.599878508932788, 0.600025769730612, 0.600258659997191, 0.600311396788629, 0.600350898653897, 0.600507846429614, 0.600520230902, 0.60075862499674, 0.600930786502385, 0.601050938565652, 0.601064221598354, 0.601328798497577, 0.601367560801702, 0.60159180143379, 0.60162551023028, 0.6016698139796, 0.601692247347219, 0.601759549275858, 0.602301289530023, 0.60246844082808, 0.602519031550823, 0.602715751867946, 0.60297697780391, 0.60309145756368, 0.603246386656729, 0.603562262804555, 0.603656487710674, 0.603705845322742, 0.603984664072068, 0.603985792780462, 0.604142523373741, 0.604223389311414, 0.604405686476924, 0.604434729898854, 0.60485835556083, 0.60495925965592, 0.605252775589961, 0.605304793970827, 0.60569271475825, 0.605759535776643, 0.605815772519161, 0.606126295568956, 0.606334243434528, 0.606476582587535, 0.606794286492708, 0.606946649131441, 0.607188711456322, 0.607668847083087, 0.607722450766011, 0.60781584625665, 0.607961181993735, 0.607990282454604, 0.608044714482534, 0.608124543254707, 0.608636410152695, 0.608707421706254, 0.608839539196795, 0.609312958348497, 0.609762168830521, 0.609849653260593, 0.609887502057302, 0.609906480448717, 0.61055245817189, 0.611252130316863, 0.611334094274373, 0.61144211433403, 0.611486294456073, 0.611672356932597, 0.611915020640222, 0.612039473576657, 0.612212973457669, 0.612464200101027, 0.612830181862086, 0.612882692137966, 0.613026161955136, 0.613027899120363, 0.613321033628637, 0.613545471493523, 0.613550569098633, 0.613689618051747, 0.614285283117735, 0.614300974802815, 0.614402528460028, 0.614432215517457, 0.614458309280572, 0.614808283458498, 0.614923421518016, 0.615126271159817, 0.615192127336141, 0.615210740661354, 0.615784439334255, 0.615832573782317, 0.616353364408856, 0.616436680811885, 0.616469914047981, 0.616898523431347, 0.617155446832072, 0.617202345208887, 0.61764920262437, 0.618173510918572, 0.618429012245284, 0.618452513624482, 0.61860068086379, 0.618619539452222, 0.618814473621119, 0.618843381638587, 0.619716251675602, 0.619769347675735, 0.619823757779868, 0.619889965294651, 0.620214702405961, 0.620237804206141, 0.620293664059904, 0.621201400087473, 0.621413864184524, 0.621992926878128, 0.622006445820237, 0.62230393074708, 0.623090312707504, 0.623741676674568, 0.623838659602831, 0.623878224690424, 0.623925324718438, 0.624061089841536, 0.624115705053428, 0.62438218646204, 0.624383564104935, 0.625013668637533, 0.625083338358188, 0.62523279062219, 0.625241449468722, 0.625523349487036, 0.625715923065782, 0.625959244960205, 0.626238312374333, 0.626343764041371, 0.626417158865863, 0.626809401545918, 0.627123988802046, 0.627919755197749, 0.628049176225735, 0.628325445161995, 0.628343735794408, 0.628412506294502, 0.628449688124453, 0.62847156447205, 0.628642181666089, 0.628750168192192, 0.628766163855355, 0.629180140577568, 0.62931049431081, 0.62944409191228, 0.629534166297594, 0.629570882529803, 0.629987287255319, 0.630243939842053, 0.63039909931999, 0.630725624576379, 0.630768218771502, 0.631114085060655, 0.631132356134108, 0.631385411637106, 0.632187291321005, 0.63230493548437, 0.632311478721105, 0.632332045868438, 0.633051141561741, 0.633132722599908, 0.63327964958982, 0.633388874546437, 0.633574026965196, 0.633697826183688, 0.633939823025293, 0.634037791048107, 0.634427211283852, 0.63458033689457, 0.634650877174634, 0.634783677544244, 0.634844028252928, 0.634921547311531, 0.634929152640055, 0.634955859033446, 0.635030066206416, 0.635086813252931, 0.635347263369409, 0.635840726222406, 0.635880356343948, 0.636070424206316, 0.636341402068704, 0.636954587007176, 0.637323366117692, 0.637703113917016, 0.637706600159033, 0.637748680556901, 0.637825068717472, 0.637984950151998, 0.638953760907059, 0.638979894811852, 0.639255149610425, 0.639372844777859, 0.639522650512284, 0.63993204711149, 0.639982596485873, 0.640039093299453, 0.640122249828934, 0.640314108513849, 0.640567255817057, 0.640786367503167, 0.641185669217504, 0.641329867556645, 0.641330154470263, 0.641689405317296, 0.641764653992182, 0.641929780673265, 0.641964626307909, 0.642544078687548, 0.643039006735465, 0.643342592609135, 0.643348334824745, 0.643362005236612, 0.643569357938088, 0.644104451288973, 0.644479976439719, 0.644750673580339, 0.644917920103064, 0.644933866682092, 0.64496656919578, 0.64515521573853, 0.645329072948188, 0.645329310094914, 0.645370739212338, 0.6455682277848, 0.645798107059165, 0.645807041844118, 0.64585256726406, 0.645873270801319, 0.646138286516878, 0.646166478346267, 0.646410288542354, 0.646727781405962, 0.647195870595439, 0.647353447732889, 0.647658256884853, 0.647768575073006, 0.647919026319459, 0.648017010129412, 0.648088267093164, 0.648232470434774, 0.64841799744968, 0.648525957110911, 0.648602094100042, 0.648703387860281, 0.648774091260672, 0.648847587307732, 0.648931656237655, 0.649026608483483, 0.649393586666025, 0.649434336836211, 0.64963813078559, 0.649800786491143, 0.650355306039701, 0.650406696653616, 0.65040812408302, 0.650461792836972, 0.650689307400413, 0.650964745721631, 0.65109604749827, 0.651179535676131, 0.65131197473302, 0.651665328460293, 0.651923821460301, 0.652124085436726, 0.652256658780162, 0.653098927564353, 0.653247219304131, 0.653346049004515, 0.653358961181666, 0.653419310362166, 0.653851859976758, 0.653862823761086, 0.65391820709898, 0.654283148934243, 0.654331043913195, 0.65543247647054, 0.65549053550965, 0.655655574258738, 0.655714594398942, 0.655982603710981, 0.65609622263455, 0.656496355919908, 0.656582918146195, 0.657011463242063, 0.657191931778092, 0.657432205515625, 0.65775283220483, 0.657767145670926, 0.65805204438297, 0.658320472820798, 0.658400191483025, 0.658486014156085, 0.658769370980323, 0.658828410364129, 0.659054674060895, 0.659061336506554, 0.659334177816458, 0.659450104339916, 0.659476051448218, 0.659487481061154, 0.660024037605431, 0.660123650533154, 0.660178450857505, 0.66022895335419, 0.660442133430014, 0.660596635630468, 0.660610804503187, 0.660619670624951, 0.660626356714458, 0.660766359528201, 0.661051251792759, 0.661355103956135, 0.661510859204157, 0.66155437379573, 0.661614087871456, 0.661870449765852, 0.661946451733049, 0.662107845862043, 0.662125576049741, 0.662169642018292, 0.662170568329346, 0.662437715111603, 0.66260892941919, 0.662783598277455, 0.663043058107555, 0.663081862923733, 0.663211767744626, 0.66322894477267, 0.663362931370325, 0.6636542867853, 0.663752039485648, 0.664246028683187, 0.664274568119672, 0.664596462568759, 0.66462567641871, 0.664788000579625, 0.664816840025488, 0.664987002360877, 0.665076754897596, 0.66509765256798, 0.665107217274316, 0.665194288544739, 0.665321534634041, 0.6654483104518, 0.665655780186523, 0.665698726945318, 0.665900374927121, 0.666026040359201, 0.666129798322899, 0.66622896273182, 0.666284990439148, 0.666642796598682, 0.666743638332085, 0.667023288179713, 0.6671397149809, 0.667313679474761, 0.667374008823738, 0.667657397801313, 0.667682024814205, 0.667926504830175, 0.668043813561007, 0.668132872213789, 0.668390941735317, 0.668412721997264, 0.669014419185311, 0.669020582576659, 0.669247114257129, 0.669499328790771, 0.669839797045205, 0.669933184677124, 0.669941675037399, 0.670016984945135, 0.670022150067878, 0.670047059356983, 0.670467328013322, 0.67079441131902, 0.671078778602511, 0.671672615599741, 0.671814021621931, 0.67182364903551, 0.672115367629847, 0.672125430611876, 0.672688883202429, 0.672929703699261, 0.673078883249497, 0.673085586301065, 0.673254061568381, 0.673545081327526, 0.673565410856699, 0.674199369898226, 0.674450017749209, 0.674695815950617, 0.675116743769164, 0.675171718780493, 0.675529450750851, 0.67555237442502, 0.675716084649655, 0.675878283526286, 0.675908970455588, 0.676013864156096, 0.676843686191193, 0.677610114044273, 0.677642988086237, 0.677881300518047, 0.678235313465364, 0.678293799415548, 0.67869732215033, 0.678842472737823, 0.678926023359206, 0.679044238657069, 0.679570622099389, 0.679586963440002, 0.680123835438147, 0.680887138622167, 0.681139425369154, 0.681682698559011, 0.681782609960915, 0.682410130034274, 0.682527385851025, 0.682867766094564, 0.683180122245139, 0.68320549445429, 0.683311500028753, 0.683692672786336, 0.684078568491393, 0.684681821276974, 0.684707319156052, 0.684723812489395, 0.684885921417855, 0.684950940650791, 0.685080954009797, 0.685120598966804, 0.685197039318423, 0.685325384803026, 0.685410405932023, 0.685544305512406, 0.685635914170314, 0.685726847749275, 0.686242808391145, 0.686362451526173, 0.686676568517832, 0.68675203333476, 0.686756351033687, 0.687295475741524, 0.687424504508819, 0.688081848117863, 0.688706004110522, 0.688842682185724, 0.688851898456983, 0.688937641731075, 0.689250051192921, 0.689792412490088, 0.690435516976021, 0.690667146763511, 0.690820622031499, 0.690998808364384, 0.691083901489776, 0.691436170505115, 0.691812180558303, 0.691898791169498, 0.692010948558099, 0.692259145038639, 0.692776407378654, 0.693386821403224, 0.693823658658407, 0.69384421400976, 0.69427760391879, 0.694590530782302, 0.694628611645237, 0.695133676574305, 0.695355558261691, 0.695395607705141, 0.695432613440615, 0.695531711767462, 0.695791281517539, 0.695813424455107, 0.696524219374016, 0.6971300147669, 0.697822167326831, 0.697943601454108, 0.697960718849981, 0.698034819487063, 0.698054570306659, 0.698861312929075, 0.6988725762051, 0.699037156872904, 0.700392908507787, 0.700565200561425, 0.700607619033198, 0.701214450558463, 0.701830277164741, 0.701840139866053, 0.701855406652409, 0.702949758031449, 0.703595787756226, 0.703796899105918, 0.703817499873134, 0.704186977202606, 0.704510153368105, 0.704635047024184, 0.704730751713519, 0.704944599493068, 0.705116921996371, 0.705497106077929, 0.70578964210843, 0.706325927263532, 0.706395370192338, 0.70683371122384, 0.707115807769527, 0.707157060995031, 0.707804185022118, 0.708365126296385, 0.708704988847991, 0.708754864899797, 0.708965223611627, 0.708971901229934, 0.709719953555193, 0.709732062408736, 0.710028159686535, 0.710577983057987, 0.710865436599344, 0.711001364338356, 0.711048957782493, 0.711493615145416, 0.711518320079738, 0.712341552312292, 0.712365985931081, 0.712621706070491, 0.712857392422745, 0.712966774721035, 0.714649003730495, 0.714900034602857, 0.715261792906535, 0.715494450560383, 0.715578295714833, 0.716586404165446, 0.71664983126342, 0.716767473769832, 0.716832017791456, 0.718037657276454, 0.718581676791346, 0.718686049472742, 0.718721517154852, 0.71894976273819, 0.719208280557076, 0.719850959264009, 0.720076423918382, 0.720182528564975, 0.720421570828864, 0.720559542189275, 0.721404520514867, 0.72160253595417, 0.722431050771945, 0.722559116634245, 0.722899620338575, 0.723736234247332, 0.723743081446699, 0.724692287728719, 0.724871407487738, 0.725460774892844, 0.726631434171952, 0.726637335873101, 0.726817438134887, 0.726823327167834, 0.726830647536384, 0.7269527302196, 0.727055565300234, 0.727249083236318, 0.728409719741468, 0.728576205043676, 0.728583074671481, 0.728793343433996, 0.728854455168056, 0.728859083387718, 0.729343813917585, 0.729519811456603, 0.729592821919021, 0.729602142514685, 0.72963628204206, 0.730022387646992, 0.730106349670477, 0.730604852491252, 0.731913355376641, 0.732287078437687, 0.73241839273909, 0.732632020020397, 0.732938198811649, 0.73386307311084, 0.733916044787221, 0.733937220032925, 0.734367621166236, 0.73445255622052, 0.734558964646455, 0.736013545439433, 0.736038769558531, 0.73604150833317, 0.736663523536782, 0.73730362342775, 0.737518301222243, 0.737871431475304, 0.738135350439451, 0.738141447617284, 0.738184858106729, 0.738249738267837, 0.738841832813169, 0.73893594556955, 0.739951620172423, 0.740011403196595, 0.740019989207225, 0.740115777327421, 0.740409218909667, 0.740661524995893, 0.740955898318039, 0.740980375916566, 0.741026234144798, 0.741762894596417, 0.741770305035363, 0.742067009616945, 0.742145113168837, 0.742243053987489, 0.7422884026785, 0.742377928028127, 0.742457360814465, 0.742588049972785, 0.742841037334971, 0.742939348980356, 0.742973344214616, 0.742977087420881, 0.743033197774195, 0.743515512571902, 0.743524683356927, 0.744431721208973, 0.744549888441854, 0.745024666793189, 0.745568246578389, 0.745752701568408, 0.745826760428309, 0.745948779292142, 0.746189080056302, 0.746698419870706, 0.747295029611633, 0.747414314880614, 0.747463453872477, 0.747551132414799, 0.747659152822892, 0.747899972417977, 0.748119400195438, 0.748438567893339, 0.748450545735738, 0.748462549552779, 0.748969530169911, 0.749044104184803, 0.749156127401538, 0.749272553867462, 0.749702366499695, 0.749976837696023, 0.750209770209707, 0.750285712001528, 0.750811649049283, 0.750883479576757, 0.751472960771983, 0.752137704383731, 0.752297814292977, 0.752912234108321, 0.752935634285434, 0.753870108215508, 0.754148545646171, 0.754532458047851, 0.754724065720747, 0.754915921231651, 0.754955990693639, 0.755572288241698, 0.755963111099641, 0.756452675403975, 0.756601625077832, 0.756902365392135, 0.757574711674959, 0.758762220476833, 0.758902382420415, 0.759481612702305, 0.759518495204297, 0.759628116971447, 0.761035018542707, 0.761254244986875, 0.761264612842671, 0.761722898340025, 0.761768425225208, 0.762101375782385, 0.762568104210967, 0.762726505054629, 0.762857236830327, 0.762961449993579, 0.763152196438837, 0.763321039399831, 0.764443509758252, 0.764550826643186, 0.765050850077791, 0.765428452610579, 0.766644936897676, 0.766716642063646, 0.766952384420626, 0.767481283633045, 0.769575736402456, 0.771695903909496, 0.772630923978069, 0.772992361443555, 0.773101542889224, 0.773487393406918, 0.773492512164765, 0.773722844515861, 0.773943016802524, 0.774385470733309, 0.775100857986133, 0.775408529682736, 0.775614771938592, 0.775833522248349, 0.776043525840568, 0.776183406342094, 0.776470289421983, 0.776750047532431, 0.776898984987508, 0.777965877279262, 0.778432781169171, 0.778721523738936, 0.779464383443753, 0.779546165752185, 0.779925623244723, 0.780075969255583, 0.780205292994559, 0.7821916573244, 0.78327424963776, 0.783326284641548, 0.78352830306968, 0.783744785003187, 0.783778720308051, 0.785723354166251, 0.786255522887363, 0.786865061582666, 0.787049358396952, 0.787064004418134, 0.787147538579777, 0.787372203310648, 0.787642209097482, 0.788212087814637, 0.788299103314687, 0.789507951165982, 0.791119576046153, 0.792171841307034, 0.792454015377255, 0.79321012410659, 0.794056887908651, 0.794262546522213, 0.794521130259395, 0.795932151688022, 0.796334775941234, 0.797397782371358, 0.797402721759836, 0.797495361099345, 0.799882320228194, 0.800283751051368, 0.80044577963976, 0.80077178078375, 0.802871213809897, 0.802884176588784, 0.803042611421264, 0.803812386400323, 0.803905216428666, 0.804141024649865, 0.804904820933071, 0.805118045437377, 0.805797342094691, 0.806120102034067, 0.806622599843904, 0.808978722560497, 0.81169495835599, 0.811719135546498, 0.812697627851534, 0.812824757784379, 0.813495875902146, 0.815323401332533, 0.816493555681891, 0.817190455361977, 0.819401031210424, 0.819452498257766, 0.819545784607451, 0.820166311608015, 0.821048238944034, 0.822582491949134, 0.823202367893369, 0.823341398078553, 0.823675432006138, 0.82482942715979, 0.825837552979889, 0.826018945862697, 0.826113217454473, 0.827499296747576, 0.82937974662984, 0.833399841609691, 0.83367836016153, 0.836973008020982, 0.8372423785904, 0.837656623223828, 0.840366061213385, 0.844012012318488, 0.844604283129073, 0.846050212807988, 0.846232789488918, 0.846726587764704, 0.846791802136065, 0.846810846009167, 0.849680583304961, 0.851041440198201, 0.85201410571221, 0.85245007594223, 0.855221849002101, 0.855301960010082, 0.858265981407452, 0.859687857647007, 0.859987244576169, 0.863819591954374, 0.869735565295141, 0.871777666849008, 0.871939745054593, 0.872428645095226, 0.874548503163322, 0.875061808226742, 0.881753687171519, 0.888035092839363, 0.890261433302512, 0.895202967547635, 0.897762982183592, 0.899709511429099, 0.900106974208047, 0.905314205196654, 0.905770540042205, 0.92013740138761, 0.920456804255329, 0.92679113159236, 0.931940657030305, 0.95216108453434, 0.984470029535195, 0.991587481730391,  };
+  }
+
+  /**
+   * realestatepBefore Custom Distribution
+   */
+  public CustomDistribution realestatepBefore = new CustomDistribution( _realestatepBefore_Values_xjal, this );
+
+  public double realestatepBefore() { return realestatepBefore.get(); }
+
+  @AnyLogicInternalCodegenAPI
+  private final static double[] _realestatepAfter_Values_xjal = _realestatepAfter_Values_xjal();
+  @AnyLogicInternalCodegenAPI
+  private final static double[] _realestatepAfter_Values_xjal() {
+    return new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8.46897580364196E-6, 1.55337440383847E-5, 2.44477658684299E-4, 2.5022465645134E-4, 4.56864070284163E-4, 6.64019537381443E-4, 6.89536507204377E-4, 8.75855599788739E-4, 9.98858353916971E-4, 0.00108693243477209, 0.00129977681189255, 0.00156597776325206, 0.00196096361837062, 0.00202339616743558, 0.00256941236855016, 0.00686285700774244, 0.0095809923847475, 0.0121656606482422, 0.0133995748961444, 0.0163210287119173, 0.0170740226392445, 0.0186104856990502, 0.022599584007987, 0.0249206858765782, 0.0256707749572861, 0.0262390109277899, 0.0368476285353134, 0.0392044525437426, 0.0480578914998189, 0.0524826342671859, 0.0594440313785779, 0.0646137557854099, 0.0646743560064586, 0.0749983364261837, 0.0766055702754556, 0.07728074812668, 0.0826160133165457, 0.0843722233122828, 0.0878091960785765, 0.0908601457006953, 0.0909937416653388, 0.0949758317977556, 0.0970824563538287, 0.10345432254188, 0.112516552386727, 0.113435710322157, 0.11421146132001, 0.114828058241458, 0.116074790180589, 0.119441244696832, 0.120238455908834, 0.125512643892748, 0.126867534917143, 0.12799281886792, 0.129247694675799, 0.129321928479396, 0.129434391254275, 0.135209264526615, 0.137501864961995, 0.14083368341252, 0.141081310132525, 0.141726729719945, 0.141984327510431, 0.142493379232276, 0.143521612963688, 0.145036510098822, 0.147082374864318, 0.151292479053635, 0.151719830357829, 0.154714362012689, 0.156194277166315, 0.158296827286135, 0.158371055834829, 0.164181691164179, 0.166672576638721, 0.170334275589188, 0.170338024331936, 0.171102809413994, 0.172009475110636, 0.174174292856068, 0.174845460067204, 0.175711597960529, 0.177188589903284, 0.177539924472927, 0.177636004865271, 0.178643397162588, 0.178962386960634, 0.179697363328198, 0.181037093714632, 0.182207787325067, 0.183759014066166, 0.184945327909064, 0.187594342758739, 0.190983790427923, 0.191701020586595, 0.19272264170989, 0.193802553768119, 0.194718697537104, 0.19587153325438, 0.19861416502046, 0.199531654311995, 0.20174504626684, 0.201993312457368, 0.202778804656742, 0.204041311515749, 0.204686534424058, 0.205295962587227, 0.207728953365774, 0.208426957241791, 0.209200241224017, 0.209843074290359, 0.209971759365387, 0.210209121586679, 0.210522515744877, 0.211460963263593, 0.212321155324379, 0.213617674581993, 0.213835623360986, 0.217153002124495, 0.21833416806356, 0.221415375160368, 0.221545458211961, 0.224206347148261, 0.224933585552475, 0.228820177303476, 0.228850839303565, 0.229938574349592, 0.23095673233563, 0.231198602293786, 0.231244193323575, 0.232897960012785, 0.234680666956297, 0.234695827113907, 0.23654009072815, 0.237847273867089, 0.240378019367129, 0.240727291168424, 0.243334086403822, 0.244293462059167, 0.244499327257739, 0.244873451203662, 0.245162553913625, 0.245955326393997, 0.246029532702566, 0.24627341305314, 0.247138925856472, 0.249379904862499, 0.249946686507216, 0.253241273373556, 0.254177194054406, 0.254835491679984, 0.255189942181812, 0.25606545627964, 0.256367260059544, 0.256639500275243, 0.257328991204083, 0.258492114278852, 0.259150913464233, 0.259387444630451, 0.261338865706646, 0.262292216849175, 0.262947031150356, 0.262957294230045, 0.264180399104702, 0.265290830439128, 0.265499479210574, 0.265749834319241, 0.266675455192284, 0.266874006107275, 0.266954576534389, 0.267060041317626, 0.267219377378645, 0.267907962882048, 0.271031885084604, 0.271178281504297, 0.27147335489326, 0.271474669674612, 0.27178455653199, 0.271964445301164, 0.271967779729487, 0.272804560244566, 0.27345094596494, 0.274343139327556, 0.275205473977479, 0.275248991091637, 0.275435985652339, 0.27654261185745, 0.27671241393802, 0.277218467569588, 0.278241061293829, 0.279048166512042, 0.28098375995454, 0.281240854884537, 0.281787271500058, 0.281932438916255, 0.28209387081809, 0.282635942129958, 0.28302883134647, 0.28444649975467, 0.285845205909021, 0.286831345104151, 0.287459641900502, 0.287468551260551, 0.287949545740181, 0.287979226041049, 0.290246286882327, 0.290473657702534, 0.291525860316102, 0.292249930792819, 0.292287745283142, 0.292484807743953, 0.293020864086668, 0.293669004743423, 0.294231901861249, 0.294639793950422, 0.294730854016167, 0.295927342935268, 0.296607306517427, 0.297050542986417, 0.297902749265327, 0.298070077427096, 0.298586688300567, 0.298899517080808, 0.299081515129228, 0.299473346109527, 0.299585058599752, 0.301045243219511, 0.301408528267584, 0.301541270313544, 0.302852378503405, 0.303457822369253, 0.303926342854597, 0.304420743733492, 0.304699647102474, 0.304758768268111, 0.304923703820213, 0.305833547735224, 0.306080669344192, 0.307260765780508, 0.307363410038558, 0.307535201029131, 0.309073011945152, 0.309705523410336, 0.310827025023359, 0.31084021368497, 0.310926753077104, 0.311067194588862, 0.311856621106743, 0.312053815460909, 0.312289032813661, 0.312368327642765, 0.312952672182115, 0.312981333374467, 0.313801972664035, 0.31425095730373, 0.315237789489103, 0.315525044140503, 0.31584780803488, 0.315848139588546, 0.316500801386092, 0.316854252290182, 0.317250941833987, 0.317611292263287, 0.31798191705403, 0.318235294127588, 0.318536628123467, 0.318682026269707, 0.319355684783178, 0.319416417442226, 0.320374140005282, 0.320398254042232, 0.320849423096993, 0.321128678144373, 0.321135072952576, 0.321550062492273, 0.321644049431716, 0.321889703619431, 0.322102687733236, 0.322132972583142, 0.323458657389401, 0.323755686465972, 0.324086546558277, 0.324204912474275, 0.325029895166032, 0.325165498576272, 0.326857975215181, 0.327646227680794, 0.328291662799261, 0.328548355317392, 0.328669252775322, 0.329453779557698, 0.329708611104818, 0.329941668769128, 0.330387135061239, 0.332989212181529, 0.333472632591523, 0.333540376570368, 0.334278611534129, 0.334310555927421, 0.334836202061303, 0.334924056196781, 0.335236390458147, 0.335349403088578, 0.336085013668154, 0.336174590382542, 0.336175108645492, 0.336331435228282, 0.336790317934393, 0.337158908763692, 0.338145737875324, 0.338437815664637, 0.339240582679224, 0.339905727224838, 0.339978702666252, 0.340799822130635, 0.340923402543652, 0.341155837910573, 0.341317029599242, 0.341670077472048, 0.342163529434269, 0.343077726047149, 0.343750845661265, 0.345222726644566, 0.34536775634761, 0.345514416540012, 0.346644046491291, 0.346840335319897, 0.347667838499121, 0.347871437424037, 0.347902496737207, 0.348918181696036, 0.349135287491738, 0.349364247295286, 0.350457169945515, 0.350578689346458, 0.350883320368257, 0.352206191633595, 0.352427080843985, 0.352710141358338, 0.352977087835056, 0.35298358367718, 0.353141508694147, 0.353347262593084, 0.353723735357672, 0.354232535897671, 0.354760470006487, 0.35478581125583, 0.354912773760895, 0.355231565806739, 0.355794284822368, 0.355799509477484, 0.35589929583404, 0.356301065761078, 0.356809228051753, 0.357357680027428, 0.357649058581878, 0.358190731149184, 0.358708702568156, 0.359030280239067, 0.35908878159566, 0.359270733448598, 0.359711204304757, 0.359843226251619, 0.360668421049871, 0.361159478580361, 0.362184424287792, 0.362279451867264, 0.363553339411239, 0.36358998439473, 0.364257010664115, 0.36432135949226, 0.365105927738558, 0.365337379190935, 0.365473329269629, 0.365785928938103, 0.365994689609917, 0.365996931164597, 0.367353583434695, 0.367430198947068, 0.36772896909115, 0.368784986918831, 0.368800727015752, 0.369282637401642, 0.369468360537418, 0.369883415125309, 0.369927392582443, 0.370093664382153, 0.370122759286877, 0.370346970067115, 0.370916344053767, 0.371028794665288, 0.371228884562651, 0.371529445136349, 0.371536093264235, 0.371630872440664, 0.371738896330503, 0.372412323638593, 0.372439458470452, 0.372536527784408, 0.372718761281206, 0.372788990202533, 0.372942938954958, 0.37317726846547, 0.373993615684686, 0.374264272052549, 0.374401155789523, 0.374432012907572, 0.374450649421122, 0.374526257634884, 0.374708134531724, 0.37484773724749, 0.375270550056927, 0.375777529751838, 0.375948147043699, 0.37610889166032, 0.376291124628156, 0.377147377245035, 0.377317820647567, 0.377559416071138, 0.377730157297091, 0.377778908839156, 0.37809368449913, 0.378394270445456, 0.37843430071451, 0.378454433132644, 0.379086336510285, 0.379755764286749, 0.380015102379415, 0.380264311220181, 0.380930161427073, 0.381677449752375, 0.381782527867221, 0.381859795755908, 0.383050420691335, 0.383123608855526, 0.383393357459709, 0.383455525732716, 0.383839564098883, 0.383960184174789, 0.38442353560065, 0.38469456784168, 0.385002727338629, 0.385019755846091, 0.385262773204515, 0.385470266653033, 0.385992699653394, 0.386050062388394, 0.386214187199375, 0.386369033189106, 0.386506470004545, 0.386710977754221, 0.386715307692564, 0.387189698907656, 0.38760516102263, 0.387781093743379, 0.387814635231399, 0.387858865358907, 0.387917631760568, 0.387963701109288, 0.388164350379806, 0.388468313942794, 0.388866647918968, 0.388880227042966, 0.388990818633164, 0.389521156964896, 0.389755763730165, 0.39009593515907, 0.390662282234516, 0.391309976360834, 0.391310576094852, 0.392741024649002, 0.39274375516629, 0.393995137872001, 0.394634299137523, 0.394706316693376, 0.395798135730004, 0.395857054740919, 0.396068697194991, 0.396245984570483, 0.396264035648001, 0.396604222651541, 0.397447777301063, 0.397510122014821, 0.397723886588767, 0.398213699155702, 0.39902272868023, 0.399067525736307, 0.39922120537578, 0.399406032973003, 0.399436084172168, 0.399645732492685, 0.399678082040956, 0.399682162313553, 0.400200906643318, 0.400461445252698, 0.40046740114718, 0.400669141213429, 0.401199528754619, 0.401456263734199, 0.402253217147029, 0.402295320933436, 0.402367110035172, 0.402400636892597, 0.402595828943746, 0.402972966415243, 0.404147881543385, 0.404683866154739, 0.405131172679395, 0.405468612197508, 0.405543713436846, 0.405945712303599, 0.406095168514313, 0.406273280044285, 0.406395746074822, 0.406532428761189, 0.406703356477976, 0.406843471282456, 0.407119715089586, 0.407509155452432, 0.407829814231008, 0.408145455480804, 0.408278855242575, 0.408404504544263, 0.408724948300226, 0.409251884010917, 0.409306711261071, 0.409400789516982, 0.410110148828264, 0.410501085379569, 0.411053699853784, 0.411075598688467, 0.411588689896298, 0.411982061883808, 0.412029387875691, 0.412229864567872, 0.41230837973116, 0.412983997625186, 0.413625713347441, 0.414095861540458, 0.414384274412638, 0.414592475433791, 0.414981985368311, 0.415231151092867, 0.415273074454922, 0.415888317302142, 0.41628257801763, 0.416541279457842, 0.417363426507853, 0.417369840663578, 0.417448032755829, 0.417674904543691, 0.417808841923486, 0.418055504728875, 0.41815312837398, 0.418578967663123, 0.418747317917903, 0.418957824328782, 0.418991809552142, 0.419244034043019, 0.419290322866948, 0.420103724815909, 0.42024953821364, 0.42049948518253, 0.420577418076159, 0.420967753373195, 0.421018659156568, 0.421559127216335, 0.421598892862612, 0.42223038175465, 0.422266227712887, 0.422688124963038, 0.42272669440166, 0.422954190669256, 0.423160514622902, 0.423342191367265, 0.423350663560824, 0.42339002401388, 0.423530584006, 0.423878547152476, 0.42391959463147, 0.424007518226349, 0.424064116350457, 0.424323162758594, 0.42441895402484, 0.424425157207793, 0.424650528821262, 0.425365814515428, 0.425707808118114, 0.426381437108906, 0.426459446328023, 0.426759772108804, 0.426888130855284, 0.427187761431877, 0.427309665486105, 0.427423586533089, 0.42769740732258, 0.427776194395372, 0.427781817899292, 0.428006785230579, 0.428094382913683, 0.428424617881577, 0.42847196426728, 0.428807385516958, 0.428842666642095, 0.428987213896219, 0.429333469494941, 0.429989581909889, 0.429995605940768, 0.430110502020668, 0.430375754422846, 0.43079466299058, 0.4308967392281, 0.430981874469789, 0.430987362150465, 0.431002983906781, 0.431051083278386, 0.431350456435216, 0.431516098781839, 0.431887482863714, 0.432079422591875, 0.432351440920306, 0.432541153374994, 0.432598921948984, 0.432676156941861, 0.432801139536999, 0.433252042912923, 0.433692079321803, 0.433733353012889, 0.433848975332277, 0.433928685077096, 0.434059451778448, 0.434134571433506, 0.434148316910246, 0.434329165121364, 0.434364454624624, 0.434566033632209, 0.434595022816282, 0.434615343867675, 0.434720477181606, 0.434768853169867, 0.434794171485568, 0.434916539868343, 0.435017836270998, 0.435033151287617, 0.435359713739102, 0.435915537589818, 0.435918138713483, 0.436070245871198, 0.436399255272061, 0.436511901079083, 0.436561573456022, 0.436878431006511, 0.436973418210713, 0.437463319324638, 0.437466653335703, 0.437500667157948, 0.437909777675826, 0.438698856595802, 0.438743576713067, 0.438814350473252, 0.438974295515274, 0.438986091414396, 0.439386266316863, 0.439602526704465, 0.439675503386079, 0.440198081102743, 0.440277520363538, 0.44033653820557, 0.440655560980606, 0.440731457576796, 0.440947606681709, 0.441433242355138, 0.441465536883161, 0.441565376395181, 0.441590891735961, 0.44161076873621, 0.441638524436557, 0.441694587911085, 0.441787218225388, 0.442023238150358, 0.442119937483901, 0.442126244535467, 0.442420203076782, 0.442575712093133, 0.442703897722471, 0.442969029136917, 0.443452501367717, 0.443542901533135, 0.444517965749178, 0.444518496315146, 0.444792547550834, 0.445111556102213, 0.445150665865912, 0.445695183491457, 0.445724381165226, 0.445853831058064, 0.446010195017556, 0.446621421742593, 0.446874967278751, 0.447434590328631, 0.447508669954891, 0.447552677695649, 0.447704904658424, 0.447957600196847, 0.448106300906335, 0.448163580575766, 0.448506152548023, 0.448603613844373, 0.449277962315102, 0.44941696921742, 0.449753517687764, 0.449774649497135, 0.449811273515737, 0.449832117696636, 0.450055236370575, 0.450197362687168, 0.450208985764952, 0.450574153672775, 0.451058192990235, 0.451375496595502, 0.451445265158361, 0.451596304465129, 0.451657551361607, 0.451682675026752, 0.452385985496041, 0.452405750306688, 0.453032852080055, 0.453267240723078, 0.453281835972452, 0.45345060447358, 0.453459325643195, 0.453631320867957, 0.453778512363936, 0.454051771860399, 0.454333471959834, 0.454560847782488, 0.454593808788734, 0.454830432325137, 0.455242524511056, 0.455349867397629, 0.455522203634021, 0.456422104502036, 0.45645345784086, 0.456523930544111, 0.456817828082178, 0.456948356541843, 0.457154099840689, 0.45717872676696, 0.457525005543985, 0.457630956656209, 0.457697334840171, 0.457756824909549, 0.457786718166479, 0.458607211952504, 0.459679200859969, 0.459893384953905, 0.459907962340402, 0.46008863703361, 0.460680529015502, 0.460736781768183, 0.46098899509511, 0.461045944145893, 0.461355809171895, 0.461478460752441, 0.461519958319981, 0.461624001843104, 0.461724373762311, 0.461733829148495, 0.462104370614189, 0.462260580886612, 0.462364835245988, 0.462426036551195, 0.462456281946973, 0.462456436921608, 0.463145514734893, 0.463205446577864, 0.463239816924264, 0.4636178388916, 0.463846204827502, 0.464320566160866, 0.464564443705076, 0.464684846289257, 0.464913244324878, 0.465062720814438, 0.465344907387186, 0.465459967265664, 0.465540672274402, 0.465558578183699, 0.465973540708777, 0.46606012542304, 0.466206829909586, 0.466252288440127, 0.466665573334875, 0.466882472882896, 0.467055903645562, 0.467061341401467, 0.467298002484154, 0.467320908264309, 0.467335742026554, 0.467374597616168, 0.467658146570352, 0.467913377016528, 0.468098681436421, 0.468369027090552, 0.468924227920807, 0.469097474126489, 0.470121558867443, 0.470340594056299, 0.47043420129941, 0.470513692261472, 0.471104698337471, 0.471167960326549, 0.471329705873035, 0.471385216602959, 0.471584063335611, 0.471873857693918, 0.471915105689849, 0.472119513112729, 0.47224361546231, 0.47250280363303, 0.472515055235766, 0.472686528478173, 0.472783297858279, 0.472810296006163, 0.472862971665495, 0.473380296729482, 0.473820489625416, 0.473852461743385, 0.474097792608218, 0.474933442496966, 0.474946889025192, 0.475206859787534, 0.476230595918864, 0.476241234781261, 0.476484476697245, 0.476586895655905, 0.476959964920294, 0.477130712921742, 0.477147856663793, 0.477201114175827, 0.477331252395548, 0.477767527567579, 0.477996678590277, 0.478029565410429, 0.478073800852584, 0.478274017148069, 0.478274165118574, 0.478747283641936, 0.478756645466348, 0.478891636625135, 0.479087697831381, 0.479233320057738, 0.479334641613111, 0.479800539309974, 0.479946851760697, 0.479966201618093, 0.480269134662477, 0.480708578107723, 0.480755325343458, 0.480778702280975, 0.481005108287379, 0.48102424660032, 0.481688077100022, 0.481798948518932, 0.481859202453965, 0.482270193833104, 0.482604478625904, 0.48284560945407, 0.482848738331833, 0.483161366456239, 0.483768882229379, 0.4839627750512, 0.484066385937217, 0.484120056928784, 0.484177964709576, 0.484297769398185, 0.484340518857872, 0.484420268077177, 0.484497859790571, 0.48485648746205, 0.485248430747941, 0.485302545326039, 0.485359618344726, 0.485826509610306, 0.485839565864774, 0.485852049816592, 0.486052327137756, 0.486077177462561, 0.486118417846819, 0.486424687351054, 0.486821222064067, 0.487041725463607, 0.487211085119688, 0.487609172529688, 0.48767710421692, 0.487954182840832, 0.488169930942887, 0.488180883164319, 0.488361444298536, 0.4885805990148, 0.48917084330154, 0.489572597346207, 0.489854631201127, 0.489937578175231, 0.489977867823004, 0.490050607961944, 0.490130702044323, 0.490298102485574, 0.490387649852481, 0.49042460055876, 0.490876874095961, 0.490950804195057, 0.491034635262308, 0.491186783727781, 0.491405927076704, 0.491446408142429, 0.491667716941121, 0.491788217181927, 0.492144797522494, 0.492342296321935, 0.49238135985986, 0.492472857772852, 0.492473528988624, 0.492936819329698, 0.492956353536803, 0.493134696274947, 0.493320964703213, 0.493596665418932, 0.49383254132732, 0.493919803986671, 0.493992376026094, 0.494420617304621, 0.494966601765712, 0.49512646049738, 0.495149508172464, 0.495499234583447, 0.495507973117153, 0.495690530870353, 0.49580734215556, 0.496218762789103, 0.496279646779538, 0.496327366844424, 0.496587210720946, 0.496742623066763, 0.496856008989136, 0.497034003993175, 0.497138587460551, 0.497258340412702, 0.497438617778635, 0.497739364767867, 0.497809185068421, 0.497820769126092, 0.497920617217151, 0.498036430840769, 0.498240806557901, 0.49828314255289, 0.49832582872144, 0.498635535819005, 0.498806469055095, 0.498936987099896, 0.499391118803354, 0.499500747712015, 0.49969778671651, 0.49990504371022, 0.500009538801737, 0.500201920920862, 0.500208674593805, 0.500542505895332, 0.500805995158162, 0.500896177123081, 0.501110125970817, 0.501320831931976, 0.501557022150613, 0.501648117313092, 0.501684160863884, 0.501966521711482, 0.502019227667427, 0.502199790655051, 0.502469447076065, 0.502484625362392, 0.502493757186494, 0.502610270313078, 0.502695321303605, 0.503234297049179, 0.503440085086364, 0.503617943025763, 0.503675657627897, 0.503833994085574, 0.504043858525091, 0.504133477718402, 0.504418995442715, 0.504430910152973, 0.504577577682421, 0.504723283918469, 0.504815515954941, 0.504914152976449, 0.50495587481083, 0.505174697233283, 0.505260480309921, 0.505409816679813, 0.505606837327475, 0.505719027715256, 0.505841709928305, 0.505902318567012, 0.505997627397548, 0.506086873414835, 0.506200519176661, 0.506343391585016, 0.506431525275709, 0.506643027197322, 0.50670029332093, 0.506778691085062, 0.506874198292595, 0.506888614186852, 0.507198802308976, 0.507698791679591, 0.507703049980372, 0.507933258443099, 0.508057179308219, 0.508063044844947, 0.508076962118837, 0.508321774543435, 0.508449483542969, 0.508657064799865, 0.50916433276115, 0.509176070299022, 0.509328420091477, 0.509438508430819, 0.509507623052983, 0.509645055044023, 0.509884929688261, 0.509944830715511, 0.509992648564636, 0.510188207998896, 0.510723920552983, 0.510749580617121, 0.510997710429663, 0.511223553563911, 0.511599772557074, 0.511626596750167, 0.511734626383814, 0.511755172302538, 0.511762237897436, 0.511794831214243, 0.511807370728405, 0.511880552510096, 0.511914727199248, 0.512162130204514, 0.512896239542365, 0.513202749470086, 0.513285766421735, 0.513474672120718, 0.513827584699867, 0.513900423417798, 0.514387349190878, 0.514670495633427, 0.514874649961262, 0.515019161630923, 0.515072452133424, 0.515573437934182, 0.515857508645998, 0.516041355366172, 0.516065199027155, 0.516214281541596, 0.516216864668874, 0.516227368245772, 0.516436301267583, 0.516806658436999, 0.517091629142442, 0.517284227706677, 0.517342101154698, 0.51744475191637, 0.517506673066388, 0.517801873290679, 0.518255819701529, 0.518927671576493, 0.518985901048859, 0.519017012612895, 0.519192281231599, 0.519693181809688, 0.5199374080171, 0.520019661551661, 0.520147259805953, 0.520626449520191, 0.520629674545359, 0.520721458966513, 0.520768956584973, 0.520850660887565, 0.520990864100986, 0.521209654440015, 0.521514120258104, 0.52186164166534, 0.521953486889124, 0.522106443318354, 0.522424256343076, 0.522840058463865, 0.523058391936879, 0.523114447033133, 0.523408393654447, 0.523787498589846, 0.524226358795077, 0.524265648913595, 0.524632234733444, 0.524750103834678, 0.524773385169577, 0.525093368482834, 0.525113369344733, 0.525393455943246, 0.525622800592787, 0.525731056028995, 0.52586295216305, 0.525880754379837, 0.526150126842092, 0.526247071175765, 0.526299289230797, 0.52646015842286, 0.526529046071794, 0.526614304800386, 0.526652933509501, 0.526808184217479, 0.527378961920538, 0.527504032220932, 0.527835258157715, 0.527963986677872, 0.528097602734815, 0.528277696791438, 0.528917811811986, 0.529010339624569, 0.529423602481763, 0.529496969845073, 0.529522860024101, 0.529925032162137, 0.530236637625275, 0.530363934494305, 0.530595316759426, 0.53059864883537, 0.530723084314746, 0.530826567564436, 0.530854814651183, 0.530895804489382, 0.530897817121226, 0.530934418635974, 0.531266363878654, 0.531531722482205, 0.531714930278783, 0.53190688926252, 0.53201658756346, 0.532396823361923, 0.532637376902624, 0.532670492616063, 0.532671714717145, 0.532673760824464, 0.532791189438498, 0.533149546126542, 0.533871959313707, 0.53401616631934, 0.534323089572469, 0.534507106622965, 0.534531887166494, 0.535358929020131, 0.535385605034054, 0.535407791086335, 0.536374174947487, 0.536534680204821, 0.536710526098612, 0.53765354757732, 0.537756625316852, 0.538005778026551, 0.538280640102134, 0.538310340232469, 0.538467930156246, 0.538504301728269, 0.538573936018325, 0.538676541487403, 0.538794405053462, 0.539573940705022, 0.539647202664648, 0.539794119246435, 0.539811008679216, 0.539883923606466, 0.539952166744341, 0.540259202123072, 0.540378011508181, 0.540768233569278, 0.540895105678069, 0.540911855202009, 0.541013982162441, 0.541047380588968, 0.541165709692096, 0.541399336227178, 0.541411499878747, 0.541434432636014, 0.541540078044241, 0.541738181762901, 0.541895044239779, 0.541941746048424, 0.542395187888831, 0.543354843013568, 0.543632224030523, 0.543634211624217, 0.54386366560549, 0.543908750187161, 0.544098848603017, 0.544220249609611, 0.544226242413158, 0.544265826100665, 0.544267496914899, 0.544298660368551, 0.544671808532407, 0.544917945667621, 0.545067942814645, 0.545118803320847, 0.545219863109035, 0.545762984714371, 0.545823116893825, 0.546337947787847, 0.547337440021407, 0.54819018687214, 0.54821524644402, 0.548395873012595, 0.548487402076193, 0.548622162909469, 0.548795540757051, 0.548846253466721, 0.548951280250829, 0.548978860024201, 0.548980967673432, 0.54904664855454, 0.549075565851418, 0.549589963053482, 0.54989602060616, 0.549906975555852, 0.550001099662326, 0.550125055546132, 0.550423050239057, 0.550504041302586, 0.550683541879035, 0.550723297165796, 0.550749251546277, 0.550842046292942, 0.551479525437978, 0.551501683664693, 0.551580037185122, 0.552109126815652, 0.552227322093448, 0.552282125467573, 0.552844681924938, 0.55297472580077, 0.553141101539653, 0.553160823952231, 0.553380146247124, 0.553678872780192, 0.553824575186498, 0.554059657400157, 0.55421926333673, 0.554220104270985, 0.554636622017152, 0.554906338746039, 0.55495122564052, 0.554954967270934, 0.55499840400826, 0.555008813253648, 0.555037825600193, 0.555177935129406, 0.55520880701208, 0.555474980691486, 0.555747605827936, 0.555862580998991, 0.556177156908157, 0.556495803231177, 0.556592831924453, 0.556876343227751, 0.556886055858222, 0.556912720735304, 0.557465968949574, 0.557490533455867, 0.557754269645826, 0.557829846880342, 0.558359761079817, 0.558553725170899, 0.559038989531559, 0.559253138958971, 0.559403131396711, 0.559531721799385, 0.559664978261839, 0.559926350579281, 0.560080333676498, 0.560176458609883, 0.560374275826058, 0.560599547304154, 0.561283686402825, 0.561285599601907, 0.561394569612679, 0.561506404340826, 0.56163111689685, 0.561660714895557, 0.56170081891092, 0.562037177850283, 0.562145005220146, 0.562275217725128, 0.562416068559439, 0.562559824180842, 0.562682220085109, 0.562720922960803, 0.563138232229669, 0.563179723455185, 0.563317864021432, 0.563597879139321, 0.563795043085169, 0.563795380988432, 0.563931034818781, 0.564076014759691, 0.564146892047552, 0.564149006146357, 0.564354789272209, 0.564642352352225, 0.564672899720366, 0.565049709855713, 0.565544962091665, 0.565548725951827, 0.565675312459511, 0.565846672937548, 0.56590424086746, 0.566260797685774, 0.566525790639057, 0.566578424841585, 0.56689591498706, 0.566930689801703, 0.567024887168152, 0.567269292410375, 0.567407440017355, 0.567806593819859, 0.568190272865567, 0.568193231489106, 0.568515170522304, 0.56856087512775, 0.568708886654039, 0.568718117357386, 0.568837546728165, 0.569569266116841, 0.569629515909344, 0.569639771896681, 0.569686031464888, 0.569867754418285, 0.570081290261859, 0.570167881732766, 0.570511576460148, 0.570613329282378, 0.570732085852971, 0.570782910198059, 0.571040494117864, 0.571080670441825, 0.571216307184926, 0.571280504660575, 0.571498279906763, 0.571713022281681, 0.571993773007112, 0.572044169629681, 0.572065099008919, 0.572069866595522, 0.572427486479401, 0.572664127085493, 0.572755475158406, 0.572888124512247, 0.573294408309952, 0.573475730891031, 0.573827258172078, 0.573901817049628, 0.574058567009648, 0.574068038943942, 0.574360571677873, 0.574404589263706, 0.574508870225545, 0.574659029635722, 0.574753471782512, 0.574853300840551, 0.574890696372506, 0.575084516818589, 0.575142970710254, 0.576038258333582, 0.576191129942071, 0.576193140870623, 0.576275065457163, 0.576458991307749, 0.57755154848713, 0.577740047279338, 0.57810291658009, 0.578511782215466, 0.578723672072351, 0.579097399421878, 0.579111656915182, 0.579201554102337, 0.579216271891886, 0.579292706701491, 0.57929975543642, 0.579401868309353, 0.579695054984371, 0.579708883094088, 0.579859954159473, 0.579943891851552, 0.579996441652339, 0.580167049512541, 0.580251800744083, 0.580432471741138, 0.58076672876675, 0.581178346752497, 0.581218649313584, 0.581283645991783, 0.581327380146729, 0.581334567807375, 0.581410918477798, 0.581587432781425, 0.581855043544657, 0.58191915152313, 0.582274095105192, 0.582428108131439, 0.582461289234312, 0.582759311470467, 0.582888077933152, 0.583416182824325, 0.583751959297421, 0.583802283109661, 0.583917663611186, 0.584136401493276, 0.58427688538477, 0.585041289926487, 0.585132015765256, 0.585216499367069, 0.585298236257419, 0.585430525526806, 0.585683419406737, 0.585794026412733, 0.585851799599378, 0.586025972086007, 0.586491596372206, 0.586604910182043, 0.586870632807396, 0.586964360412797, 0.587243546695869, 0.587447575767864, 0.587481357891877, 0.58766846433179, 0.587705517653841, 0.587720267967451, 0.587741049547208, 0.587765957724075, 0.58832142166853, 0.588358543031307, 0.588415042586588, 0.588465138832287, 0.58897325768168, 0.589045708636194, 0.589415690507322, 0.589495510606816, 0.589520881025793, 0.589793019966353, 0.589817232417166, 0.590155749074261, 0.590598782108277, 0.590753118055916, 0.590907988702037, 0.591165944192308, 0.591527171662832, 0.591530082906335, 0.591531195327372, 0.591770528989552, 0.591954634468177, 0.592045553311313, 0.592065714881618, 0.592747850061172, 0.592786953602091, 0.592831153752952, 0.592893619532218, 0.593255796877507, 0.593273079961398, 0.593282907814234, 0.593352274248233, 0.593370700972107, 0.593576464035658, 0.593914285788193, 0.594035847748293, 0.594062912105075, 0.59426344701616, 0.59538720103025, 0.595445539613472, 0.595667837835225, 0.596080907418577, 0.59636948356978, 0.596760418800619, 0.597098009714963, 0.597368565342224, 0.597423690897326, 0.598041371963976, 0.598207446819987, 0.598281559042451, 0.598426476483762, 0.598452968379947, 0.598805733680552, 0.59913908082843, 0.600056521396581, 0.600190239300331, 0.600193433893017, 0.600550374971812, 0.600551964192823, 0.60068133027384, 0.600926247223193, 0.601085233162774, 0.601405316466341, 0.601413552605406, 0.601828595688955, 0.601849259830114, 0.602058339370222, 0.602109399252817, 0.602110616330708, 0.602235298688079, 0.602251457285384, 0.602274840297544, 0.602299378487934, 0.602362421727533, 0.602477366031112, 0.603065177140559, 0.603112991355477, 0.603707459852502, 0.603788334904188, 0.603830019966168, 0.603906268859614, 0.604072732738337, 0.604273103044915, 0.604340109163646, 0.604422638912954, 0.604506276944919, 0.604570327930732, 0.604708845114261, 0.604822152817866, 0.604835305309281, 0.604865129340904, 0.604918999092788, 0.605005364064889, 0.605167373195464, 0.605342873056359, 0.605462557990518, 0.605698153824173, 0.605838481762166, 0.605838545691813, 0.605904141080222, 0.606058957011016, 0.606106375001882, 0.60617664608572, 0.606341156876909, 0.606408360332138, 0.606583501173672, 0.606613999496417, 0.606679051549996, 0.606731894526705, 0.606965007030043, 0.607088228400477, 0.607160326745569, 0.607214197441993, 0.607263019259461, 0.607344834690624, 0.607741958888171, 0.60776409765406, 0.608337347007252, 0.608674794289111, 0.608882314778096, 0.609023049246056, 0.609322335704166, 0.609442733601112, 0.60947389377066, 0.60971814109999, 0.60989265637279, 0.610452847229326, 0.610604599953664, 0.610711281980928, 0.610811726090198, 0.611113202397225, 0.611125786069029, 0.611709620897124, 0.611900570953914, 0.612019088426626, 0.612047010746587, 0.612195016775031, 0.612534892129267, 0.612863365252812, 0.612875756001972, 0.613156957255467, 0.613632897681131, 0.613646895433662, 0.613780818612507, 0.613805288226222, 0.614659884163442, 0.614771649224128, 0.616562328745749, 0.616758987893635, 0.61704030240244, 0.617169946047583, 0.617277524275245, 0.617357365220993, 0.617513895530506, 0.617537993088988, 0.617670511562965, 0.617838464146192, 0.617923569818189, 0.618320785553453, 0.618512112057772, 0.618778482033415, 0.618989564166619, 0.619141263967107, 0.619259427243551, 0.619585358738462, 0.619600331795672, 0.619826646627877, 0.619831415754466, 0.620157295335305, 0.620231959224341, 0.620249354201382, 0.620385365411004, 0.620479048912761, 0.620757970873256, 0.621008562506787, 0.621148881253081, 0.621218734020165, 0.621655356740731, 0.62176728645508, 0.62177248941551, 0.621930939059971, 0.622300052758394, 0.622573512468493, 0.622613016134631, 0.622628054560983, 0.623049791609931, 0.62329996250108, 0.623313392744028, 0.62347473264631, 0.62353946188062, 0.623654691355624, 0.623781247449058, 0.623901392087342, 0.623901805350088, 0.624025976780561, 0.624138295877803, 0.624205728936686, 0.624221982155375, 0.624270009530833, 0.624565802545443, 0.624956895404699, 0.625088310820191, 0.625168905733833, 0.625555228049364, 0.625603109777191, 0.625667633657092, 0.626142777912094, 0.626182987974049, 0.626541786701461, 0.627126956675416, 0.627247336661447, 0.627250334774501, 0.627439084335705, 0.627545179926104, 0.627795583849079, 0.628027459752698, 0.628408192584415, 0.6287547499631, 0.629156772738038, 0.629584672921172, 0.629594002121327, 0.629693318033248, 0.62989109621598, 0.630176714410067, 0.630234355363379, 0.630338426284652, 0.630598035971558, 0.630948831768428, 0.631408414454589, 0.631436266930035, 0.631665153990839, 0.632089059108021, 0.632424585932667, 0.632559638228585, 0.632696866877642, 0.633046701492782, 0.633124028043248, 0.633297223766132, 0.633320940939208, 0.63354941999688, 0.633569806040646, 0.633954713731919, 0.633988087768966, 0.634048530199399, 0.634339035272695, 0.634670246191861, 0.634816085159147, 0.635162569511956, 0.635182232722771, 0.63578704785122, 0.636221276120303, 0.636295391316108, 0.636335459043262, 0.636472185351702, 0.636818682044873, 0.636861706308282, 0.637377093935731, 0.637637654833465, 0.63790314084583, 0.637921123782257, 0.637941757157302, 0.638055102017742, 0.638061389506318, 0.638112818278395, 0.638353466455784, 0.638643843909549, 0.638769251590676, 0.639013704238592, 0.63923561351171, 0.639302907975935, 0.639520113339954, 0.639530035615835, 0.639761710289863, 0.63997771649538, 0.640476442993297, 0.64089881975396, 0.641311081554403, 0.641530546643751, 0.641575593280184, 0.641587435739837, 0.64164741483821, 0.641803634659764, 0.642044595773695, 0.642297527739235, 0.642333192388046, 0.64237142343646, 0.642537399753568, 0.642615200845259, 0.643008815621942, 0.64317141023857, 0.643224109833651, 0.643349037686788, 0.64335216378315, 0.643593897277412, 0.643734696897675, 0.644388495203986, 0.644590244643591, 0.644754718348909, 0.644881068932089, 0.644918383830057, 0.645140548032767, 0.645456485629903, 0.645687915461849, 0.645848329759864, 0.645931472491154, 0.646034702835699, 0.64663640674751, 0.646700453813907, 0.64671956689599, 0.646723496679429, 0.647587362930219, 0.647707321232265, 0.647797285338374, 0.647954794179625, 0.648344071917779, 0.648526075088515, 0.6486163953768, 0.648799025057819, 0.649082966336607, 0.6490843439078, 0.649354017834587, 0.649430481345081, 0.64943139157736, 0.649466751826526, 0.649555636324851, 0.649628616897724, 0.649780681413589, 0.650014193901482, 0.650314048069602, 0.650426486422231, 0.650829283904286, 0.650874480676056, 0.651132395221397, 0.651163604715947, 0.651337987216035, 0.651473626113679, 0.651499313758184, 0.652210568871536, 0.652211887287963, 0.653181445103651, 0.653232986127184, 0.653390434073319, 0.65359478538728, 0.653906929846957, 0.653922829187689, 0.653947921078317, 0.654021706815169, 0.654460919332876, 0.654494848484961, 0.654591640774643, 0.655027144833169, 0.655065662570032, 0.65580892076195, 0.655840151302398, 0.65631451144372, 0.656384387555496, 0.656410128289506, 0.656426501213583, 0.656690773742554, 0.656722621993694, 0.656950065028135, 0.65724741826835, 0.657293202877047, 0.657452968145834, 0.657492794324361, 0.657725599066241, 0.658043379712462, 0.658144876574947, 0.658308580287067, 0.658564521959413, 0.658612999208067, 0.658718454542564, 0.658835119535671, 0.6588414456208, 0.65886442701403, 0.659583152243392, 0.659611773950237, 0.659668592160615, 0.659807392904942, 0.660003279632161, 0.660201656480179, 0.66042770151245, 0.660449876072294, 0.660468251583437, 0.660952011488304, 0.661379291480402, 0.661425450116486, 0.663034402696679, 0.663165281268016, 0.663239577550198, 0.664580237341874, 0.664865014712531, 0.664913058802627, 0.664939351183153, 0.664986758395464, 0.665047472588746, 0.665656514337319, 0.665864789442705, 0.666367055676052, 0.667042335401942, 0.667669038882169, 0.668404291489473, 0.668529153114503, 0.668551054582981, 0.668966388397458, 0.669093159966337, 0.669159711311755, 0.669719326026073, 0.670048938131493, 0.670106675540208, 0.670333963688465, 0.670354212231688, 0.67085690491083, 0.670903613517017, 0.671755092716956, 0.671790719802661, 0.671988192959476, 0.672181212037144, 0.672599834273974, 0.672691600085878, 0.672883353870524, 0.672885675907659, 0.673289953196503, 0.673384029662621, 0.673436780810792, 0.673823856078479, 0.674668705072772, 0.674765271307328, 0.674884916424054, 0.674975787253371, 0.675049560086047, 0.675207239858955, 0.675491360225594, 0.67551316472285, 0.675626551073578, 0.675767088066972, 0.675933919595595, 0.675970556432623, 0.676065639652995, 0.676066796952636, 0.676523134400046, 0.676859554983946, 0.677092831620089, 0.677246983125559, 0.677274466050193, 0.677305018172414, 0.677324634049562, 0.677514454135712, 0.677636825993465, 0.678121299296727, 0.678148625842649, 0.678300360923337, 0.678406081900599, 0.678639658040331, 0.678675839401943, 0.678778477380812, 0.679287928330158, 0.679391703050514, 0.679478704554216, 0.679511094963559, 0.679710279167688, 0.679765352294156, 0.680030093421907, 0.68009405383554, 0.680100739460349, 0.680172706160461, 0.680240736135647, 0.680330288812272, 0.680953148716011, 0.681007980281001, 0.68143223092885, 0.681553870316901, 0.681827164844821, 0.682105960372525, 0.682210938034584, 0.682255016559258, 0.682296288323963, 0.682624051205902, 0.682651045095805, 0.682750659527087, 0.68305397466049, 0.683404189200593, 0.683567148873583, 0.68366187418992, 0.683950837893671, 0.683951313792769, 0.683995097947068, 0.684091406237148, 0.684287875062696, 0.684662980973786, 0.684741787469676, 0.684757327248987, 0.685374757820369, 0.685676178856133, 0.686404209550098, 0.686522284196424, 0.687522676864092, 0.68753285508329, 0.687653662077666, 0.687666350538563, 0.687939871482669, 0.68803986392713, 0.688152474849445, 0.688265371713429, 0.6883187377373, 0.688350077135693, 0.688444556104645, 0.688681352142689, 0.688747828724972, 0.688896481318367, 0.689680413794407, 0.689946019162863, 0.690245551447836, 0.690563506409377, 0.690586255756838, 0.690803874412175, 0.690864182587466, 0.691104706212867, 0.691743626795849, 0.692450091517452, 0.692487108917619, 0.692945697897802, 0.693178484557299, 0.693298129663279, 0.693805368891917, 0.693823616115916, 0.694128428645763, 0.694140411343997, 0.694801661177144, 0.695123098500939, 0.695522574642598, 0.695636703045132, 0.695702516126671, 0.695825781539134, 0.695938404060583, 0.696325274981359, 0.696479934039908, 0.696740558195747, 0.696803660585833, 0.697076536793496, 0.697483700733705, 0.698171568137401, 0.698190703765633, 0.698423783736887, 0.698993253878851, 0.699078676534032, 0.699146015474802, 0.699582060308075, 0.699878090979419, 0.70005456513646, 0.70019020897126, 0.700202546331775, 0.700535641290892, 0.701110422856733, 0.701120723957409, 0.701583054260976, 0.701723779115424, 0.70183165027472, 0.702237393585424, 0.702892392199597, 0.703240349119721, 0.703405277918292, 0.703419088135167, 0.70361547386185, 0.703953359307372, 0.703954859375295, 0.703977182866944, 0.704752126214931, 0.705202537896026, 0.705289310544213, 0.705485636538873, 0.705499899927936, 0.705872439065061, 0.70591296797769, 0.706077157900465, 0.706543997669775, 0.706568407917147, 0.707129233088624, 0.708124237773789, 0.708559421212959, 0.708731130560072, 0.709039630895402, 0.709154752418619, 0.7094785554216, 0.70961188261741, 0.709855312637605, 0.710229424576081, 0.710292015488798, 0.710308154920918, 0.71050920086379, 0.71098040924783, 0.71115887523102, 0.711707707817346, 0.711889173853542, 0.712051396363485, 0.712241744379375, 0.712341921234193, 0.712478392419225, 0.71249399312782, 0.71252764130047, 0.712582659518769, 0.712702907711757, 0.713045820364908, 0.713616441989423, 0.714126681988275, 0.714410895406834, 0.714746880515936, 0.714787493744564, 0.71492308010653, 0.715255062885059, 0.715488291882619, 0.71568554549381, 0.716156583939693, 0.717699093912741, 0.717985591714382, 0.718046820565055, 0.718084940597327, 0.718281208229998, 0.718583846505253, 0.718715847326107, 0.719190448463952, 0.71963963679875, 0.719650820517468, 0.719653285738615, 0.719800398255294, 0.719844027574464, 0.720137713874283, 0.720248138378996, 0.720401253708466, 0.720527568817862, 0.721898607735434, 0.722200019861021, 0.722287809476138, 0.722692258552024, 0.723140051800779, 0.723858315915176, 0.724145852459781, 0.724661378978728, 0.724781386426682, 0.725462086985104, 0.725686848124759, 0.72580951207407, 0.726063257799223, 0.726166650624595, 0.726277845073993, 0.726736331447097, 0.727194711422851, 0.727201465852785, 0.727999261918059, 0.728823485168805, 0.729075550112653, 0.72957138937278, 0.730041150058157, 0.730197449001509, 0.730362565191273, 0.730613233411127, 0.731009065101537, 0.731122317914105, 0.731644553322233, 0.732264926348956, 0.732312044930384, 0.732621674915916, 0.732643140850465, 0.732752535178365, 0.733212679044942, 0.733373619031956, 0.733917798598503, 0.733950421389878, 0.734402321892341, 0.735472633058583, 0.735673157463233, 0.73572841411766, 0.736070783521171, 0.736161040875673, 0.736351633242791, 0.736404977446204, 0.736746758165242, 0.736940454577198, 0.736949132156957, 0.737193771043895, 0.737237413039457, 0.737368670372226, 0.738383531622125, 0.738680189912424, 0.740192372349112, 0.740865478232638, 0.741496729838437, 0.741587167779293, 0.742190887175087, 0.74290693652578, 0.743462847048881, 0.743763178509735, 0.743800794400789, 0.743871358813005, 0.743913916391546, 0.743985078337925, 0.74549929587229, 0.745991042643529, 0.746605210743446, 0.747034555742954, 0.747395863416775, 0.747648992751494, 0.747917800821436, 0.747993581279102, 0.748917305275724, 0.74944132375225, 0.749479689985021, 0.749626953121973, 0.749713164801402, 0.749720801170344, 0.750126123449742, 0.750556840911738, 0.750716378394715, 0.750771863411064, 0.751956080320612, 0.752286204645068, 0.752438712147188, 0.752520908285863, 0.753034530277356, 0.754359747049846, 0.754449129054266, 0.755022875323548, 0.755716380413632, 0.75593041716257, 0.756219678097343, 0.756972656321867, 0.757451999335246, 0.757500460708015, 0.759001408835601, 0.75952623564976, 0.759712440594903, 0.759964873740098, 0.76001103908938, 0.760149002557527, 0.760215181172273, 0.761490397204412, 0.762306718330444, 0.763106899429295, 0.763112829401843, 0.763516497191807, 0.763711026556228, 0.765078208678647, 0.765328193188035, 0.765392095273914, 0.765658319219603, 0.765892870861599, 0.765954300287628, 0.766281754050045, 0.766548214382046, 0.766637315067562, 0.76767608035579, 0.768385328613967, 0.76857526908686, 0.768833048589533, 0.769006791544677, 0.769075276313334, 0.769500322602719, 0.769601580278605, 0.769608533341831, 0.769798375241614, 0.770111795435196, 0.770161418521369, 0.770363352020161, 0.770786563529361, 0.771103989387371, 0.771451924177215, 0.771844115054918, 0.772592829011091, 0.774223389223705, 0.775016407081213, 0.775287140094066, 0.775297798158564, 0.775737500635078, 0.776218899825162, 0.776237168980375, 0.77636369385034, 0.776763087719159, 0.777556726068086, 0.778116953740261, 0.778701363400774, 0.779118784325893, 0.779907195707919, 0.780604731704302, 0.781007410174273, 0.781353523048796, 0.78143287084954, 0.781553567211025, 0.781708627286044, 0.781813436601432, 0.782498399162931, 0.782773423389366, 0.782923542821193, 0.784211176673909, 0.784348102310386, 0.78437609799757, 0.78452241424682, 0.785630290132795, 0.785721211202123, 0.787740914448003, 0.788966315335201, 0.789182382158659, 0.78922395429662, 0.789716786515358, 0.789914856758232, 0.790806977796479, 0.793573779320622, 0.793917561478752, 0.794457485924013, 0.794782201345985, 0.795552309015142, 0.795928004073187, 0.796392014151186, 0.796888957315707, 0.797353422833557, 0.798520612375769, 0.799448309008666, 0.799656904978294, 0.799995569356776, 0.800460321896978, 0.80091828936765, 0.80170822427943, 0.802173041261197, 0.802886469047129, 0.802941882986525, 0.80306903788999, 0.803728426032181, 0.804063098860737, 0.80410104841723, 0.804513158008329, 0.804883018700823, 0.805310515312577, 0.806419481080964, 0.806765278147664, 0.806908725381202, 0.807526075465515, 0.807610055261512, 0.807628015447745, 0.807753767014253, 0.808083357343989, 0.808447690833034, 0.808592077393168, 0.809359239920198, 0.809821808428874, 0.81001344975673, 0.810215402974801, 0.810769961796255, 0.811226406525593, 0.811737776117553, 0.812451444520716, 0.812695809277598, 0.813374820786043, 0.813625464556617, 0.814067988585161, 0.814343207110076, 0.81494067671367, 0.814951365852047, 0.814966918724166, 0.815902278940131, 0.816132546357889, 0.816328801507523, 0.817066210897014, 0.817175899475046, 0.817235571848138, 0.817595336594432, 0.818054326460618, 0.818450334929962, 0.818610856492024, 0.819392944558425, 0.819418187508707, 0.81982464261796, 0.820046292518703, 0.821922514679971, 0.823485293574405, 0.824901892737588, 0.825549923747057, 0.826451657506583, 0.828046163473251, 0.828225564751203, 0.830117174065456, 0.830651564133226, 0.83081639969507, 0.830894749243321, 0.83158258848616, 0.831758534599846, 0.833357303321395, 0.8338834815478, 0.835261424196664, 0.837019436243814, 0.837517295167058, 0.837914554822848, 0.837969242755602, 0.838277403766126, 0.838651164556748, 0.841311326154542, 0.842785300350521, 0.843046384450652, 0.844358237455112, 0.84468419083881, 0.845079347200621, 0.84537521357785, 0.851130454864012, 0.852362209672041, 0.856152755117004, 0.856212166921743, 0.857203442228765, 0.859024153727198, 0.860065775995432, 0.860361094114243, 0.861206264595401, 0.863410626228204, 0.864604570458859, 0.864874997173598, 0.865513537792499, 0.866929383273464, 0.86916926577055, 0.870806331588921, 0.872877605642001, 0.873037454317382, 0.874643448790548, 0.876385840555419, 0.876678524973834, 0.879048351466791, 0.881717182930233, 0.882011794658788, 0.884290023154178, 0.884308288826259, 0.88610061282697, 0.890010075261597, 0.891196238533712, 0.895775268322166, 0.899602894973869, 0.907587462498071, 0.907820342989952, 0.916618533900448, 0.916754335396411, 0.918372082466812, 0.922254119578795, 0.924249761946926, 0.924877960383139, 0.927425218609197, 0.932261264076943, 0.939360882558211, 0.940029583815979, 0.941946857601917, 0.942599079574931, 0.949839969709702, 0.951966766220133, 0.96195830966779, 0.962320831598015, 0.964177347992152, 0.966938672553846, 0.97598409588235, 0.977467168060243,  };
+  }
+
+  /**
+   * realestatepAfter Custom Distribution
+   */
+  public CustomDistribution realestatepAfter = new CustomDistribution( _realestatepAfter_Values_xjal, this );
+
+  public double realestatepAfter() { return realestatepAfter.get(); }
+
+  // Analysis Data Elements
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart1_expression0_dataSet_xjal = new DataSet( 10, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart1_expression0_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart1_expression0_dataSet_xjal_YValue() {
+    return 
+overnightDegreeOut.mean() 
+;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart1_expression1_dataSet_xjal = new DataSet( 10, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart1_expression1_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart1_expression1_dataSet_xjal_YValue() {
+    return 
+overnightDegreeIn.mean() 
+;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public DataSet _chart2_expression0_dataSet_xjal = new DataSet( 100, new DataUpdater_xjal() {
+    double _lastUpdateX = Double.NaN;
+    @Override
+    public void update( DataSet _d ) {
+      if ( time() == _lastUpdateX ) { return; }
+      _d.add( time(), __chart2_expression0_dataSet_xjal_YValue() );
+      _lastUpdateX = time();
+    }
+  } );
+  /**
+   * <i>This method should not be called by user</i>
+   */
+  @AnyLogicInternalCodegenAPI
+  private double __chart2_expression0_dataSet_xjal_YValue() {
+    return 
+TDErr 
+;
+  }
+
+  public HistogramSimpleData overnightDegreeOut = new HistogramSimpleData( 50, 
+0 
+, 
+50 
+, true, false, 0.1, 0.1 );
+  
+  public HistogramSimpleData overnightDegreeIn = new HistogramSimpleData( 50, 
+0 
+, 
+50 
+, true, false, 0.1, 0.1 );
+  
+  // View areas
+  public ViewArea _origin_VA = new ViewArea( this, "[Origin]", 0, 0, 1200.0, 650.0 );
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public int getViewAreas(Map<String, ViewArea> _output) {
+    if ( _output != null ) {
+      _output.put( "_origin_VA", this._origin_VA );
+    }
+    return 1 + super.getViewAreas( _output );
+  }
+  @AnyLogicInternalCodegenAPI
+  protected static final int _chart = 1;
+  @AnyLogicInternalCodegenAPI
+  protected static final int _chart1 = 2;
+  @AnyLogicInternalCodegenAPI
+  protected static final int _chart2 = 3;
+
+  /** Internal constant, shouldn't be accessed by user */
+  @AnyLogicInternalCodegenAPI
+  protected static final int _SHAPE_NEXT_ID_xjal = 4;
+
+  @AnyLogicInternalCodegenAPI
+  public boolean isPublicPresentationDefined() {
+    return true;
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public boolean isEmbeddedAgentPresentationVisible( Agent _a ) {
+    return super.isEmbeddedAgentPresentationVisible( _a );
+  }
+
+  protected Histogram chart;
+  protected TimePlot chart1;
+  protected TimePlot chart2;
+  @AnyLogicInternalCodegenAPI
+  private void _createPersistentElementsBP0_xjal() {
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private void _createPersistentElementsAP0_xjal() {
+    {
+    HistogramData _item;
+    List<HistogramData> _items = new ArrayList<HistogramData>( 2 );
+    _item = 
+overnightDegreeOut 
+;
+    _items.add( _item ); 
+    _item = 
+overnightDegreeIn 
+;
+    _items.add( _item ); 
+    List<String> _titles = new ArrayList<String>( 2 );
+    _titles.add( "Overnight Lending Degree Distribution" );
+    _titles.add( "Overnight BorrowingDegree Distribution" );
+    List<Histogram.Appearance> _appearances = new ArrayList<Histogram.Appearance>( 2 );
+    _appearances.add( new Histogram.Appearance( goldenRod, darkMagenta, purple, mediumSeaGreen, 1, oliveDrab ) );
+    _appearances.add( new Histogram.Appearance( oliveDrab, orange, deepPink, slateBlue, 1, deepSkyBlue ) );
+    chart = new Histogram(
+		    BankingSystem.this, true, 50.0, 250.0, 
+			410.0, 270.0,
+            null, null,
+            40.0, 20.0,
+			350.0, 190.0, white, black, black,
+            40.0, Chart.SOUTH,
+            Chart.GRID_DEFAULT, Chart.GRID_DEFAULT,
+            darkGray, darkGray, 
+            true, false, false, 0.8,
+            _items, _titles, _appearances );
+
+    }
+    {
+    DataSet _item;
+    List<DataSet> _items = new ArrayList<DataSet>( 2 );
+    _items.add( _chart1_expression0_dataSet_xjal ); 
+    _items.add( _chart1_expression1_dataSet_xjal ); 
+    List<String> _titles = new ArrayList<String>( 2 );
+    _titles.add( "Out-degree" );
+    _titles.add( "In-degree" );
+    List<Chart2DPlot.Appearance> _appearances = new ArrayList<Chart2DPlot.Appearance>( 2 );
+    _appearances.add( new Chart2DPlot.Appearance( gold, true, false, Chart.INTERPOLATION_LINEAR, 3.0, Chart.POINT_CIRCLE ) );
+    _appearances.add( new Chart2DPlot.Appearance( yellowGreen, true, false, Chart.INTERPOLATION_LINEAR, 3.0, Chart.POINT_CIRCLE ) );
+    chart1 = new TimePlot(
+		    BankingSystem.this, true, 490.0, 260.0, 
+			440.0, 260.0,
+            null, null,
+            50.0, 30.0,
+			360.0, 180.0, white, black, black,
+            20.0, Chart.SOUTH,
+            
+30 
+            , Chart.WINDOW_MOVES_WITH_TIME, null, Chart.SCALE_AUTO,
+            0, 0, Chart.GRID_DEFAULT, Chart.GRID_DEFAULT,
+            darkGray, darkGray, _items, _titles, _appearances );
+
+    }
+    {
+    DataSet _item;
+    List<DataSet> _items = new ArrayList<DataSet>( 1 );
+    _items.add( _chart2_expression0_dataSet_xjal ); 
+    List<String> _titles = new ArrayList<String>( 1 );
+    _titles.add( "Real estate %" );
+    List<Chart2DPlot.Appearance> _appearances = new ArrayList<Chart2DPlot.Appearance>( 1 );
+    _appearances.add( new Chart2DPlot.Appearance( deepSkyBlue, true, false, Chart.INTERPOLATION_LINEAR, 2.0, Chart.POINT_CIRCLE ) );
+    chart2 = new TimePlot(
+		    BankingSystem.this, true, 530.0, 10.0, 
+			510.0, 240.0,
+            null, null,
+            50.0, 10.0,
+			440.0, 180.0, white, black, black,
+            20.0, Chart.SOUTH,
+            
+100 
+            , Chart.WINDOW_MOVES_WITH_TIME, null, Chart.SCALE_AUTO,
+            0, 0, Chart.GRID_DEFAULT, Chart.GRID_DEFAULT,
+            darkGray, darkGray, _items, _titles, _appearances );
+
+    }
+  }
+
+  @AnyLogicInternalCodegenAPI
+  private void _createPersistentElementsBS0_xjal() {
+  }
+
+
+  // Static initialization of persistent elements
+  {
+    _createPersistentElementsBP0_xjal();
+  }
+  protected ShapeTopLevelPresentationGroup presentation;
+  protected ShapeModelElementsGroup icon; 
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public ShapeTopLevelPresentationGroup getPresentationShape() {
+    return presentation;
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public ShapeModelElementsGroup getModelElementsShape() {
+    return icon;
+  }
+
+  /**
+   * Constructor
+   */
+  public BankingSystem( Engine engine, Agent owner, AgentList<? extends BankingSystem> ownerPopulation ) {
+    super( engine, owner, ownerPopulation );
+    instantiateBaseStructureThis_xjal();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void onOwnerChanged_xjal() {
+    super.onOwnerChanged_xjal();
+    setupReferences_xjal();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void instantiateBaseStructure_xjal() {
+    super.instantiateBaseStructure_xjal();
+    instantiateBaseStructureThis_xjal();
+  }
+  
+  @AnyLogicInternalCodegenAPI
+  private void instantiateBaseStructureThis_xjal() {
+    setupReferences_xjal();
+    initTargetInput.readFile();
+  }
+  
+  @AnyLogicInternalCodegenAPI
+  private void setupReferences_xjal() {
+  }
+  
+  /**
+   * Simple constructor. Please add created agent to some population by calling goToPopulation() function
+   */
+  public BankingSystem() {
+  }
+  
+  /**
+   * Simple constructor. Please add created agent to some population by calling goToPopulation() function
+   */
+  public BankingSystem( int initBanks, double shockTime, String regime, int reactionTime, double recoveryRate, double adaptiveP, double alphaLarge, double alphaSmall, boolean isEN, double r_correction, double betaLarge, double betaSmall, int FIRESALE, int BASEL3, double liquidityABS, double liquidityAgency, double liquidityEquitysec, double liquidityMBS, double liquidityState, double liquidityTreasury, double marketReaction, int seedValue, double sellMore, double capitalRatio, double liborRate, int stopTime, int LendPcntTrained ) {
+    markParametersAreSet();
+    this.initBanks = initBanks;
+    this.shockTime = shockTime;
+    this.regime = regime;
+    this.reactionTime = reactionTime;
+    this.recoveryRate = recoveryRate;
+    this.adaptiveP = adaptiveP;
+    this.alphaLarge = alphaLarge;
+    this.alphaSmall = alphaSmall;
+    this.isEN = isEN;
+    this.r_correction = r_correction;
+    this.betaLarge = betaLarge;
+    this.betaSmall = betaSmall;
+    this.FIRESALE = FIRESALE;
+    this.BASEL3 = BASEL3;
+    this.liquidityABS = liquidityABS;
+    this.liquidityAgency = liquidityAgency;
+    this.liquidityEquitysec = liquidityEquitysec;
+    this.liquidityMBS = liquidityMBS;
+    this.liquidityState = liquidityState;
+    this.liquidityTreasury = liquidityTreasury;
+    this.marketReaction = marketReaction;
+    this.seedValue = seedValue;
+    this.sellMore = sellMore;
+    this.capitalRatio = capitalRatio;
+    this.liborRate = liborRate;
+    this.stopTime = stopTime;
+    this.LendPcntTrained = LendPcntTrained;
+  }
+  
+  /**
+   * Creating embedded object instances
+   */
+  @AnyLogicInternalCodegenAPI
+  private void instantiatePopulations_xjal() {
+    {
+      int _cnt = 
+initBanks 
+;
+      for ( int i = banks.size(); i < _cnt; i++ ) {
+        instantiate_banks_xjal( i );
+      }
+    }
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void doCreate() {
+    super.doCreate();
+    // Creating embedded object instances
+    instantiatePopulations_xjal();
+    // Assigning initial values for plain variables
+    setupPlainVariables_BankingSystem_xjal();
+    // Dynamic initialization of persistent elements
+    _createPersistentElementsAP0_xjal();
+    presentation = new ShapeTopLevelPresentationGroup( BankingSystem.this, true, 0, 0, 0, 0 , chart, chart1, chart2 );
+    // Creating embedded object instances
+    instantiatePopulations_xjal();
+    icon = new ShapeModelElementsGroup( BankingSystem.this, getElementProperty( "usbankingsystem.BankingSystem.icon", IElementDescriptor.MODEL_ELEMENT_DESCRIPTORS )  );
+    icon.setIconOffsets( 0.0, 0.0 );
+    // Environments setup
+    {
+      double _x_xjal = 
+750 
+;
+      double _y_xjal = 
+500 
+;
+      double _z_xjal = 
+0 
+;
+      setupSpace( _x_xjal, _y_xjal, _z_xjal );
+    }
+    disableSteps();
+    setNetworkUserDefined();
+    setLayoutType( LAYOUT_RANDOM );
+	 // Port connectors with non-replicated objects
+    // Creating replicated embedded objects
+    banks.setEnvironment( this );
+    for ( int i = 0; i < banks.size(); i++ ) {
+      Bank _a = banks.get(i); 
+      setupParameters_banks_xjal( _a, i, null );
+      doBeforeCreate_banks_xjal( _a, i, null );
+      _a.createAsEmbedded();
+    }
+    setupInitialConditions_xjal( BankingSystem.class );
+    // Dynamic initialization of persistent elements
+    _createPersistentElementsBS0_xjal();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void setupExt_xjal(AgentExtension _ext) {
+    // Agent properties setup
+    if ( _ext instanceof ExtAgentWithSpatialMetrics && _ext instanceof ExtWithSpaceType && !(tryExt(ExtAgentWithSpatialMetrics.class) instanceof ExtWithSpaceType) ) {
+      double _speed;
+      _speed = 
+0 
+;
+      ((ExtAgentWithSpatialMetrics) _ext).setSpeed( _speed, MPS );
+    }
+    if ( _ext instanceof ExtAgentWithSpatialMetrics && tryExt(ExtAgentWithSpatialMetrics.class) == null ) {
+      ExtAgentWithSpatialMetrics _e = (ExtAgentWithSpatialMetrics) _ext;
+      _e.setAutomaticHorizontalRotation( false );
+    }
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public void doStart() {
+    super.doStart();
+    record.start();
+    shock.start();
+    clear.start();
+    check.start();
+    checkAlive.start();
+    checkCapitalRatio.start();
+    collectRL.start();
+    _chart1_autoUpdateEvent_xjal.start();
+    _chart2_autoUpdateEvent_xjal.start();
+    applyLayout();
+    for (Agent embeddedObject : banks) {
+      embeddedObject.startAsEmbedded();
+    }
+  }
+ 
+  @AnyLogicInternalCodegenAPI
+  public void onStartup() {
+    super.onStartup();
+    
+//initData();
+// initialize banks interactive score
+//initInteractiveScore();
+// initialize network
+initNetwork();
+totAvgReward = 0;
+//updateDegreeDist();
+/*degreeRecord.setCellValue("Overnight", 1, 1, 1);
+degreeRecord.setCellValue("Shortterm", 1, 1, 2);
+degreeRecord.setCellValue("Longterm", 1, 1, 3);*/
+System.out.println("**********INITIALIZAITON FINISHED**********");
+
+// generate output files
+try {
+	new FileWriter(bankfile);
+	new FileWriter(overnightfile);
+	new FileWriter(shorttermfile);
+	new FileWriter(longtermfile);
+	new FileWriter(thetafile);
+} catch (IOException e) {
+	e.printStackTrace();
+} 
+  }
+
+  /**
+   * Assigning initial values for plain variables<br>
+   * <em>This method isn't designed to be called by user and may be removed in future releases.</em>
+   */
+  @AnyLogicInternalCodegenAPI
+  public void setupPlainVariables_xjal() {
+    setupPlainVariables_BankingSystem_xjal();
+  }
+
+  /**
+   * Assigning initial values for plain variables<br>
+   * <em>This method isn't designed to be called by user and may be removed in future releases.</em>
+   */
+  @AnyLogicInternalCodegenAPI
+  private void setupPlainVariables_BankingSystem_xjal() {
+    numBanks = 
+0 
+;
+    numDebts = 
+0 
+;
+    numFailedBanks = 
+0 
+;
+    nrowRecord = 
+1 
+;
+    nrowDebt = 
+1 
+;
+    startTime = 
+System.currentTimeMillis() 
+;
+    endTime = 
+System.currentTimeMillis() 
+;
+    numLiquidityFailure = 
+0 
+;
+    numSolvencyFailure = 
+0 
+;
+    rankedbanks = 
+null 
+;
+    converged = 
+false 
+;
+    convergedTime = 
+0 
+;
+    TDErr = 
+0.0 
+;
+    avgHousing = 
+0.0 
+;
+    bankfile = 
+"bank-v"+Double.toString(seedValue)+"-"+shockTime+".txt"
+//"bank-v("+Double.toString(alphaLarge)+Double.toString(alphaSmall)+Double.toString(betaLarge)+Double.toString(betaSmall)+").txt" 
+;
+    overnightfile = 
+"overnight-network-v"+Double.toString(seedValue)+"-"+shockTime+".txt"
+
+//"overnight-network-v("+Double.toString(alphaLarge)+" "+Double.toString(alphaSmall)+" "+Double.toString(betaLarge)+" "+Double.toString(betaSmall)+").txt" 
+;
+    shorttermfile = 
+"shortterm-network-v"+Double.toString(seedValue)+"-"+shockTime+".txt"
+
+//"shortterm-network-v("+Double.toString(alphaLarge)+" "+Double.toString(alphaSmall)+" "+Double.toString(betaLarge)+" "+Double.toString(betaSmall)+").txt" 
+;
+    longtermfile = 
+
+"longterm-network-v"+Double.toString(seedValue)+"-"+shockTime+".txt"
+
+//"longterm-network-v("+Double.toString(alphaLarge)+" "+Double.toString(alphaSmall)+" "+Double.toString(betaLarge)+" "+Double.toString(betaSmall)+").txt" 
+;
+    sysDelta = 
+0 
+;
+    stepReward = 
+0.0 
+;
+    thetafile = 
+"thetafile.txt" 
+;
+    avgReward = 
+0.0 
+;
+    totAvgReward = 
+0.0 
+;
+    totRewardLarge = 
+0.0 
+;
+    failurefile = 
+"failurefile-v"+Double.toString(seedValue)+"-"+shockTime+" "+alphaSmall+" "+alphaLarge+" "+betaSmall+" "+betaLarge+".txt"
+
+//"shortterm-network-v("+Double.toString(alphaLarge)+" "+Double.toString(alphaSmall)+" "+Double.toString(betaLarge)+" "+Double.toString(betaSmall)+").txt" 
+;
+    lendpfile = 
+"lendpfile-v"+Double.toString(seedValue)+"-"+shockTime+".txt"
+
+//"shortterm-network-v("+Double.toString(alphaLarge)+" "+Double.toString(alphaSmall)+" "+Double.toString(betaLarge)+" "+Double.toString(betaSmall)+").txt" 
+;
+  }
+
+  // User API -----------------------------------------------------
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _bank_commonAnimationSettings_xjal;
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _bank_commonAnimationSettings_xjal() {
+    if (_bank_commonAnimationSettings_xjal == null) {
+      if (Bank._system_commonAnimationSettings_xjal == null) {
+        Bank._system_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, black, 1.0, LINE_STYLE_SOLID, ARROW_NONE, 0.0 );
+      }
+      _bank_commonAnimationSettings_xjal = Bank._system_commonAnimationSettings_xjal;
+    } // endif (bidirectional)
+    return _bank_commonAnimationSettings_xjal;
+  }
+
+  public LinkToAgentCollection<Bank, BankingSystem> bank = new LinkToAgentCollectionImpl<Bank, BankingSystem>(this, _bank_commonAnimationSettings_xjal()){
+
+    @AnyLogicInternalCodegenAPI
+    public AbstractLinkToAgent<BankingSystem, Bank> getBidirectionalPeer_xjal(Bank _agent_xjal) {
+      return _agent_xjal.system;
+    }
+  };
+
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _clearingVec_commonAnimationSettings_xjal;
+  @AnyLogicInternalCodegenAPI
+  public static LinkToAgentAnimationSettings _clearingVec_commonAnimationSettings_xjal() {
+    if (_clearingVec_commonAnimationSettings_xjal == null) {
+      if (Bank._clearingVec_commonAnimationSettings_xjal == null) {
+        Bank._clearingVec_commonAnimationSettings_xjal = new LinkToAgentAnimationSettingsImpl( false, black, 1.0, LINE_STYLE_SOLID, ARROW_NONE, 0.0 );
+      }
+      _clearingVec_commonAnimationSettings_xjal = Bank._clearingVec_commonAnimationSettings_xjal;
+    } // endif (bidirectional)
+    return _clearingVec_commonAnimationSettings_xjal;
+  }
+
+  public LinkToAgentCollection<Bank, BankingSystem> clearingVec = new LinkToAgentCollectionImpl<Bank, BankingSystem>(this, _clearingVec_commonAnimationSettings_xjal()){
+
+    @AnyLogicInternalCodegenAPI
+    public AbstractLinkToAgent<BankingSystem, Bank> getBidirectionalPeer_xjal(Bank _agent_xjal) {
+      return _agent_xjal.clearingVec;
+    }
+  };
+
+
+  @AnyLogicInternalCodegenAPI
+  public void drawLinksToAgents(boolean _underAgents_xjal, LinkToAgentAnimator _animator_xjal) {
+    super.drawLinksToAgents(_underAgents_xjal, _animator_xjal);
+    if ( _underAgents_xjal ) {
+      _animator_xjal.drawLink( this, bank, true, false );
+    }
+    if ( _underAgents_xjal ) {
+      _animator_xjal.drawLink( this, clearingVec, true, false );
+    }
+  }
+
+  public List<Object> getEmbeddedObjects() {
+    List<Object> list = super.getEmbeddedObjects();
+    if (list == null) {
+      list = new LinkedList<Object>();
+    }
+    list.add( banks );
+    return list;
+  }
+
+  public AgentList<? extends BankingSystem> getPopulation() {
+    return (AgentList<? extends BankingSystem>) super.getPopulation();
+  }
+
+  public List<? extends BankingSystem> agentsInRange( double distance ) {
+    return (List<? extends BankingSystem>) super.agentsInRange( distance );
+  }
+
+  @Override
+  @AnyLogicInternalCodegenAPI
+  public boolean isLoggingToDB(EventOriginator _e) {
+    if ( _e == _chart1_autoUpdateEvent_xjal ) return false;
+    if ( _e == _chart2_autoUpdateEvent_xjal ) return false;
+    return super.isLoggingToDB( _e );
+  }
+
+  @AnyLogicInternalCodegenAPI
+  public void onDestroy() {
+    record.onDestroy();
+    shock.onDestroy();
+    clear.onDestroy();
+    check.onDestroy();
+    checkAlive.onDestroy();
+    checkCapitalRatio.onDestroy();
+    collectRL.onDestroy();
+    _chart1_autoUpdateEvent_xjal.onDestroy();
+    _chart2_autoUpdateEvent_xjal.onDestroy();
+    bank.onDestroy();
+    clearingVec.onDestroy();
+    for (Agent _item : banks) {
+      _item.onDestroy();
+    }
+    initOvernightNetwork.close();
+    initShorttermNetwork.close();
+    initLongtermNetwork.close();
+    pricedrop.close();
+    overnightNetworkRecord.close();
+    shorttermNetworkRecord.close();
+    longtermNetworkRecord.close();
+    bankRecord.close();
+    initThetaFile.close();
+    initTargetInput.writeFile();
+  // Analysis Data Elements
+    _chart1_expression0_dataSet_xjal.destroyUpdater_xjal();
+    _chart1_expression1_dataSet_xjal.destroyUpdater_xjal();
+    _chart2_expression0_dataSet_xjal.destroyUpdater_xjal();
+    overnightDegreeOut.destroyUpdater_xjal();
+    overnightDegreeIn.destroyUpdater_xjal();
+    logToDB( overnightDegreeOut, "overnightDegreeOut" );
+    logToDB( overnightDegreeIn, "overnightDegreeIn" );
+    logToDB( _chart1_expression0_dataSet_xjal, "chart1 : Out-degree" );
+    logToDB( _chart1_expression1_dataSet_xjal, "chart1 : In-degree" );
+    logToDB( _chart2_expression0_dataSet_xjal, "chart2 : Real estate %" );
+    super.onDestroy();
+  }
+
+  @AnyLogicInternalCodegenAPI
+  @Override
+  public void doFinish() {
+    super.doFinish();
+    for (Agent _item : banks) {
+      _item.doFinish();
+    }
+  }
+
+
+
+}
